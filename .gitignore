@@ -1,0 +1,8 @@
+
+# ignoring all files in out directory
+
+out/**
+
+# ignoring mac files
+
+.DS_Store

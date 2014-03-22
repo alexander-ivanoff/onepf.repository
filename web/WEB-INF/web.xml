@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://java.sun.com/xml/ns/javaee"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
+		  http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+           version="2.5">
+
+    <servlet>
+        <servlet-name>AppdfLoaderServlet</servlet-name>
+        <servlet-class>org.onepf.repository.UploadAppdfFileServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>AppListerServlet</servlet-name>
+        <servlet-class>org.onepf.repository.GetApplicationsListServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>FileDownloadServlet</servlet-name>
+        <servlet-class>org.onepf.repository.DownloadObjectServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>PurchaseListServlet</servlet-name>
+        <servlet-class>org.onepf.repository.GetPurchaseListServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>DownloadListServlet</servlet-name>
+        <servlet-class>org.onepf.repository.GetDownloadListServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>AppdfLoaderServlet</servlet-name>
+        <url-pattern>/openaep/upload</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AppListerServlet</servlet-name>
+        <url-pattern>/openaep/applist</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>PurchaseListServlet</servlet-name>
+        <url-pattern>/openaep/purchases</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DownloadListServlet</servlet-name>
+        <url-pattern>/openaep/downloads</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>FileDownloadServlet</servlet-name>
+        <url-pattern>/openaep/appdf</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>FileDownloadServlet</servlet-name>
+        <url-pattern>/openaep/apk</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>FileDownloadServlet</servlet-name>
+        <url-pattern>/openaep/appdescription</url-pattern>
+    </servlet-mapping>
+</web-app>
