@@ -13,7 +13,7 @@ public class AmazonAppstoreEntity extends AmazonDBEntity{
 
     public static final String FIELD_REPOSITORY = "repository";
     public static final String FIELD_AUTH_TOKEN = "authtoken";
-    public static final String FIELD_APPSTORE_NAME = "appstore_name";
+    public static final String FIELD_APPSTORE_NAME = "appstorename";
     public static final String FIELD_IP_DNS = "ip-dns";
     public static final String FIELD_PUBLICKEY = "publickey";
     public static final String FIELD_DESCRIPTION = "description";

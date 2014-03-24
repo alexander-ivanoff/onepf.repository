@@ -5,21 +5,19 @@ import com.amazonaws.services.dynamodbv2.model.PutItemRequest;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
-import org.onepf.appdf.model.ApkFilesInfo;
 import org.onepf.appdf.model.Application;
 import org.onepf.appdf.parser.AppdfFileParser;
 import org.onepf.appdf.parser.ParseResult;
 import org.onepf.repository.model.AppdfToUpload;
 import org.onepf.repository.model.FileType;
 import org.onepf.repository.model.amazon.db.AmazonAppEntity;
+import org.onepf.repository.model.auth.AppstoreDescriptor;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.Enumeration;
-import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
@@ -39,7 +37,7 @@ public class AmazonAppdfToUpload extends AppdfToUpload {
     }
 
     @Override
-    public void processFile(File file) throws IOException {
+    public void processFile(File file, String developersContact, AppstoreDescriptor appstoreDescriptor) throws IOException {
         AppdfFileParser parser = new AppdfFileParser(file);
         ParseResult parseResult = parser.parse();
 
@@ -47,26 +45,23 @@ public class AmazonAppdfToUpload extends AppdfToUpload {
         Application application = parseResult.getApplication();
 
         final String packageName = application.getPackageName();
-        final List<ApkFilesInfo.ApkFile> apkFiles = application.getFilesInfo().getApkFiles();
-        List<String> apkFilenames= new ArrayList<String>(apkFiles.size());
-        for (ApkFilesInfo.ApkFile apkfile : apkFiles) {
-            apkFilenames.add(apkfile.getFileName());
-        }
+
         long time = System.currentTimeMillis();
-        List<String> apkS3Keys = extractFiles(packageName, parseResult.getFile(), apkFiles);
 
         String appdfS3Key = buildAmazonS3Key(packageName, FileType.APPDF.addExtention(packageName));
+        String descrS3Key = buildAmazonS3Key(packageName, FileType.DESCRIPTION.addExtention(packageName));
         sendAppDFFile(appdfS3Key, file);
+        sendDescription(descrS3Key, parseResult.getFile());
 
-        System.out.println(System.currentTimeMillis() - time);
 
         AmazonAppEntity appEntity = new AmazonAppEntity()
                 .withPackageName(packageName)
                 .withLastUpdate(System.currentTimeMillis())
                 .withLastReview(System.currentTimeMillis()) // TODO what is last-review time
                 .withAppdf(appdfS3Key)
-                .withApks(apkS3Keys)
-                .withDescription(buildAmazonS3Key(packageName, FileType.DESCRIPTION.addExtention(packageName)));
+                .withDescription(descrS3Key)
+                .withDevelopersContact(developersContact)
+                .withAppstore(appstoreDescriptor.appstoreName);
 
         time = System.currentTimeMillis();
         PutItemRequest itemRequest = new PutItemRequest().withTableName(repositoryOptions.packageTable).withItem(appEntity.getItem());
@@ -76,29 +71,20 @@ public class AmazonAppdfToUpload extends AppdfToUpload {
 
     }
 
-    private List<String> extractFiles(String packageName, ZipFile zipFile, List<ApkFilesInfo.ApkFile> apkFiles) throws IOException {
-        List<String> apkS3Keys = new ArrayList<String>();
-        Enumeration<? extends ZipEntry> entries = zipFile.entries();
-        List<String> apkFilenames = new ArrayList<String>(apkFiles.size());
-        for (ApkFilesInfo.ApkFile apkFile: apkFiles) {
-            apkFilenames.add(apkFile.getFileName());
-        }
+    private boolean sendDescription(String descrS3key, ZipFile zipFile) throws IOException {
 
-        int apkIndex = 0;
+        Enumeration<? extends ZipEntry> entries = zipFile.entries();
+
         while ( entries.hasMoreElements()){
             ZipEntry elem = entries.nextElement();
             String name = elem.getName();
-            String apkS3Key = null;
 
             if (name.equals(APPDF_DESCRIPTION_FILE_NAME)) {
-                extractFile(buildAmazonS3Key( packageName, FileType.DESCRIPTION.addExtention(packageName)), zipFile, elem);
-            } else if (apkFilenames.contains(name)) {
-                apkS3Key = buildAmazonS3Key(packageName, FileType.APK.addExtention(packageName + (++apkIndex != 1 ? "." + apkIndex : "")));
-                apkS3Keys.add(apkS3Key);
-                extractFile(apkS3Key, zipFile, elem);
+                extractFile(descrS3key, zipFile, elem);
+                return true;
             }
         }
-        return  apkS3Keys;
+        return false;
     }
 
     public void extractFile(String apkS3Key, ZipFile zipFile, ZipEntry zipEntry) throws IOException {
@@ -126,13 +112,12 @@ public class AmazonAppdfToUpload extends AppdfToUpload {
     }
 
     public void sendToAmazon(String amazonKey, long contentLength, InputStream is) {
-        System.out.println(Thread.currentThread().getName() + ">  Uploading to S3: " + amazonKey);
         long time = System.currentTimeMillis();
         ObjectMetadata metadata = new ObjectMetadata();
         metadata.setContentLength(contentLength);
         PutObjectRequest putRequest = new PutObjectRequest(repositoryOptions.bucket, amazonKey, is, metadata);
         amazonConnector.putObject(putRequest);
-        System.out.println(Thread.currentThread().getName() + ">  Uploading finished: " + amazonKey + " = " + (System.currentTimeMillis() - time));
+        System.out.println(Thread.currentThread().getName() + ">  Uploading to S3: " + amazonKey + " = " + (System.currentTimeMillis() - time)); // TODO move to Log4J
 
     }
 

@@ -6,7 +6,8 @@
 </head>
 <body>
 <form action="openaep/upload" method="post" enctype="multipart/form-data">
-    <input name="authToken" type="text"><br>
+    Token: <input name="authToken" type="text"><br>
+    developer's contact: <input name="developersContact" type="text"><br>
     <input name="data" type="file"><br>
     <input type="submit"><br>
 </form>

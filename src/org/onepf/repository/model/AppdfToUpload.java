@@ -1,5 +1,7 @@
 package org.onepf.repository.model;
 
+import org.onepf.repository.model.auth.AppstoreDescriptor;
+
 import java.io.File;
 import java.io.IOException;
 
@@ -12,5 +14,5 @@ public abstract class AppdfToUpload {
 
     File targetDir;
 
-    public abstract void processFile(File file) throws IOException;
+    public abstract void processFile(File file, String developersContact, AppstoreDescriptor appstoreDescriptor) throws IOException;
 }

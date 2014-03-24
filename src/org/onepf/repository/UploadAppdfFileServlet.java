@@ -1,19 +1,23 @@
 package org.onepf.repository;
 
 import org.onepf.repository.model.AppdfToUpload;
-import org.onepf.repository.utils.uploader.UploadFileHandler;
+import org.onepf.repository.model.auth.AppstoreDescriptor;
 import org.onepf.repository.utils.uploader.NoMultipartException;
+import org.onepf.repository.utils.uploader.UploadFileHandler;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
+import java.util.Map;
 
 /**
  * Created by ivanoff on 11.03.14.
  */
 public class UploadAppdfFileServlet extends BaseServlet {
+
+    private static final String DEVELOPERS_CONTACT = "developersContact";
 
     private AppdfToUpload appdfHandler;
 
@@ -35,11 +39,13 @@ public class UploadAppdfFileServlet extends BaseServlet {
 
         UploadFileHandler appdfFileUploder = new UploadFileHandler(tempDir, uploadDir);
         appdfFileUploder.createUploadDirIfNotExist();
+        Map<String, String> formFields = appdfFileUploder.getFormFields();
         try {
             appdfFileUploder.upload(request);
-            if (getAuthenticator().isAuthorized(appdfFileUploder.getFormFields())) {
+            AppstoreDescriptor appstore = getAuthenticator().getAuthorizedAppstore(formFields);
+            if (appstore != null) {
                 for (File file : appdfFileUploder.getUploadedFiles()) {
-                    appdfHandler.processFile(file);
+                    appdfHandler.processFile(file, formFields.get(DEVELOPERS_CONTACT), appstore);
                 }
             } else {
                 response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
