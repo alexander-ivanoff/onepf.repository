@@ -3,9 +3,7 @@ package org.onepf.repository.model.amazon.db;
 import com.amazonaws.services.dynamodbv2.model.*;
 import org.onepf.repository.utils.responsewriter.descriptors.ApplicationDescriptor;
 
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -18,8 +16,9 @@ public class AmazonAppEntity extends AmazonDBEntity{
     public static final String FIELD_LAST_UPDATE = "lastUpdate";
     public static final String FIELD_LAST_REVIEW = "lastReview";
     public static final String FIELD_APPDF = "appdf";
-    public static final String FIELD_APK = "apk";
     public static final String FIELD_DESCRIPTION = "description";
+    public static final String FIELD_APPSTORE_ID = "appstoreId";
+    public static final String FIELD_DEVELOPERS_CONTACT = "developersContact";
 
     public static final String INDEX_LAST_UPDATE = "lastUpdate-index";
     public static final String INDEX_LAST_REVIEW = "lastReview-index";
@@ -67,13 +66,14 @@ public class AmazonAppEntity extends AmazonDBEntity{
         return this;
     }
 
-    public AmazonAppEntity withApks(Collection<String> apkS3keys) {
-        put(FIELD_APK, apkS3keys);
+    public AmazonAppEntity withAppstore(String appstoreId) {
+        put(FIELD_APPSTORE_ID, appstoreId);
         return this;
     }
 
-    public List<String> getApks() {
-        return getStringList(FIELD_APK);
+    public AmazonAppEntity withDevelopersContact(String developersContact) {
+        put(FIELD_DEVELOPERS_CONTACT, developersContact);
+        return this;
     }
 
     public String getAppdf() {

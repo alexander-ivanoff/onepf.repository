@@ -30,23 +30,33 @@ public class AmazonAppstoreAuthenticator extends AppstoreAuthenticator {
 
     @Override
     public boolean isAuthorized(HttpServletRequest request) {
-        String token = request.getHeader(AUTH_TOKEN);
-        if (token == null) {
-            token = request.getParameter(AUTH_TOKEN);
-        }
-        return isAuthorized(token);
+        return getAuthorizedAppstore(request) != null;
     }
 
     @Override
     public boolean isAuthorized(Map<String, String> parameters) {
-        return isAuthorized(parameters.get(AUTH_TOKEN));
+        return getAuthorizedAppstore(parameters) != null;
     }
 
-    private boolean isAuthorized(String token) {
+    @Override
+    public AppstoreDescriptor getAuthorizedAppstore(HttpServletRequest request) {
+        String token = request.getHeader(AUTH_TOKEN);
+        if (token == null) {
+            token = request.getParameter(AUTH_TOKEN);
+        }
+        return getAuthorized(token);
+    }
+
+    @Override
+    public AppstoreDescriptor getAuthorizedAppstore(Map<String, String> parameters) {
+        return getAuthorized(parameters.get(AUTH_TOKEN));
+    }
+
+    private AppstoreDescriptor getAuthorized(String token) {
         if (appstores == null) {
             appstores = getAppstores();
         }
-        return token != null ? appstores.containsKey(token) : false;
+        return token != null ? appstores.get(token) : null;
     }
 
 

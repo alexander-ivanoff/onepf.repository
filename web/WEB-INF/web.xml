@@ -48,10 +48,6 @@
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>FileDownloadServlet</servlet-name>
-        <url-pattern>/openaep/apk</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>FileDownloadServlet</servlet-name>
         <url-pattern>/openaep/appdescription</url-pattern>
     </servlet-mapping>
 </web-app>

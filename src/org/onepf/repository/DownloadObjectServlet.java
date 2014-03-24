@@ -21,7 +21,7 @@ public class DownloadObjectServlet extends BaseServlet {
     Logger logger = Logger.getLogger("");
 
 
-    private static final String PATH_APK = "/apk";
+    //private static final String PATH_APK = "/apk";
     private static final String PATH_APPDF = "/appdf";
     private static final String PATH_DESCRIPTION = "/appdescription";
 
@@ -87,13 +87,6 @@ public class DownloadObjectServlet extends BaseServlet {
     }
 
     private FileType parseRequestType(String uri) {
-        String pathInfo = uri.substring(uri.lastIndexOf('/'));
-        if (uri.endsWith(PATH_APK)) {
-            return FileType.APK;
-        }
-        if (uri.endsWith(PATH_APK)) {
-            return FileType.APK;
-        }
         if (uri.endsWith(PATH_APPDF)) {
             return FileType.APPDF;
         }
