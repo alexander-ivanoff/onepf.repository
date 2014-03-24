@@ -2,6 +2,7 @@ package org.onepf.repository.model.amazon;
 
 import com.amazonaws.regions.Regions;
 import org.onepf.repository.model.*;
+import org.onepf.repository.model.auth.AppstoreAuthenticator;
 
 import javax.servlet.ServletContext;
 
@@ -13,6 +14,7 @@ public class AmazonRepositoryFactory extends RepositoryFactory {
     public static class RepositoryOptions {
 
         // TODO maybe move all setting to separate .properties file
+        public String appstoreTable = "appstores";
         public String packageTable = "packages";
         public String purchaseTable = "purchases";
         public String downloadTable = "downloads";
@@ -58,5 +60,10 @@ public class AmazonRepositoryFactory extends RepositoryFactory {
     @Override
     public DownloadsList createDownloadsList() {
         return new AmazonDownloadsList(amazonServices, repositoryOptions);
+    }
+
+    @Override
+    public AppstoreAuthenticator createAuthenticator() {
+        return new AmazonAppstoreAuthenticator(amazonServices, repositoryOptions);
     }
 }

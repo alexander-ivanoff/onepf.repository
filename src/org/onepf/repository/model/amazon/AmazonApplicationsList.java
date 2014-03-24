@@ -4,12 +4,10 @@ import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.amazonaws.services.dynamodbv2.model.QueryRequest;
 import com.amazonaws.services.dynamodbv2.model.QueryResult;
-import com.amazonaws.services.s3.model.S3ObjectSummary;
-import org.onepf.repository.model.Options;
-import org.onepf.repository.utils.responsewriter.descriptors.ApplicationDescriptor;
 import org.onepf.repository.model.ApplicationsList;
-import org.onepf.repository.model.ObjectToDownload;
+import org.onepf.repository.model.Options;
 import org.onepf.repository.model.amazon.db.AmazonAppEntity;
+import org.onepf.repository.utils.responsewriter.descriptors.ApplicationDescriptor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,9 +21,6 @@ public class AmazonApplicationsList extends ApplicationsList {
     private AmazonDynamoDB amazonDynamoDB;
 
     private AmazonRepositoryFactory.RepositoryOptions repositoryOptions;
-    private ObjectToDownload.ObjectOptions options;
-
-    private List<S3ObjectSummary> summaries;
 
     public AmazonApplicationsList(AmazonServices amazonServices, AmazonRepositoryFactory.RepositoryOptions repositoryOptions) {
         this.amazonDynamoDB = amazonServices.getAmazonDynamoDB();

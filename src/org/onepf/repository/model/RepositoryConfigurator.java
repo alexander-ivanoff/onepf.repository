@@ -2,10 +2,8 @@ package org.onepf.repository.model;
 
 import org.onepf.repository.model.amazon.AmazonRepositoryFactory;
 import org.onepf.repository.model.auth.AppstoreAuthenticator;
-import org.onepf.repository.model.auth.SimpleAppstoreAuthenticator;
 
 import javax.servlet.ServletContext;
-import java.io.File;
 
 /**
  * Created by ivanoff on 14.03.14.
@@ -28,8 +26,7 @@ public class RepositoryConfigurator {
 
     public static synchronized AppstoreAuthenticator getAppstoreAuthenticator(ServletContext context){
         if (appstoreAuthenticator == null) {
-            File authFile = new File(context.getRealPath(authPropertiesPath));
-            appstoreAuthenticator = new SimpleAppstoreAuthenticator(authFile);
+            appstoreAuthenticator = getRepositoryFactory(context).createAuthenticator();
         }
         return appstoreAuthenticator;
     }
