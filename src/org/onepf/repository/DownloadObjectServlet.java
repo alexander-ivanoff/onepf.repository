@@ -1,8 +1,9 @@
 package org.onepf.repository;
 
 import org.apache.commons.io.IOUtils;
+import org.onepf.repository.model.DownloadObjectRequestHandler;
 import org.onepf.repository.model.FileType;
-import org.onepf.repository.model.ObjectToDownload;
+import org.onepf.repository.model.services.StorageException;
 import org.onepf.repository.utils.downloader.NoPackageException;
 
 import javax.servlet.ServletException;
@@ -27,12 +28,12 @@ public class DownloadObjectServlet extends BaseServlet {
 
     private static final String PARAMETER_PACKAGE = "package";
 
-    private ObjectToDownload objectToDownload;
+    private DownloadObjectRequestHandler downloadObjectRequestHandler;
 
     @Override
     public void init() throws ServletException {
         super.init();
-        objectToDownload = getRepositoryFactory().createFileRequester();
+        downloadObjectRequestHandler = getRepositoryFactory().createFileRequester();
     }
 
     protected void post(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -50,33 +51,35 @@ public class DownloadObjectServlet extends BaseServlet {
             return;
         }
 
-        ObjectToDownload.ObjectOptions objectOptions = new ObjectToDownload.ObjectOptions();
+        DownloadObjectRequestHandler.ObjectOptions objectOptions = new DownloadObjectRequestHandler.ObjectOptions();
         objectOptions.packageName = packageName;
         objectOptions.fileType = fileType;
 
         InputStream in = null;
         OutputStream out = null;
         try {
-            objectToDownload.init(objectOptions);
+            downloadObjectRequestHandler.init(objectOptions);
             String mimeType = null;
             if (objectOptions.fileType == FileType.DESCRIPTION) {
                 mimeType = "application/xml";
             } else {
                 mimeType = "application/octet-stream";
-                response.setHeader("Content-Disposition", "attachment; filename=\"" + objectToDownload.getName() + "\"");
+                response.setHeader("Content-Disposition", "attachment; filename=\"" + downloadObjectRequestHandler.getName() + "\"");
             }
-            response.setContentLength((int) objectToDownload.getSize());
+            response.setContentLength((int) downloadObjectRequestHandler.getSize());
             response.setContentType(mimeType);
 
 
-            in = objectToDownload.getAsStream();
+            in = downloadObjectRequestHandler.getAsStream();
             out = response.getOutputStream();
             IOUtils.copy(in, out);
         } catch (NoPackageException e) {
             response.sendError(HttpServletResponse.SC_NOT_FOUND, e.getMessage() +" package not found");
         } catch (IOException e) {
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-        } finally {
+        }  catch (StorageException e) {
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        }finally {
             if (in != null) {
                 in.close();
             }

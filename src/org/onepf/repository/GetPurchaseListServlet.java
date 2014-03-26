@@ -1,7 +1,7 @@
 package org.onepf.repository;
 
-import org.onepf.repository.model.Options;
-import org.onepf.repository.model.PurchasesList;
+import org.onepf.repository.model.GetPurchasesRequestHandler;
+import org.onepf.repository.model.services.DataException;
 import org.onepf.repository.utils.responsewriter.ResponseWriter;
 import org.onepf.repository.utils.responsewriter.WriteException;
 import org.onepf.repository.utils.responsewriter.XmlResponseWriter;
@@ -21,12 +21,12 @@ public class GetPurchaseListServlet extends BaseServlet {
     private static final String PARAMETER_PACKAGE = "package";
     private static final String PARAMETER_DATE = "date";
 
-    private PurchasesList purchasesList;
+    private GetPurchasesRequestHandler getPurchasesRequestHandler;
 
     @Override
     public void init() throws ServletException {
         super.init();
-        purchasesList = getRepositoryFactory().createPurchasesList();
+        getPurchasesRequestHandler = getRepositoryFactory().createPurchasesList();
     }
 
     protected void post(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -46,15 +46,13 @@ public class GetPurchaseListServlet extends BaseServlet {
             // TODO PARSE DATE
         }
 
-        Options options = new Options(2);
-        options.put(Options.PACKAGE_NAME, packageName);
-        options.put(Options.UPDATE_TIME, String.valueOf(0));
-
-        List<PurchaseDescriptor> purchases = purchasesList.getPurchases(options);
-        ResponseWriter responseWriter = new XmlResponseWriter();
         try {
+            List<PurchaseDescriptor> purchases = getPurchasesRequestHandler.getPurchases(packageName, 0);
+            ResponseWriter responseWriter = new XmlResponseWriter();
             responseWriter.writePurchases(response.getWriter(), purchases);
         } catch (WriteException e) {
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        } catch (DataException e) {
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
     }

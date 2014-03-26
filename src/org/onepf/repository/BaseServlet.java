@@ -3,6 +3,7 @@ package org.onepf.repository;
 import org.onepf.repository.model.RepositoryConfigurator;
 import org.onepf.repository.model.RepositoryFactory;
 import org.onepf.repository.model.auth.AppstoreAuthenticator;
+import org.onepf.repository.model.services.DataException;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -34,20 +35,28 @@ public abstract class BaseServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        try {
             if (authenticator.isAuthorized(req)) {
                 get(req, resp);
             } else {
                 resp.sendError(HttpServletResponse.SC_UNAUTHORIZED);
             }
+        } catch (DataException e) {
+            resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        }
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        try {
             if (authenticator.isAuthorized(req)) {
                 post(req, resp);
             } else {
                 resp.sendError(HttpServletResponse.SC_UNAUTHORIZED);
             }
+        } catch (DataException e) {
+            resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        }
     }
 
     abstract void get(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException;

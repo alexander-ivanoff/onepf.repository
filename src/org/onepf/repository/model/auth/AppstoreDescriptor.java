@@ -5,9 +5,9 @@ package org.onepf.repository.model.auth;
  */
 public class AppstoreDescriptor {
     public String authToken;
-    public String appstoreName;
+    public String appstoreId;
     public String description;
     public String publickKey;
-    public String ipDns;
+    public String openaepUrl;
 
 }

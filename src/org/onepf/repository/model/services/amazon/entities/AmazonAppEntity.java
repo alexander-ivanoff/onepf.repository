@@ -1,4 +1,4 @@
-package org.onepf.repository.model.amazon.db;
+package org.onepf.repository.model.services.amazon.entities;
 
 import com.amazonaws.services.dynamodbv2.model.*;
 import org.onepf.repository.utils.responsewriter.descriptors.ApplicationDescriptor;
@@ -9,7 +9,7 @@ import java.util.Map;
 /**
  * Created by ivanoff on 18.03.14.
  */
-public class AmazonAppEntity extends AmazonDBEntity{
+public class AmazonAppEntity extends AmazonDBEntity {
 
     public static final String FIELD_REPOSITORY = "repository";
     public static final String FIELD_PACKAGE_NAME = "packageName";
@@ -46,7 +46,7 @@ public class AmazonAppEntity extends AmazonDBEntity{
         return this;
     }
 
-    public AmazonAppEntity withLastUpdate(long lastUpdateTime) {
+    public AmazonAppEntity withLastUpdate(String lastUpdateTime) {
         put(FIELD_LAST_UPDATE, lastUpdateTime);
         return this;
     }
@@ -94,8 +94,9 @@ public class AmazonAppEntity extends AmazonDBEntity{
         appDescriptor.packageName = getString(item, FIELD_PACKAGE_NAME);
         appDescriptor.build = 0; //TODO no information in DB
         appDescriptor.version = "Unknown"; //TODO no information in DB
-        appDescriptor.updatedTime = getLong(item, FIELD_LAST_UPDATE);
-        appDescriptor.reviewedTime = getLong(item, FIELD_LAST_REVIEW);
+        appDescriptor.lastUpdated = getString(item, FIELD_LAST_UPDATE);
+        appDescriptor.developerContact = getString(item, FIELD_DEVELOPERS_CONTACT);
+        appDescriptor.appstoreId = getString(item, FIELD_APPSTORE_ID);
         return  appDescriptor;
     }
 
@@ -105,14 +106,14 @@ public class AmazonAppEntity extends AmazonDBEntity{
         return new GetItemRequest().withKey(keyEntity.getItem());
     }
 
-    public static QueryRequest searchRequestByLastUpdatedTime(long lastUpdatedTime) {
+    public static QueryRequest searchRequestByLastUpdatedTime(String lastUpdatedTime) {
         Condition hashKeyCondition = new Condition()
                 .withComparisonOperator(ComparisonOperator.EQ.toString())
                 .withAttributeValueList(new AttributeValue().withS(DEFAULT_REPOSITORY));
 
         Condition rangeKeyCondition = new Condition()
                 .withComparisonOperator(ComparisonOperator.GT.toString())
-                .withAttributeValueList(new AttributeValue().withN(String.valueOf(lastUpdatedTime)));
+                .withAttributeValueList(new AttributeValue().withS(lastUpdatedTime));
 
         Map<String, Condition> keyConditions = new HashMap<String, Condition>();
         keyConditions.put(AmazonAppEntity.FIELD_REPOSITORY, hashKeyCondition);
