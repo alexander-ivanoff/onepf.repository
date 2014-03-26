@@ -9,10 +9,11 @@ import org.onepf.repository.utils.responsewriter.WriteException;
  */
 public class ApplicationDescriptor implements Writable {
     public String packageName;
+    public String lastUpdated;
     public String version;
     public int build;
-    public long updatedTime;
-    public long reviewedTime;
+    public String developerContact;
+    public String appstoreId;
 
     @Override
     public void write(ResponseWriter responseWriter) throws WriteException {

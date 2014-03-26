@@ -1,4 +1,4 @@
-package org.onepf.repository.model.amazon.db;
+package org.onepf.repository.model.services.amazon.entities;
 
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.amazonaws.services.dynamodbv2.model.ComparisonOperator;
@@ -12,20 +12,7 @@ import java.util.Map;
 /**
  * Created by ivanoff on 18.03.14.
  */
-public class AmazonDownloadEntity extends AmazonDBEntity{
-    /*
-        <download>
-            <package>com.softspb.geo_game</package>
-            <datetime>2013-02-22T23:30:30Z</datetime>
-            <version>1.0</version>
-            <build>50</build>
-            <last-updated>20130227T110425</last-updated>
-            <device-model>SHW-M130K</device-model>
-            <device-name>Samsung GT-i9082</device-name>
-            <country>US</country>
-            <is-update>no</is-update>
-        </download>
-     */
+public class AmazonDownloadEntity extends AmazonDBEntity {
 
     public static final String FIELD_PACKAGE_NAME = "package"; // DynamoDB Hash key
     public static final String FIELD_DATE_TIME = "datetime"; // DynamoDB Range key
@@ -72,12 +59,12 @@ public class AmazonDownloadEntity extends AmazonDBEntity{
         return this;
     }
 
-    public AmazonDownloadEntity withDateTime(long dateTime) {
+    public AmazonDownloadEntity withDateTime(String dateTime) {
         put(FIELD_DATE_TIME, dateTime);
         return this;
     }
 
-    public AmazonDownloadEntity withLastUpdate(long lastUpdateTime) {
+    public AmazonDownloadEntity withLastUpdate(String lastUpdateTime) {
         put(FIELD_LAST_UPDATE, lastUpdateTime);
         return this;
     }
@@ -95,8 +82,8 @@ public class AmazonDownloadEntity extends AmazonDBEntity{
     public static DownloadDescriptor getDescriptor(Map<String, AttributeValue> item) {
         DownloadDescriptor downloadDescriptor = new DownloadDescriptor();
         downloadDescriptor.packageName = getString(item, FIELD_PACKAGE_NAME);
-        downloadDescriptor.dateTime = getLong(item, FIELD_DATE_TIME);
-        downloadDescriptor.lastUpdate = getLong(item, FIELD_LAST_UPDATE);
+        downloadDescriptor.dateTime = getString(item, FIELD_DATE_TIME);
+        downloadDescriptor.lastUpdate = getString(item, FIELD_LAST_UPDATE);
         downloadDescriptor.build = getInt(item, FIELD_BUILD);
         downloadDescriptor.version = getString(item, FIELD_VERSION);
         downloadDescriptor.country = getString(item, FIELD_COUNTRY);

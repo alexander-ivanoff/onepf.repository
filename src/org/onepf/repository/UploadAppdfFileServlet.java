@@ -1,6 +1,6 @@
 package org.onepf.repository;
 
-import org.onepf.repository.model.AppdfToUpload;
+import org.onepf.repository.model.UploadAppdfRequestHandler;
 import org.onepf.repository.model.auth.AppstoreDescriptor;
 import org.onepf.repository.utils.uploader.NoMultipartException;
 import org.onepf.repository.utils.uploader.UploadFileHandler;
@@ -19,7 +19,7 @@ public class UploadAppdfFileServlet extends BaseServlet {
 
     private static final String DEVELOPERS_CONTACT = "developersContact";
 
-    private AppdfToUpload appdfHandler;
+    private UploadAppdfRequestHandler appdfHandler;
 
     File tempDir;
     File uploadDir;

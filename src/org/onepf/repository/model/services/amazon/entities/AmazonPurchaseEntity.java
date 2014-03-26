@@ -1,4 +1,4 @@
-package org.onepf.repository.model.amazon.db;
+package org.onepf.repository.model.services.amazon.entities;
 
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.amazonaws.services.dynamodbv2.model.ComparisonOperator;
@@ -12,7 +12,7 @@ import java.util.Map;
 /**
  * Created by ivanoff on 18.03.14.
  */
-public class AmazonPurchaseEntity extends AmazonDBEntity{
+public class AmazonPurchaseEntity extends AmazonDBEntity {
 
     public static final String FIELD_PACKAGE_NAME = "package"; // DynamoDB Hash key
     public static final String FIELD_DATE_TIME = "datetime"; // DynamoDB Range key
@@ -83,12 +83,12 @@ public class AmazonPurchaseEntity extends AmazonDBEntity{
         return this;
     }
 
-    public AmazonPurchaseEntity withDateTime(long dateTime) {
+    public AmazonPurchaseEntity withDateTime(String dateTime) {
         put(FIELD_DATE_TIME, dateTime);
         return this;
     }
 
-    public AmazonPurchaseEntity withLastUpdate(long lastUpdateTime) {
+    public AmazonPurchaseEntity withLastUpdate(String lastUpdateTime) {
         put(FIELD_LAST_UPDATE, lastUpdateTime);
         return this;
     }
@@ -106,8 +106,8 @@ public class AmazonPurchaseEntity extends AmazonDBEntity{
     public static PurchaseDescriptor getDescriptor(Map<String, AttributeValue> item) {
         PurchaseDescriptor purchaseDescriptor = new PurchaseDescriptor();
         purchaseDescriptor.packageName = getString(item, FIELD_PACKAGE_NAME);
-        purchaseDescriptor.dateTime = getLong(item, FIELD_DATE_TIME);
-        purchaseDescriptor.lastUpdate = getLong(item, FIELD_LAST_UPDATE);
+        purchaseDescriptor.dateTime = getString(item, FIELD_DATE_TIME);
+        purchaseDescriptor.lastUpdate = getString(item, FIELD_LAST_UPDATE);
         purchaseDescriptor.build = getInt(item, FIELD_BUILD);
         purchaseDescriptor.version = getString(item, FIELD_VERSION);
         purchaseDescriptor.country = getString(item, FIELD_COUNTRY);

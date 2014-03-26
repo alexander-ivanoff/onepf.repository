@@ -1,6 +1,9 @@
-package org.onepf.repository.model.amazon.db;
+package org.onepf.repository.model.services.amazon.entities;
 
-import com.amazonaws.services.dynamodbv2.model.*;
+import com.amazonaws.services.dynamodbv2.model.AttributeValue;
+import com.amazonaws.services.dynamodbv2.model.ComparisonOperator;
+import com.amazonaws.services.dynamodbv2.model.Condition;
+import com.amazonaws.services.dynamodbv2.model.QueryRequest;
 import org.onepf.repository.model.auth.AppstoreDescriptor;
 
 import java.util.HashMap;
@@ -9,7 +12,7 @@ import java.util.Map;
 /**
  * Created by ivanoff on 18.03.14.
  */
-public class AmazonAppstoreEntity extends AmazonDBEntity{
+public class AmazonAppstoreEntity extends AmazonDBEntity {
 
     public static final String FIELD_REPOSITORY = "repository";
     public static final String FIELD_AUTH_TOKEN = "authtoken";
@@ -72,9 +75,9 @@ public class AmazonAppstoreEntity extends AmazonDBEntity{
     public static AppstoreDescriptor getDescriptor(Map<String, AttributeValue> item ) {
         AppstoreDescriptor appDescriptor = new AppstoreDescriptor();
         appDescriptor.authToken = getString(item, FIELD_AUTH_TOKEN);
-        appDescriptor.appstoreName = getString(item, FIELD_APPSTORE_NAME);
+        appDescriptor.appstoreId = getString(item, FIELD_APPSTORE_NAME);
         appDescriptor.description = getString(item, FIELD_DESCRIPTION);
-        appDescriptor.ipDns = getString(item, FIELD_IP_DNS);
+        appDescriptor.openaepUrl = getString(item, FIELD_IP_DNS);
         appDescriptor.publickKey = getString(item, FIELD_PUBLICKEY);
         return  appDescriptor;
     }

@@ -9,11 +9,11 @@ import org.onepf.repository.utils.responsewriter.WriteException;
  */
 public class DownloadDescriptor implements Writable {
     public String packageName;
-    public long dateTime;
+    public String dateTime;
     public String isUpdate;
     public String version;
     public int build;
-    public long lastUpdate;
+    public String lastUpdate;
     public String deviceModel;
     public String deviceName;
     public String country;

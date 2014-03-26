@@ -1,7 +1,7 @@
 package org.onepf.repository;
 
-import org.onepf.repository.model.DownloadsList;
-import org.onepf.repository.model.Options;
+import org.onepf.repository.model.GetDownloadsRequestHandler;
+import org.onepf.repository.model.services.DataException;
 import org.onepf.repository.utils.responsewriter.ResponseWriter;
 import org.onepf.repository.utils.responsewriter.WriteException;
 import org.onepf.repository.utils.responsewriter.XmlResponseWriter;
@@ -21,7 +21,7 @@ public class GetDownloadListServlet extends BaseServlet {
     private static final String PARAMETER_PACKAGE = "package";
     private static final String PARAMETER_DATE = "date";
 
-    private DownloadsList list;
+    private GetDownloadsRequestHandler list;
 
     @Override
     public void init() throws ServletException {
@@ -46,15 +46,13 @@ public class GetDownloadListServlet extends BaseServlet {
             // TODO PARSE DATE
         }
 
-        Options options = new Options(2);
-        options.put(Options.PACKAGE_NAME, packageName);
-        options.put(Options.UPDATE_TIME, String.valueOf(0));
-
-        List<DownloadDescriptor> downloads = list.getDownloads(options);
-        ResponseWriter responseWriter = new XmlResponseWriter();
         try {
+            List<DownloadDescriptor> downloads = list.getDownloads(packageName, 0);
+            ResponseWriter responseWriter = new XmlResponseWriter();
             responseWriter.writeDownloads(response.getWriter(), downloads);
         } catch (WriteException e) {
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        } catch (DataException e) {
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
     }

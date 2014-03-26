@@ -57,10 +57,9 @@ public class XmlResponseWriter extends ResponseWriter {
         try {
             out.writeEmptyElement("application");
             out.writeAttribute("package", app.packageName);
-            out.writeAttribute("version", app.version);
-            out.writeAttribute("build", String.valueOf(app.build));
-            out.writeAttribute("last-updated", String.valueOf(app.updatedTime));
-            out.writeAttribute("last-review", String.valueOf(app.reviewedTime));
+            //out.writeAttribute("version", app.version);
+            //out.writeAttribute("build", String.valueOf(app.build));
+            out.writeAttribute("last-updated", String.valueOf(app.lastUpdated));
         } catch (XMLStreamException e) {
             throw new WriteException(e);
         }

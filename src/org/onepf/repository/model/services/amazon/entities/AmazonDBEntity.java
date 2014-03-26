@@ -1,4 +1,4 @@
-package org.onepf.repository.model.amazon.db;
+package org.onepf.repository.model.services.amazon.entities;
 
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 
