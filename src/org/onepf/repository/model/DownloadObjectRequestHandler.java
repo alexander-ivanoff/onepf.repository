@@ -2,6 +2,7 @@ package org.onepf.repository.model;
 
 import org.onepf.repository.model.services.DataService;
 import org.onepf.repository.model.services.StorageException;
+import org.onepf.repository.model.services.StorageObject;
 import org.onepf.repository.model.services.StorageService;
 
 import java.io.FileNotFoundException;
@@ -12,10 +13,6 @@ import java.io.InputStream;
  */
 public class DownloadObjectRequestHandler extends BaseRequestHandler {
 
-    public DownloadObjectRequestHandler(DataService dataService, StorageService storageService) {
-        super(dataService, storageService);
-    }
-
     public static class ObjectOptions {
         public String packageName;
         public FileType fileType = FileType.APPDF;
@@ -23,13 +20,19 @@ public class DownloadObjectRequestHandler extends BaseRequestHandler {
     }
 
     private ObjectOptions options;
+    StorageObject storageObject;
 
-    public void init (ObjectOptions options) {
+    public DownloadObjectRequestHandler(DataService dataService, StorageService storageService) {
+        super(dataService, storageService);
+    }
+
+    public void init(ObjectOptions options) throws StorageException{
         this.options = options;
+        storageObject = storageService.getObject(options.packageName, options.fileType);
     }
 
     public InputStream getAsStream() throws StorageException {
-        return storageService.getObjectAsStream(options.packageName, options.fileType);
+        return storageObject.asStream();
     }
 
 
@@ -38,7 +41,7 @@ public class DownloadObjectRequestHandler extends BaseRequestHandler {
     }
 
     public long getSize() throws FileNotFoundException, StorageException {
-        return storageService.getObjectSize(options.packageName, options.fileType);
+        return storageObject.size();
     }
 
 }
