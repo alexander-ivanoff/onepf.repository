@@ -4,6 +4,9 @@ import org.onepf.repository.model.services.DataService;
 import org.onepf.repository.model.services.StorageService;
 
 /**
+ *
+ * Handlers should be stateless to work safely in different threads
+ *
  * Created by ivanoff on 12.03.14.
  */
 public abstract class BaseRequestHandler {

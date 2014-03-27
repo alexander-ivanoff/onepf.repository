@@ -4,6 +4,7 @@ import org.apache.commons.io.IOUtils;
 import org.onepf.repository.model.DownloadObjectRequestHandler;
 import org.onepf.repository.model.FileType;
 import org.onepf.repository.model.services.StorageException;
+import org.onepf.repository.model.services.StorageObject;
 import org.onepf.repository.utils.downloader.NoPackageException;
 
 import javax.servlet.ServletException;
@@ -58,19 +59,19 @@ public class DownloadObjectServlet extends BaseServlet {
         InputStream in = null;
         OutputStream out = null;
         try {
-            downloadObjectRequestHandler.init(objectOptions);
+            StorageObject objectToDownload = downloadObjectRequestHandler.getObject(objectOptions);
             String mimeType = null;
             if (objectOptions.fileType == FileType.DESCRIPTION) {
                 mimeType = "application/xml";
             } else {
                 mimeType = "application/octet-stream";
-                response.setHeader("Content-Disposition", "attachment; filename=\"" + downloadObjectRequestHandler.getName() + "\"");
+                response.setHeader("Content-Disposition", "attachment; filename=\"" + fileType.addExtention(packageName) + "\"");
             }
-            response.setContentLength((int) downloadObjectRequestHandler.getSize());
+            response.setContentLength((int) objectToDownload.size());
             response.setContentType(mimeType);
 
 
-            in = downloadObjectRequestHandler.getAsStream();
+            in = objectToDownload.asStream();
             out = response.getOutputStream();
             IOUtils.copy(in, out);
         } catch (NoPackageException e) {

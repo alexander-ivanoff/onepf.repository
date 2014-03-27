@@ -27,7 +27,7 @@ public class UploadAppdfRequestHandler extends BaseRequestHandler {
 
     public static final String APPDF_DESCRIPTION_FILE_NAME = "description.xml"; // Move to RepositoryOptions
 
-    private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     public UploadAppdfRequestHandler(DataService dataService, StorageService storageService) {
         super(dataService, storageService);
