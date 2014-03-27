@@ -11,6 +11,7 @@ import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.services.s3.model.S3Object;
 import org.onepf.repository.model.FileType;
 import org.onepf.repository.model.services.StorageException;
+import org.onepf.repository.model.services.StorageObject;
 import org.onepf.repository.model.services.StorageService;
 
 import java.io.InputStream;
@@ -19,6 +20,25 @@ import java.io.InputStream;
  * Created by ivanoff on 25.03.14.
  */
 public class AmazonStorageService implements StorageService {
+
+    public static class AmazonStorageObject implements StorageObject {
+
+        S3Object s3Object;
+
+        protected AmazonStorageObject(S3Object s3Object) {
+            this.s3Object = s3Object;
+        }
+
+        @Override
+        public InputStream asStream() throws StorageException {
+            return s3Object.getObjectContent();
+        }
+
+        @Override
+        public long size() throws StorageException {
+            return s3Object.getObjectMetadata().getContentLength();
+        }
+    }
 
     private AmazonS3 amazonS3;
 
@@ -48,17 +68,9 @@ public class AmazonStorageService implements StorageService {
     }
 
     @Override
-    public InputStream getObjectAsStream(String packageName, FileType fileType) throws StorageException {
+    public StorageObject getObject(String packageName, FileType fileType) throws StorageException {
         String amazonS3Key = amazonS3Key(packageName, fileType);
-        S3Object amazonS3Object = amazonS3.getObject(new GetObjectRequest(options.bucket, amazonS3Key));
-        return amazonS3Object.getObjectContent();
-    }
-
-    @Override
-    public long getObjectSize(String packageName, FileType fileType) throws StorageException {
-        String amazonS3Key = amazonS3Key(packageName, fileType);
-        S3Object amazonS3Object = amazonS3.getObject(new GetObjectRequest(options.bucket, amazonS3Key));
-        return amazonS3Object.getObjectMetadata().getContentLength();
+        return new AmazonStorageObject(amazonS3.getObject(new GetObjectRequest(options.bucket, amazonS3Key)));
     }
 
     private String amazonS3Key(String packageName, FileType fileType) {

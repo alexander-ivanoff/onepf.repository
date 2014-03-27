@@ -10,7 +10,6 @@ import java.io.InputStream;
 public interface StorageService {
 
     void storeObject(String packageName, InputStream is, FileType fileType, long contentLength) throws StorageException;
-    InputStream getObjectAsStream(String packageName, FileType fileType) throws StorageException;
-    long getObjectSize(String packageName, FileType fileType) throws StorageException;
+    StorageObject getObject(String packageName, FileType fileType) throws StorageException;
 
 }
