@@ -1,9 +1,9 @@
 package org.onepf.repository.model;
 
-import org.onepf.repository.model.services.DataService;
-import org.onepf.repository.model.services.StorageException;
-import org.onepf.repository.model.services.StorageObject;
-import org.onepf.repository.model.services.StorageService;
+import org.onepf.repository.model.services.*;
+import org.onepf.repository.utils.responsewriter.descriptors.ApplicationDescriptor;
+
+import java.util.List;
 
 /**
  * Created by ivanoff on 12.03.14.
@@ -20,7 +20,19 @@ public class DownloadObjectRequestHandler extends BaseRequestHandler {
         super(dataService, storageService);
     }
 
-    public StorageObject getObject(ObjectOptions options) throws StorageException{
-        return storageService.getObject(options.packageName, options.fileType);
+    public StorageObject getObject(ObjectOptions options) throws StorageException, DataException {
+        List<ApplicationDescriptor> appLog = dataService.getApplicationsLog(options.packageName, -1);
+        String objectKey = null;
+        switch (options.fileType) {
+            case DESCRIPTION:
+                objectKey = appLog.get(0).descriptionLink;
+                break;
+            case APK:
+            case APPDF:
+            default:
+                objectKey = appLog.get(0).appdfLink;
+        }
+
+        return storageService.getObject(objectKey);
     }
 }

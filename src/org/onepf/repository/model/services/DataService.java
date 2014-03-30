@@ -14,8 +14,12 @@ import java.util.Map;
  */
 public interface DataService {
 
+
+    // TODO refactoring: move method in different requests (Maybe Entities), here should be only generic requests
+
     void store(ApplicationDescriptor applicationDescriptor) throws DataException;
-    List<ApplicationDescriptor> getApplications() throws DataException;
+    List<ApplicationDescriptor> getApplicationsLog() throws DataException;
+    List<ApplicationDescriptor> getApplicationsLog(String packageName, int page) throws DataException;
     Map<String,AppstoreDescriptor> getAppstores() throws DataException;
     ArrayList<DownloadDescriptor> getDownloads(String packageName, long updateTime) throws DataException;
     ArrayList<PurchaseDescriptor> getPurchases(String packageName, long updateTime) throws DataException;

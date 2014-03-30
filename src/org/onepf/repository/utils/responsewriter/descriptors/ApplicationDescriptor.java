@@ -14,6 +14,10 @@ public class ApplicationDescriptor implements Writable {
     public int build;
     public String developerContact;
     public String appstoreId;
+    public String appdfLink;
+    public String descriptionLink;
+    public int currPageHash;
+    public int prevPageHash;
 
     @Override
     public void write(ResponseWriter responseWriter) throws WriteException {

@@ -56,13 +56,13 @@ public class AmazonAppEntity extends AmazonDBEntity {
         return this;
     }
 
-    public AmazonAppEntity withAppdf(String appdfS3key) {
-        put(FIELD_APPDF, appdfS3key);
+    public AmazonAppEntity withAppdf(String appdfKey) {
+        put(FIELD_APPDF, appdfKey);
         return this;
     }
 
-    public AmazonAppEntity withDescription(String descriptionS3key) {
-        put(FIELD_DESCRIPTION, descriptionS3key);
+    public AmazonAppEntity withDescription(String descriptionKey) {
+        put(FIELD_DESCRIPTION, descriptionKey);
         return this;
     }
 
@@ -97,6 +97,8 @@ public class AmazonAppEntity extends AmazonDBEntity {
         appDescriptor.lastUpdated = getString(item, FIELD_LAST_UPDATE);
         appDescriptor.developerContact = getString(item, FIELD_DEVELOPERS_CONTACT);
         appDescriptor.appstoreId = getString(item, FIELD_APPSTORE_ID);
+        appDescriptor.appdfLink = getString(item, FIELD_APPDF);
+        appDescriptor.descriptionLink = getString(item, FIELD_DESCRIPTION);
         return  appDescriptor;
     }
 
@@ -104,6 +106,23 @@ public class AmazonAppEntity extends AmazonDBEntity {
         AmazonAppEntity keyEntity = new AmazonAppEntity().withPackageName(packageName);
 
         return new GetItemRequest().withKey(keyEntity.getItem());
+    }
+
+    public static QueryRequest searchRequestByPackageName(String packageName) {
+        Condition hashKeyCondition = new Condition()
+                .withComparisonOperator(ComparisonOperator.EQ.toString())
+                .withAttributeValueList(new AttributeValue().withS(DEFAULT_REPOSITORY));
+
+        Condition rangeKeyCondition = new Condition()
+                .withComparisonOperator(ComparisonOperator.EQ.toString())
+                .withAttributeValueList(new AttributeValue().withS(packageName));
+
+        Map<String, Condition> keyConditions = new HashMap<String, Condition>();
+        keyConditions.put(AmazonAppEntity.FIELD_REPOSITORY, hashKeyCondition);
+        keyConditions.put(AmazonAppEntity.FIELD_PACKAGE_NAME, rangeKeyCondition);
+
+        return new QueryRequest()
+                .withKeyConditions(keyConditions);
     }
 
     public static QueryRequest searchRequestByLastUpdatedTime(String lastUpdatedTime) {

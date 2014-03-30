@@ -1,7 +1,6 @@
 package org.onepf.repository.model.services.filesystem;
 
 import org.apache.commons.io.IOUtils;
-import org.onepf.repository.model.FileType;
 import org.onepf.repository.model.services.StorageException;
 import org.onepf.repository.model.services.StorageObject;
 import org.onepf.repository.model.services.StorageService;
@@ -48,13 +47,15 @@ public class FilesystemStorageService implements StorageService {
     }
 
     @Override
-    public void storeObject(String packageName, InputStream is, FileType fileType, long contentLength) throws StorageException {
+    public void storeObject(String objectKey, InputStream is, long contentLength) throws StorageException {
         OutputStream fos = null;
             try {
-                File packageDir = new File(targetDir, packageName);
-                packageDir.mkdirs();
+                //File packageDir = new File(targetDir, packageName);
+                //packageDir.mkdirs();
 
-                File targetFile = new File(packageDir, fileType.addExtention(packageName));
+                File targetFile = new File(targetDir, objectKey);
+
+                targetFile.getParentFile().mkdirs();
                 targetFile.createNewFile();
 
                 fos = new FileOutputStream(targetFile);
@@ -69,8 +70,8 @@ public class FilesystemStorageService implements StorageService {
     }
 
     @Override
-    public StorageObject getObject(String packageName, FileType fileType) throws StorageException {
-        return new FileStorageObject(targetDir, packageName + File.separator + fileType.addExtention(packageName));
+    public StorageObject getObject(String objectKey) throws StorageException {
+        return new FileStorageObject(targetDir, objectKey);
     }
 
 }

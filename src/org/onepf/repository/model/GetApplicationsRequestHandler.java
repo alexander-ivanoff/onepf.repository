@@ -16,9 +16,9 @@ public class GetApplicationsRequestHandler extends BaseRequestHandler {
         super(dataService, storageService);
     }
 
-    public List<ApplicationDescriptor> getApplications() throws DataException {
+    public List<ApplicationDescriptor> getApplications(int pageHash) throws DataException {
         long time = System.currentTimeMillis();
-        List<ApplicationDescriptor> apps = dataService.getApplications();
+        List<ApplicationDescriptor> apps = dataService.getApplicationsLog(null, pageHash);
         System.out.println("List applications time: " + (System.currentTimeMillis() - time));  // TODO move to Log4J
         return apps;
     }

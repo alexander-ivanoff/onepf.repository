@@ -10,6 +10,7 @@ import org.onepf.repository.model.auth.AppstoreDescriptor;
 import org.onepf.repository.model.services.DataException;
 import org.onepf.repository.model.services.DataService;
 import org.onepf.repository.model.services.mysql.entities.*;
+import org.onepf.repository.utils.Pair;
 import org.onepf.repository.utils.responsewriter.descriptors.ApplicationDescriptor;
 import org.onepf.repository.utils.responsewriter.descriptors.DownloadDescriptor;
 import org.onepf.repository.utils.responsewriter.descriptors.PurchaseDescriptor;
@@ -25,6 +26,8 @@ import java.util.*;
  * Created by ivanoff on 18.03.14.
  */
 public class SqlDataService implements DataService {
+
+    // TODO refactoring: move method in different requests (Maybe Entities), here should be only generic requests
 
     private DataSource dbDataSource;
 
@@ -58,9 +61,11 @@ public class SqlDataService implements DataService {
                     .withPackageName(applicationDescriptor.packageName)
                     .withLastUpdate(applicationDescriptor.lastUpdated)
                     .withDevelopersContact(applicationDescriptor.developerContact)
-                    .withAppstore(applicationDescriptor.appstoreId);
+                    .withAppstore(applicationDescriptor.appstoreId)
+                    .withAppdf(applicationDescriptor.appdfLink)
+                    .withDescription(applicationDescriptor.descriptionLink);
             conn = dbDataSource.getConnection();
-            stmt = insert(conn, "applications", appEntity);
+            stmt = insertWithHashes(conn, "applications", appEntity, 3);
             stmt.executeUpdate();
         } catch (SQLException e) {
             throw new DataException(e);
@@ -72,13 +77,34 @@ public class SqlDataService implements DataService {
     }
 
     @Override
-    public List<ApplicationDescriptor> getApplications() throws DataException{
+    public List<ApplicationDescriptor> getApplicationsLog() throws DataException{
+        return getApplicationsLog(null, -1);
+    }
+
+
+    @Override
+    public List<ApplicationDescriptor> getApplicationsLog(String packageName, int currPageHash) throws DataException{
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rset = null;
         try {
+            String selection = null;
+            String[] selectionArgs = null;
             conn = dbDataSource.getConnection();
-            stmt = query(conn, "applications", null, null);
+            if (packageName != null) {
+                selection = SqlAppEntity.FIELD_PACKAGE_NAME + "=?";
+                selectionArgs = new String[] {packageName};
+            } else {
+                if (currPageHash >= 0) {
+                    selection = "currPageHash=?";
+                    selectionArgs = new String[] {String.valueOf(currPageHash)};
+                } else {
+                    selection = "currPageHash = (SELECT currPageHash FROM applications ORDER BY id DESC LIMIT 1)";
+                    selectionArgs = null;
+                }
+            }
+            String orderBy = SqlAppEntity.FIELD_ID + " DESC";
+            stmt = query(conn, "applications", selection, selectionArgs, orderBy);
             rset = stmt.executeQuery();
             ArrayList<ApplicationDescriptor> apps = new ArrayList<ApplicationDescriptor>();
             while (rset.next()) {
@@ -94,6 +120,8 @@ public class SqlDataService implements DataService {
         }
     }
 
+
+
     @Override
     public Map<String, AppstoreDescriptor> getAppstores() throws DataException{
         Connection conn = null;
@@ -101,7 +129,7 @@ public class SqlDataService implements DataService {
         ResultSet rset = null;
         try {
             conn = dbDataSource.getConnection();
-            stmt = query(conn, "appstores", null, null);
+            stmt = query(conn, "appstores", null, null, null);
             rset = stmt.executeQuery();
             Map<String, AppstoreDescriptor> apps = new HashMap<String, AppstoreDescriptor>();
             AppstoreDescriptor appstore = null;
@@ -127,9 +155,10 @@ public class SqlDataService implements DataService {
         ResultSet rset = null;
         try {
             String selection = SqlDownloadEntity.FIELD_PACKAGE_NAME + "=? AND " + SqlDownloadEntity.FIELD_DATE_TIME + ">=?";
+            String order = SqlDownloadEntity.FIELD_DATE_TIME + " DESC";
             String[] selectionArgs = new String[] {packageName, String.valueOf(updateTime)};
             conn = dbDataSource.getConnection();
-            stmt = query(conn, "applications", selection, selectionArgs);
+            stmt = query(conn, "applications", selection, selectionArgs, order);
             ArrayList<DownloadDescriptor> downloads = new ArrayList<DownloadDescriptor>();
             while (rset.next()) {
                 downloads.add(SqlDownloadEntity.getDescriptor(rset));
@@ -151,9 +180,10 @@ public class SqlDataService implements DataService {
         ResultSet rset = null;
         try {
             String selection = SqlPurchaseEntity.FIELD_PACKAGE_NAME + "=? AND " + SqlPurchaseEntity.FIELD_DATE_TIME + ">=?";
+            String order = SqlPurchaseEntity.FIELD_DATE_TIME + " DESC";
             String[] selectionArgs = new String[] {packageName, String.valueOf(updateTime)};
             conn = dbDataSource.getConnection();
-            stmt = query(conn, "applications", selection, selectionArgs);
+            stmt = query(conn, "applications", selection, selectionArgs, order);
             ArrayList<PurchaseDescriptor> purchases = new ArrayList<PurchaseDescriptor>();
             while (rset.next()) {
                 purchases.add(SqlPurchaseEntity.getDescriptor(rset));
@@ -168,7 +198,14 @@ public class SqlDataService implements DataService {
         }
     }
 
-    private static PreparedStatement insert(Connection connection,  String tableName, SqlDBEntity dbEntity) throws SQLException {
+
+    // SELECT count(currPageHash), currPageHash, prevPageHash INTO @cunt, @chash, @phash FROM onepf_repository.applications WHERE  currPageHash = (SELECT currPageHash FROM applications ORDER BY id DESC LIMIT 1);
+    // INSERT INTO applications (appstoreId, currPageHash, prevPageHash, appdfLink, descrLink) VALUES ('com.appstore.test1', IF (@cunt>=3, @chash+1, @chash), IF (@cunt>=3, @chash, @phash), 'aa', 'bb');
+
+
+    private static PreparedStatement insertWithHashes(Connection connection, String tableName, SqlDBEntity dbEntity, int limit) throws SQLException {
+
+        Pair<Integer, Integer> pageHashes = getPageHashes(connection, tableName, limit);
 
         StringBuilder columnsBuilder = new StringBuilder().append("(");
         StringBuilder valuesBuilder = new StringBuilder().append("(");
@@ -178,28 +215,36 @@ public class SqlDataService implements DataService {
             valuesBuilder.append('?').append(',');
 
         }
-        columnsBuilder.replace(columnsBuilder.length() - 1, columnsBuilder.length(), ")");
-        valuesBuilder.replace(valuesBuilder.length() - 1, valuesBuilder.length(), ")");
-        String request = "REPLACE INTO " + tableName + " " + columnsBuilder.toString() + " VALUES " + valuesBuilder.toString();
-        System.out.println("QUERY: " + request);
-        PreparedStatement stmt = null;
 
-            stmt = connection.prepareStatement(request);
-            Collection<String> values = item.values();
-            int index = 0;
-            for (String value: values) {
-                stmt.setString(++index, value);
-            }
+        columnsBuilder.append("currPageHash").append(',');
+        columnsBuilder.append("prevPageHash").append(')');
+        valuesBuilder.append("?").append(',');
+        valuesBuilder.append("?").append(')');
+
+        String request = "INSERT INTO " + tableName + " " + columnsBuilder.toString() + " VALUES " + valuesBuilder.toString() + ";";
+        System.out.println("QUERY: " + request);
+
+        PreparedStatement stmt = connection.prepareStatement(request);
+        Collection<String> values = item.values();
+        int index = 0;
+        for (String value: values) {
+            stmt.setString(++index, value);
+        }
+        stmt.setInt(++index, pageHashes.fst);
+        stmt.setInt(++index, pageHashes.snd);
             return  stmt;
 
     }
 
-    private static PreparedStatement query(Connection connection,  String tableName, String selection, String[] selectionArgs) throws SQLException {
+    private static PreparedStatement query(Connection connection,  String tableName, String selection, String[] selectionArgs, String order) throws SQLException {
 
         StringBuilder requestBuilder = new StringBuilder().append("SELECT * FROM ").append(tableName);
         if (selection != null) {
             requestBuilder.append(" WHERE ").append(selection);
         };
+        if (order != null) {
+            requestBuilder.append(" ORDER BY ").append(order);
+        }
         requestBuilder.append(" LIMIT 1000");
         System.out.println("QUERY: " + requestBuilder.toString());
 
@@ -217,6 +262,27 @@ public class SqlDataService implements DataService {
             e.printStackTrace();
             throw e;
         }
+    }
+
+    // returns pair <currPageHash, prevPageHash>
+    private static Pair<Integer, Integer> getPageHashes(Connection connection,  String tableName, int limit) throws SQLException {
+        String selection = "SELECT count(currPageHash) as cunt, currPageHash as chash, prevPageHash as phash FROM " + tableName + " WHERE currPageHash = (SELECT currPageHash FROM " + tableName + " ORDER BY id DESC LIMIT 1)";
+        PreparedStatement stmt = connection.prepareStatement(selection);
+        ResultSet rs = stmt.executeQuery();
+        int count = 0;
+        int chash = 0, phash = 0;
+        if (rs.next()) {
+            count = rs.getInt(1);
+            chash = rs.getInt(2);
+            phash = rs.getInt(3);
+        }
+        if (count >= limit) {
+            phash = chash;
+            chash += 1;
+        }
+        rs.close();
+        stmt.close();
+        return  new Pair<Integer, Integer>(chash, phash);
     }
 
 }

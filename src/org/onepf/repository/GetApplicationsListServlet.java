@@ -18,6 +18,9 @@ import java.util.List;
  */
 public class GetApplicationsListServlet extends BaseServlet {
 
+    private final static String fileTemplate = "applist_%d.xml";
+    private static final String PARAMETER_PAGE = "page";
+
     private GetApplicationsRequestHandler appLister;
 
     @Override
@@ -31,13 +34,23 @@ public class GetApplicationsListServlet extends BaseServlet {
 
     protected void get(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
+
+        String page = request.getParameter(PARAMETER_PAGE);
+
         try {
-            List<ApplicationDescriptor> apps = appLister.getApplications();
+            List<ApplicationDescriptor> apps = appLister.getApplications(page != null? Integer.valueOf(page) : -1);
             ResponseWriter responseWriter = new XmlResponseWriter();
-            responseWriter.writeApplications(response.getWriter(), apps, 0);
+            String prevFileLink = null;
+            ApplicationDescriptor lastApp = apps.get(0);
+            if (lastApp.currPageHash != lastApp.prevPageHash) {
+                prevFileLink = String.format(fileTemplate, apps.get(0).prevPageHash);
+            }
+            responseWriter.writeApplications(response.getWriter(), apps, apps.get(0).lastUpdated, prevFileLink);
         } catch (WriteException e) {
+            e.printStackTrace();
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         } catch (DataException e) {
+            e.printStackTrace();
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
     }
