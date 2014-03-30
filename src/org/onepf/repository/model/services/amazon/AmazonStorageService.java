@@ -9,7 +9,6 @@ import com.amazonaws.services.s3.model.GetObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.services.s3.model.S3Object;
-import org.onepf.repository.model.FileType;
 import org.onepf.repository.model.services.StorageException;
 import org.onepf.repository.model.services.StorageObject;
 import org.onepf.repository.model.services.StorageService;
@@ -58,22 +57,18 @@ public class AmazonStorageService implements StorageService {
     }
 
     @Override
-    public void storeObject(String packageName, InputStream is, FileType fileType, long contentLength) throws StorageException {
+    public void storeObject(String objectKey, InputStream is, long contentLength) throws StorageException {
 
         long time = System.currentTimeMillis();
         ObjectMetadata metadata = new ObjectMetadata();
         metadata.setContentLength(contentLength);
-        PutObjectRequest putRequest = new PutObjectRequest(options.bucket, amazonS3Key(packageName, fileType), is, metadata);
+        PutObjectRequest putRequest = new PutObjectRequest(options.bucket, objectKey, is, metadata);
         amazonS3.putObject(putRequest);
     }
 
     @Override
-    public StorageObject getObject(String packageName, FileType fileType) throws StorageException {
-        String amazonS3Key = amazonS3Key(packageName, fileType);
-        return new AmazonStorageObject(amazonS3.getObject(new GetObjectRequest(options.bucket, amazonS3Key)));
+    public StorageObject getObject(String objectKey) throws StorageException {
+        return new AmazonStorageObject(amazonS3.getObject(new GetObjectRequest(options.bucket, objectKey)));
     }
 
-    private String amazonS3Key(String packageName, FileType fileType) {
-        return  packageName + "/" + fileType.addExtention(packageName);
-    }
 }

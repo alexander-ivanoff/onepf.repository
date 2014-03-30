@@ -11,6 +11,7 @@ import java.util.Map;
  */
 public class SqlAppEntity extends SqlDBEntity {
 
+    public static final String FIELD_ID= "id";
     public static final String FIELD_PACKAGE_NAME = "package";
     public static final String FIELD_APPSTORE_ID = "appstoreId";
     public static final String FIELD_DEVELOPERS_CONTACT = "devContact";
@@ -19,6 +20,8 @@ public class SqlAppEntity extends SqlDBEntity {
     public static final String FIELD_DESCRIPTION = "descrLink";
     public static final String FIELD_VERSION = "version";
     public static final String FIELD_BUILD = "build";
+    public static final String FIELD_CURR_PAGE_HASH = "currPageHash";
+    public static final String FIELD_PREV_PAGE_HASH = "prevPageHash";
 
 
     public SqlAppEntity() {
@@ -50,13 +53,13 @@ public class SqlAppEntity extends SqlDBEntity {
         return this;
     }
 
-    public SqlAppEntity withAppdf(String appdfS3key) {
-        put(FIELD_APPDF, appdfS3key);
+    public SqlAppEntity withAppdf(String appdfKey) {
+        put(FIELD_APPDF, appdfKey);
         return this;
     }
 
-    public SqlAppEntity withDescription(String descriptionS3key) {
-        put(FIELD_DESCRIPTION, descriptionS3key);
+    public SqlAppEntity withDescription(String descriptionkey) {
+        put(FIELD_DESCRIPTION, descriptionkey);
         return this;
     }
 
@@ -86,6 +89,10 @@ public class SqlAppEntity extends SqlDBEntity {
         appDescriptor.lastUpdated = item.getString(FIELD_LAST_UPDATE);
         appDescriptor.developerContact = item.getString(FIELD_DEVELOPERS_CONTACT);
         appDescriptor.appstoreId = item.getString(FIELD_APPSTORE_ID);
+        appDescriptor.appdfLink = item.getString(FIELD_APPDF);
+        appDescriptor.descriptionLink = item.getString(FIELD_DESCRIPTION);
+        appDescriptor.currPageHash = item.getInt(FIELD_CURR_PAGE_HASH);
+        appDescriptor.prevPageHash = item.getInt(FIELD_PREV_PAGE_HASH);
         return  appDescriptor;
     }
 

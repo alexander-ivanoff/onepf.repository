@@ -3,6 +3,7 @@ package org.onepf.repository;
 import org.apache.commons.io.IOUtils;
 import org.onepf.repository.model.DownloadObjectRequestHandler;
 import org.onepf.repository.model.FileType;
+import org.onepf.repository.model.services.DataException;
 import org.onepf.repository.model.services.StorageException;
 import org.onepf.repository.model.services.StorageObject;
 import org.onepf.repository.utils.downloader.NoPackageException;
@@ -75,12 +76,18 @@ public class DownloadObjectServlet extends BaseServlet {
             out = response.getOutputStream();
             IOUtils.copy(in, out);
         } catch (NoPackageException e) {
+            e.printStackTrace();
             response.sendError(HttpServletResponse.SC_NOT_FOUND, e.getMessage() +" package not found");
         } catch (IOException e) {
+            e.printStackTrace();
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-        }  catch (StorageException e) {
+        } catch (StorageException e) {
+            e.printStackTrace();
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-        }finally {
+        } catch (DataException e) {
+            e.printStackTrace();
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        } finally {
             if (in != null) {
                 in.close();
             }

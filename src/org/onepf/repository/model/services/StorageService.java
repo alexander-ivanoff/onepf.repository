@@ -1,7 +1,5 @@
 package org.onepf.repository.model.services;
 
-import org.onepf.repository.model.FileType;
-
 import java.io.InputStream;
 
 /**
@@ -9,7 +7,7 @@ import java.io.InputStream;
  */
 public interface StorageService {
 
-    void storeObject(String packageName, InputStream is, FileType fileType, long contentLength) throws StorageException;
-    StorageObject getObject(String packageName, FileType fileType) throws StorageException;
+    void storeObject(String objectKey, InputStream is, long contentLength) throws StorageException;
+    StorageObject getObject(String objectKey) throws StorageException;
 
 }

@@ -30,6 +30,9 @@ import java.util.Map;
 public class AmazonDataService implements DataService {
 
 
+    // TODO refactoring: move method in different requests (Maybe Entities), here should be only generic requests
+
+
     private AmazonDynamoDB amazonDynamoDB;
 
     private AmazonOptions options;
@@ -53,16 +56,31 @@ public class AmazonDataService implements DataService {
                 .withPackageName(applicationDescriptor.packageName)
                 .withLastUpdate(applicationDescriptor.lastUpdated)
                 .withDevelopersContact(applicationDescriptor.developerContact)
-                .withAppstore(applicationDescriptor.appstoreId);
+                .withAppstore(applicationDescriptor.appstoreId)
+                .withAppdf(applicationDescriptor.appdfLink)
+                .withDescription(applicationDescriptor.descriptionLink);
 
         PutItemRequest itemRequest = new PutItemRequest().withTableName(options.packageTable).withItem(appEntity.getItem());
         amazonDynamoDB.putItem(itemRequest);
     }
 
     @Override
-    public List<ApplicationDescriptor> getApplications() {
+    public List<ApplicationDescriptor> getApplicationsLog() {
 
         QueryRequest queryRequest = AmazonAppEntity.searchRequestByLastUpdatedTime("1").withTableName(options.packageTable);
+        QueryResult result = amazonDynamoDB.query(queryRequest);
+
+        ArrayList<ApplicationDescriptor> apps = new ArrayList<ApplicationDescriptor>();
+        for (Map<String, AttributeValue> item : result.getItems()) {
+            apps.add(AmazonAppEntity.getDescriptor(item));
+        }
+        return apps;
+    }
+
+    @Override
+    public List<ApplicationDescriptor> getApplicationsLog(String packageName, int pageHash) {
+
+        QueryRequest queryRequest = AmazonAppEntity.searchRequestByPackageName(packageName).withTableName(options.packageTable);
         QueryResult result = amazonDynamoDB.query(queryRequest);
 
         ArrayList<ApplicationDescriptor> apps = new ArrayList<ApplicationDescriptor>();

@@ -20,11 +20,14 @@ public abstract class ResponseWriter {
     public abstract void write(PurchaseDescriptor purchaseDescriptor) throws  WriteException;
     public abstract void write(DownloadDescriptor downloadDescriptor) throws  WriteException;
 
-    public void writeApplications(Writer writer, List<ApplicationDescriptor> applications, long lastUpdated) throws WriteException {
+    public void writeApplications(Writer writer, List<ApplicationDescriptor> applications, String lastUpdated, String offset) throws WriteException {
         Map<String, String> headers = new HashMap<String, String>();
         headers.put("version", "1");
         headers.put("platform", "android");
-        headers.put("last-updated", String.valueOf(lastUpdated));
+        headers.put("last-updated", lastUpdated);
+        if (offset != null) {
+            headers.put("offset", offset);
+        }
         write(writer, "application-list", headers, applications);
     }
 
