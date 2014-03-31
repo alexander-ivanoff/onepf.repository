@@ -3,6 +3,7 @@ package org.onepf.repository.utils.responsewriter;
 import org.onepf.repository.utils.responsewriter.descriptors.ApplicationDescriptor;
 import org.onepf.repository.utils.responsewriter.descriptors.DownloadDescriptor;
 import org.onepf.repository.utils.responsewriter.descriptors.PurchaseDescriptor;
+import org.onepf.repository.utils.responsewriter.descriptors.ReviewDescriptor;
 
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
@@ -105,6 +106,28 @@ public class XmlResponseWriter extends ResponseWriter {
         } catch (XMLStreamException e) {
             throw new WriteException(e);
         }
+    }
+
+    @Override
+    public void write(ReviewDescriptor review) throws WriteException {
+        try {
+            out.writeStartElement("download");
+            writeElement(out, "package", review.packageName );
+            writeElement(out, "version", review.version);
+            writeElement(out, "build", String.valueOf(review.build));
+            writeElement(out, "last-updated", String.valueOf(review.lastUpdate));
+            writeElement(out, "device-model", review.deviceModel);
+            writeElement(out, "device-name", review.deviceName);
+            writeElement(out, "country", review.country);
+            writeElement(out, "stars", String.valueOf(review.stars));
+            writeElement(out, "userName", review.userName);
+            writeElement(out, "title", review.title);
+            writeElement(out, "text", review.body);
+            out.writeEndElement();
+        } catch (XMLStreamException e) {
+            throw new WriteException(e);
+        }
+
     }
 
     private static void writeElement(XMLStreamWriter out, String elementName, String elementValue) throws XMLStreamException {

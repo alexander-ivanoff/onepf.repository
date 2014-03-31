@@ -19,7 +19,9 @@ import java.util.List;
 public class GetDownloadListServlet extends BaseServlet {
 
     private static final String PARAMETER_PACKAGE = "package";
-    private static final String PARAMETER_DATE = "date";
+    private static final String PARAMETER_PAGE = "page";
+
+    private final static String fileTemplate = "downloads_%s_%d.xml";
 
     private GetDownloadsRequestHandler list;
 
@@ -40,19 +42,28 @@ public class GetDownloadListServlet extends BaseServlet {
             return;
         }
 
-        // Date is optional parameter. Can be null
-        String date = request.getParameter(PARAMETER_DATE);
-        if (date != null ) {
-            // TODO PARSE DATE
-        }
+        String page = request.getParameter(PARAMETER_PAGE);
+
 
         try {
-            List<DownloadDescriptor> downloads = list.getDownloads(packageName, 0);
+            List<DownloadDescriptor> downloads = list.getDownloads(packageName, page != null? Integer.valueOf(page) : -1);
             ResponseWriter responseWriter = new XmlResponseWriter();
-            responseWriter.writeDownloads(response.getWriter(), downloads);
+            String prevFileLink = null;
+            String lastUpdated = null;
+            if (downloads.size() > 0 ) {
+                DownloadDescriptor lastDownload = downloads.get(0);
+                lastUpdated = lastDownload.lastUpdate;
+                if (lastDownload.currPageHash != lastDownload.prevPageHash) {
+                    prevFileLink = String.format(fileTemplate, packageName, lastDownload.prevPageHash);
+                }
+
+            }
+            responseWriter.writeDownloads(response.getWriter(), downloads, lastUpdated, prevFileLink);
         } catch (WriteException e) {
+            e.printStackTrace();
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         } catch (DataException e) {
+            e.printStackTrace();
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
     }

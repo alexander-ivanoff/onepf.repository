@@ -4,6 +4,7 @@ import org.onepf.repository.model.services.DataException;
 import org.onepf.repository.model.services.DataService;
 import org.onepf.repository.model.services.StorageService;
 import org.onepf.repository.utils.responsewriter.descriptors.PurchaseDescriptor;
+import org.onepf.repository.utils.responsewriter.descriptors.ReviewDescriptor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,17 +12,17 @@ import java.util.List;
 /**
  * Created by ivanoff on 12.03.14.
  */
-public class GetPurchasesRequestHandler extends BaseRequestHandler {
+public class GetReviewsRequestHandler extends BaseRequestHandler {
 
 
-    public GetPurchasesRequestHandler(DataService dataService, StorageService storageService) {
+    public GetReviewsRequestHandler(DataService dataService, StorageService storageService) {
         super(dataService, storageService);
     }
 
-    public List<PurchaseDescriptor> getPurchases(String packageName, int pageHash) throws DataException {
+    public List<ReviewDescriptor> getReviews(String packageName, int pageHash) throws DataException {
         long time = System.currentTimeMillis();
-        ArrayList<PurchaseDescriptor> purchases = dataService.getPurchases(packageName, pageHash);
+        ArrayList<ReviewDescriptor> reviews = dataService.getReviews(packageName, pageHash);
         System.out.println("List purchases time: " + (System.currentTimeMillis() - time));  // TODO move to Log4J
-        return purchases;
+        return reviews;
     }
 }

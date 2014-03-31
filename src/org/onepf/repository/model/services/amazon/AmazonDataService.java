@@ -10,6 +10,7 @@ import com.amazonaws.services.dynamodbv2.model.PutItemRequest;
 import com.amazonaws.services.dynamodbv2.model.QueryRequest;
 import com.amazonaws.services.dynamodbv2.model.QueryResult;
 import org.onepf.repository.model.auth.AppstoreDescriptor;
+import org.onepf.repository.model.services.DataException;
 import org.onepf.repository.model.services.DataService;
 import org.onepf.repository.model.services.amazon.entities.AmazonAppEntity;
 import org.onepf.repository.model.services.amazon.entities.AmazonAppstoreEntity;
@@ -18,6 +19,7 @@ import org.onepf.repository.model.services.amazon.entities.AmazonPurchaseEntity;
 import org.onepf.repository.utils.responsewriter.descriptors.ApplicationDescriptor;
 import org.onepf.repository.utils.responsewriter.descriptors.DownloadDescriptor;
 import org.onepf.repository.utils.responsewriter.descriptors.PurchaseDescriptor;
+import org.onepf.repository.utils.responsewriter.descriptors.ReviewDescriptor;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -62,6 +64,11 @@ public class AmazonDataService implements DataService {
 
         PutItemRequest itemRequest = new PutItemRequest().withTableName(options.packageTable).withItem(appEntity.getItem());
         amazonDynamoDB.putItem(itemRequest);
+    }
+
+    @Override
+    public void addDownload(DownloadDescriptor downloadDescriptor) throws DataException {
+
     }
 
     @Override
@@ -131,5 +138,10 @@ public class AmazonDataService implements DataService {
             purchases.add(AmazonPurchaseEntity.getDescriptor(item));
         }
         return purchases;
+    }
+
+    @Override
+    public ArrayList<ReviewDescriptor> getReviews(String packageName, int pageHash) throws DataException {
+        return null;
     }
 }

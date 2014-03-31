@@ -17,6 +17,8 @@ public class DownloadDescriptor implements Writable {
     public String deviceModel;
     public String deviceName;
     public String country;
+    public int currPageHash;
+    public int prevPageHash;
 
     @Override
     public void write(ResponseWriter responseWriter) throws WriteException {

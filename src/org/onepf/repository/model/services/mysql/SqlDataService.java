@@ -14,6 +14,7 @@ import org.onepf.repository.utils.Pair;
 import org.onepf.repository.utils.responsewriter.descriptors.ApplicationDescriptor;
 import org.onepf.repository.utils.responsewriter.descriptors.DownloadDescriptor;
 import org.onepf.repository.utils.responsewriter.descriptors.PurchaseDescriptor;
+import org.onepf.repository.utils.responsewriter.descriptors.ReviewDescriptor;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -28,6 +29,9 @@ import java.util.*;
 public class SqlDataService implements DataService {
 
     // TODO refactoring: move method in different requests (Maybe Entities), here should be only generic requests
+
+    private static final int PAGE_LIMIT_APPLICATIONS = 3;
+    private static final int PAGE_LIMIT_OTHER = 3;
 
     private DataSource dbDataSource;
 
@@ -65,7 +69,34 @@ public class SqlDataService implements DataService {
                     .withAppdf(applicationDescriptor.appdfLink)
                     .withDescription(applicationDescriptor.descriptionLink);
             conn = dbDataSource.getConnection();
-            stmt = insertWithHashes(conn, "applications", appEntity, 3);
+            stmt = insertWithHashes(conn, "applications", appEntity, PAGE_LIMIT_APPLICATIONS);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new DataException(e);
+        } finally {
+            try { if (stmt != null) stmt.close(); } catch(Exception e) { }
+            try { if (conn != null) conn.close(); } catch(Exception e) { }
+        }
+
+    }
+
+    @Override
+    public void addDownload(DownloadDescriptor downloadDescriptor) throws DataException {
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        try {
+            SqlDownloadEntity entity = new SqlDownloadEntity()
+                    .withLastUpdate(downloadDescriptor.lastUpdate)
+                    .withBuild(downloadDescriptor.build)
+                    .withPackageName(downloadDescriptor.packageName)
+                    .withCountry(downloadDescriptor.country)
+                    .withDateTime(downloadDescriptor.dateTime)
+                    .withDeviceModel(downloadDescriptor.deviceModel)
+                    .withDeviceName(downloadDescriptor.deviceName)
+                    .withIsUpdate(downloadDescriptor.isUpdate);
+
+            conn = dbDataSource.getConnection();
+            stmt = insertWithHashes(conn, "downloads", downloadDescriptor.packageName, entity, PAGE_LIMIT_OTHER);
             stmt.executeUpdate();
         } catch (SQLException e) {
             throw new DataException(e);
@@ -149,16 +180,24 @@ public class SqlDataService implements DataService {
     }
 
     @Override
-    public ArrayList<DownloadDescriptor> getDownloads(String packageName, long updateTime) throws DataException {
+    public ArrayList<DownloadDescriptor> getDownloads(String packageName, long currPageHash) throws DataException {
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rset = null;
         try {
-            String selection = SqlDownloadEntity.FIELD_PACKAGE_NAME + "=? AND " + SqlDownloadEntity.FIELD_DATE_TIME + ">=?";
-            String order = SqlDownloadEntity.FIELD_DATE_TIME + " DESC";
-            String[] selectionArgs = new String[] {packageName, String.valueOf(updateTime)};
+            String selection = SqlDownloadEntity.FIELD_PACKAGE_NAME + "=? AND ";
+            String[] selectionArgs;
+            if (currPageHash >= 0) {
+                selection += "currPageHash=?";
+                selectionArgs = new String[] {packageName, String.valueOf(currPageHash)};
+            } else {
+                selection += "currPageHash = (SELECT currPageHash FROM applications ORDER BY id DESC LIMIT 1)";
+                selectionArgs = new String[] {packageName};
+            }
+            String order = SqlDownloadEntity.FIELD_ID + " DESC";
             conn = dbDataSource.getConnection();
-            stmt = query(conn, "applications", selection, selectionArgs, order);
+            stmt = query(conn, "downloads", selection, selectionArgs, order);
+            rset = stmt.executeQuery();
             ArrayList<DownloadDescriptor> downloads = new ArrayList<DownloadDescriptor>();
             while (rset.next()) {
                 downloads.add(SqlDownloadEntity.getDescriptor(rset));
@@ -174,16 +213,24 @@ public class SqlDataService implements DataService {
     }
 
     @Override
-    public ArrayList<PurchaseDescriptor> getPurchases(String packageName, long updateTime) throws DataException {
+    public ArrayList<PurchaseDescriptor> getPurchases(String packageName, long currPageHash) throws DataException {
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rset = null;
         try {
-            String selection = SqlPurchaseEntity.FIELD_PACKAGE_NAME + "=? AND " + SqlPurchaseEntity.FIELD_DATE_TIME + ">=?";
-            String order = SqlPurchaseEntity.FIELD_DATE_TIME + " DESC";
-            String[] selectionArgs = new String[] {packageName, String.valueOf(updateTime)};
+            String selection = SqlDownloadEntity.FIELD_PACKAGE_NAME + "=? AND ";
+            String[] selectionArgs;
+            if (currPageHash >= 0) {
+                selection += "currPageHash=?";
+                selectionArgs = new String[] {packageName, String.valueOf(currPageHash)};
+            } else {
+                selection += "currPageHash = (SELECT currPageHash FROM applications ORDER BY id DESC LIMIT 1)";
+                selectionArgs = new String[] {packageName};
+            }
+            String order = SqlDownloadEntity.FIELD_ID + " DESC";
             conn = dbDataSource.getConnection();
-            stmt = query(conn, "applications", selection, selectionArgs, order);
+            stmt = query(conn, "purchases", selection, selectionArgs, order);
+            rset = stmt.executeQuery();
             ArrayList<PurchaseDescriptor> purchases = new ArrayList<PurchaseDescriptor>();
             while (rset.next()) {
                 purchases.add(SqlPurchaseEntity.getDescriptor(rset));
@@ -198,14 +245,50 @@ public class SqlDataService implements DataService {
         }
     }
 
+    @Override
+    public ArrayList<ReviewDescriptor> getReviews(String packageName, int currPageHash) throws DataException {
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ResultSet rset = null;
+        try {
+            String selection = SqlDownloadEntity.FIELD_PACKAGE_NAME + "=? AND ";
+            String[] selectionArgs;
+            if (currPageHash >= 0) {
+                selection += "currPageHash=?";
+                selectionArgs = new String[] {packageName, String.valueOf(currPageHash)};
+            } else {
+                selection += "currPageHash = (SELECT currPageHash FROM applications ORDER BY id DESC LIMIT 1)";
+                selectionArgs = new String[] {packageName};
+            }
+            String order = SqlDownloadEntity.FIELD_ID + " DESC";
+            conn = dbDataSource.getConnection();
+            stmt = query(conn, "reviews", selection, selectionArgs, order);
+            rset = stmt.executeQuery();
+            ArrayList<ReviewDescriptor> reviews = new ArrayList<ReviewDescriptor>();
+            while (rset.next()) {
+                reviews.add(SqlReviewEntity.getDescriptor(rset));
+            }
+            return reviews;
+        } catch (SQLException e) {
+            throw new DataException(e);
+        } finally {
+            try { if (stmt != null) rset.close(); } catch(Exception e) { }
+            try { if (stmt != null) stmt.close(); } catch(Exception e) { }
+            try { if (conn != null) conn.close(); } catch(Exception e) { }
+        }
+    }
+
 
     // SELECT count(currPageHash), currPageHash, prevPageHash INTO @cunt, @chash, @phash FROM onepf_repository.applications WHERE  currPageHash = (SELECT currPageHash FROM applications ORDER BY id DESC LIMIT 1);
     // INSERT INTO applications (appstoreId, currPageHash, prevPageHash, appdfLink, descrLink) VALUES ('com.appstore.test1', IF (@cunt>=3, @chash+1, @chash), IF (@cunt>=3, @chash, @phash), 'aa', 'bb');
 
-
     private static PreparedStatement insertWithHashes(Connection connection, String tableName, SqlDBEntity dbEntity, int limit) throws SQLException {
+        return insertWithHashes(connection, tableName, null,  dbEntity, limit);
+    }
 
-        Pair<Integer, Integer> pageHashes = getPageHashes(connection, tableName, limit);
+    private static PreparedStatement insertWithHashes(Connection connection, String tableName, String packageName, SqlDBEntity dbEntity, int limit) throws SQLException {
+
+        Pair<Integer, Integer> pageHashes = getPageHashes(connection, tableName, packageName, limit);
 
         StringBuilder columnsBuilder = new StringBuilder().append("(");
         StringBuilder valuesBuilder = new StringBuilder().append("(");
@@ -264,10 +347,23 @@ public class SqlDataService implements DataService {
         }
     }
 
-    // returns pair <currPageHash, prevPageHash>
-    private static Pair<Integer, Integer> getPageHashes(Connection connection,  String tableName, int limit) throws SQLException {
-        String selection = "SELECT count(currPageHash) as cunt, currPageHash as chash, prevPageHash as phash FROM " + tableName + " WHERE currPageHash = (SELECT currPageHash FROM " + tableName + " ORDER BY id DESC LIMIT 1)";
+
+    /*
+    **
+    * returns pair <currPageHash, prevPageHash>, packagename is used in downloads, purchases, reviews
+    **
+    */
+    private static Pair<Integer, Integer> getPageHashes(Connection connection,  String tableName, String packageName,  int limit) throws SQLException {
+
+        String selection = "SELECT count(currPageHash) as cunt, currPageHash as chash, prevPageHash as phash FROM " + tableName + " WHERE currPageHash = (SELECT currPageHash FROM " + tableName;
+        if (packageName != null) {
+            selection += " WHERE package=?";
+        }
+        selection += " ORDER BY id DESC LIMIT 1)";
         PreparedStatement stmt = connection.prepareStatement(selection);
+        if (packageName != null) {
+            stmt.setString(0, packageName);
+        }
         ResultSet rs = stmt.executeQuery();
         int count = 0;
         int chash = 0, phash = 0;
