@@ -26,7 +26,7 @@ public class GetApplicationsListServlet extends BaseServlet {
     @Override
     public void init() throws ServletException {
         super.init();
-        appLister = getRepositoryFactory().createApplicationsList();
+        appLister = getRepositoryFactory().createApplicationsHandler();
     }
 
     protected void post(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

@@ -35,7 +35,7 @@ public class DownloadObjectServlet extends BaseServlet {
     @Override
     public void init() throws ServletException {
         super.init();
-        downloadObjectRequestHandler = getRepositoryFactory().createFileRequester();
+        downloadObjectRequestHandler = getRepositoryFactory().createDownloadHandler();
     }
 
     protected void post(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
