@@ -20,8 +20,6 @@ public class SqlAppEntity extends SqlDBEntity {
     public static final String FIELD_DESCRIPTION = "descrLink";
     public static final String FIELD_VERSION = "version";
     public static final String FIELD_BUILD = "build";
-    public static final String FIELD_CURR_PAGE_HASH = "currPageHash";
-    public static final String FIELD_PREV_PAGE_HASH = "prevPageHash";
 
 
     public SqlAppEntity() {
@@ -82,18 +80,18 @@ public class SqlAppEntity extends SqlDBEntity {
     }
 
     public static ApplicationDescriptor getDescriptor(ResultSet item) throws SQLException {
-        ApplicationDescriptor appDescriptor = new ApplicationDescriptor();
-        appDescriptor.packageName = item.getString(FIELD_PACKAGE_NAME);
-        appDescriptor.build = item.getInt(FIELD_BUILD); //TODO no information in DB
-        appDescriptor.version = item.getString(FIELD_VERSION); //"Unknown"; //TODO no information in DB
-        appDescriptor.lastUpdated = item.getString(FIELD_LAST_UPDATE);
-        appDescriptor.developerContact = item.getString(FIELD_DEVELOPERS_CONTACT);
-        appDescriptor.appstoreId = item.getString(FIELD_APPSTORE_ID);
-        appDescriptor.appdfLink = item.getString(FIELD_APPDF);
-        appDescriptor.descriptionLink = item.getString(FIELD_DESCRIPTION);
-        appDescriptor.currPageHash = item.getInt(FIELD_CURR_PAGE_HASH);
-        appDescriptor.prevPageHash = item.getInt(FIELD_PREV_PAGE_HASH);
-        return  appDescriptor;
+        ApplicationDescriptor descriptor = new ApplicationDescriptor();
+        descriptor.packageName = item.getString(FIELD_PACKAGE_NAME);
+        descriptor.build = item.getInt(FIELD_BUILD); //TODO no information in DB
+        descriptor.version = item.getString(FIELD_VERSION); //"Unknown"; //TODO no information in DB
+        descriptor.lastUpdated = item.getString(FIELD_LAST_UPDATE);
+        descriptor.developerContact = item.getString(FIELD_DEVELOPERS_CONTACT);
+        descriptor.appstoreId = item.getString(FIELD_APPSTORE_ID);
+        descriptor.appdfLink = item.getString(FIELD_APPDF);
+        descriptor.descriptionLink = item.getString(FIELD_DESCRIPTION);
+        descriptor.currPageHash = item.getInt(FIELD_CURR_PAGE_HASH);
+        descriptor.prevPageHash = item.getInt(FIELD_PREV_PAGE_HASH);
+        return  descriptor;
     }
 
 }

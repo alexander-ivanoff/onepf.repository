@@ -18,7 +18,7 @@ public class RepositoryFactory {
     }
 
 
-    public DownloadObjectRequestHandler createFileRequester() {
+    public DownloadObjectRequestHandler createDownloadHandler() {
         return new DownloadObjectRequestHandler(dataService, storageService);
     }
 
@@ -26,15 +26,15 @@ public class RepositoryFactory {
         return new UploadAppdfRequestHandler(dataService, storageService);
     }
 
-    public GetApplicationsRequestHandler createApplicationsList() {
+    public GetApplicationsRequestHandler createApplicationsHandler() {
         return new GetApplicationsRequestHandler(dataService, storageService);
     }
 
-    public GetPurchasesRequestHandler createPurchasesList() {
+    public GetPurchasesRequestHandler createPurchasesHandler() {
         return new GetPurchasesRequestHandler(dataService, storageService);
     }
 
-    public GetDownloadsRequestHandler createDownloadsList() {
+    public GetDownloadsRequestHandler createDownloadsHandler() {
         return new GetDownloadsRequestHandler(dataService, storageService);
     }
 
@@ -42,4 +42,7 @@ public class RepositoryFactory {
         return  new AppstoreAuthenticator(dataService, storageService);
     }
 
+    public GetReviewsRequestHandler createReviewsHandler() {
+        return new GetReviewsRequestHandler(dataService, storageService);
+    }
 }

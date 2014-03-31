@@ -4,13 +4,42 @@ import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by ivanoff on 28.03.14.
  */
 public class XmlFileFilter implements Filter {
 
-    public static String FILTER_APPLICATIONS = "applist_";
+    private static class CustomizedRequestWrapper extends HttpServletRequestWrapper{
+
+        private Map<String, String> customizedParameters;
+
+        CustomizedRequestWrapper(HttpServletRequest servletRequest) {
+            super(servletRequest);
+            customizedParameters = new HashMap<String, String>();
+        }
+
+        public void addParameter(String name, String value) {
+            customizedParameters.put(name, value);
+        }
+
+        @Override
+        public String getParameter(String name) {
+            String parameterValue = customizedParameters.get(name);
+            if (parameterValue == null) {
+                parameterValue = super.getParameter(name);
+            }
+            return parameterValue;
+        }
+    }
+
+
+    public static String FILTER_APPLICATIONS = "applist";
+    public static String FILTER_DOWNLOADS = "downloads";
+    public static String FILTER_PURCHASES = "purchases";
+    public static String FILTER_REVIEWS = "reviews";
     public static String FILTER_XML = ".xml";
 
     @Override
@@ -27,20 +56,27 @@ public class XmlFileFilter implements Filter {
             String[] pathParts = servletPath.substring(0, servletPath.length() - FILTER_XML.length()).split("/");
             String lastPart = pathParts[pathParts.length - 1];
 
-            if (lastPart.startsWith(FILTER_APPLICATIONS)) {
-                final String pageHash =  lastPart.substring(FILTER_APPLICATIONS.length());
-                System.out.println("TEST2: " + lastPart.substring(FILTER_APPLICATIONS.length()));
-                final RequestDispatcher dispatcher = httpServletRequest.getRequestDispatcher("/openaep/applist");
+            String[] lastPartParts = lastPart.split("_");
 
-                ServletRequest wrapper = new HttpServletRequestWrapper(httpServletRequest) {
-                    @Override
-                    public String getParameter(String name) {
-                        if (name.equals("page")) {
-                            return pageHash;
-                        }
-                        return super.getParameter(name);
-                    }
-                };
+            RequestDispatcher dispatcher = null;
+            CustomizedRequestWrapper wrapper = new CustomizedRequestWrapper(httpServletRequest);
+
+            if (lastPartParts[0].equals(FILTER_APPLICATIONS)) {
+                dispatcher = httpServletRequest.getRequestDispatcher("/openaep/applist");
+                wrapper.addParameter("page", lastPartParts[1]); // index of page hash
+            } else {
+                if (lastPartParts[0].equals(FILTER_DOWNLOADS)) {
+                    dispatcher = httpServletRequest.getRequestDispatcher("/openaep/downloads");
+                } else if (lastPartParts[0].equals(FILTER_PURCHASES)) {
+                    dispatcher = httpServletRequest.getRequestDispatcher("/openaep/purchases");
+                } else if (lastPartParts[0].equals(FILTER_REVIEWS)) {
+                    dispatcher = httpServletRequest.getRequestDispatcher("/openaep/reviews");
+                }
+                wrapper.addParameter("package", lastPartParts[1]);
+                wrapper.addParameter("page", lastPartParts[2]); // index of page hash
+
+            }
+            if (dispatcher != null) {
                 dispatcher.forward(wrapper, servletResponse);
                 return;
             }

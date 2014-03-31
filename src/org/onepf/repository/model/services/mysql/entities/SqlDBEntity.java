@@ -9,6 +9,9 @@ import java.util.Map;
  */
 public class SqlDBEntity {
 
+    public static final String FIELD_CURR_PAGE_HASH = "currPageHash";
+    public static final String FIELD_PREV_PAGE_HASH = "prevPageHash";
+
     protected Map<String, String> item = new HashMap<String, String>();
 
     public SqlDBEntity() {

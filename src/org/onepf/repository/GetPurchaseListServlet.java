@@ -19,14 +19,17 @@ import java.util.List;
 public class GetPurchaseListServlet extends BaseServlet {
 
     private static final String PARAMETER_PACKAGE = "package";
-    private static final String PARAMETER_DATE = "date";
+    private static final String PARAMETER_PAGE = "page";
+
+    public final static String FILE_PREFIX = "purchases";
+    private final static String FILE_TEMPLATE = FILE_PREFIX + "_%s_%d.xml";
 
     private GetPurchasesRequestHandler getPurchasesRequestHandler;
 
     @Override
     public void init() throws ServletException {
         super.init();
-        getPurchasesRequestHandler = getRepositoryFactory().createPurchasesList();
+        getPurchasesRequestHandler = getRepositoryFactory().createPurchasesHandler();
     }
 
     protected void post(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -40,16 +43,20 @@ public class GetPurchaseListServlet extends BaseServlet {
             return;
         }
 
-        // Date is optional parameter. Can be null
-        String date = request.getParameter(PARAMETER_DATE);
-        if (date != null ) {
-            // TODO PARSE DATE
-        }
-
         try {
-            List<PurchaseDescriptor> purchases = getPurchasesRequestHandler.getPurchases(packageName, 0);
+            String page = request.getParameter(PARAMETER_PAGE);
+            List<PurchaseDescriptor> purchases = getPurchasesRequestHandler.getPurchases(packageName, page != null? Integer.valueOf(page) : -1);
+            String prevFileLink = null;
+            String lastUpdate = null;
+            if (purchases.size() > 0 ) {
+                PurchaseDescriptor lastPurchase = purchases.get(0);
+                lastUpdate = lastPurchase.lastUpdate;
+                if (lastPurchase.currPageHash != lastPurchase.prevPageHash) {
+                    prevFileLink = String.format(FILE_TEMPLATE, packageName, lastPurchase.prevPageHash);
+                }
+            }
             ResponseWriter responseWriter = new XmlResponseWriter();
-            responseWriter.writePurchases(response.getWriter(), purchases);
+            responseWriter.writePurchases(response.getWriter(), purchases, lastUpdate, prevFileLink);
         } catch (WriteException e) {
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         } catch (DataException e) {

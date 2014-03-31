@@ -1,7 +1,5 @@
 package org.onepf.repository.model.services.mysql.entities;
 
-import com.amazonaws.services.dynamodbv2.model.AttributeValue;
-import org.onepf.repository.model.services.amazon.entities.AmazonDBEntity;
 import org.onepf.repository.utils.responsewriter.descriptors.PurchaseDescriptor;
 
 import java.sql.ResultSet;
@@ -11,7 +9,7 @@ import java.util.Map;
 /**
  * Created by ivanoff on 18.03.14.
  */
-public class SqlPurchaseEntity extends AmazonDBEntity {
+public class SqlPurchaseEntity extends SqlDBEntity {
 
     public static final String FIELD_ID = "id"; //PK
     public static final String FIELD_PACKAGE_NAME = "package"; // FK(applications)
@@ -28,7 +26,11 @@ public class SqlPurchaseEntity extends AmazonDBEntity {
     public static final String FIELD_INNER_CURRENCY = "innerCurrency";
 
 
-    public SqlPurchaseEntity(Map<String, AttributeValue> item) {
+    public SqlPurchaseEntity() {
+        super();
+    }
+
+    public SqlPurchaseEntity(Map<String, String> item) {
         super(item);
     }
 
@@ -99,21 +101,23 @@ public class SqlPurchaseEntity extends AmazonDBEntity {
 
 
     public static PurchaseDescriptor getDescriptor(ResultSet item) throws SQLException {
-        PurchaseDescriptor purchaseDescriptor = new PurchaseDescriptor();
-        purchaseDescriptor.packageName = item.getString(FIELD_PACKAGE_NAME);
-        purchaseDescriptor.dateTime = item.getString(FIELD_DATE_TIME);
-        purchaseDescriptor.lastUpdate = item.getString(FIELD_LAST_UPDATE);
-        purchaseDescriptor.build = item.getInt(FIELD_BUILD);
-        purchaseDescriptor.version = item.getString(FIELD_VERSION);
-        purchaseDescriptor.country = item.getString(FIELD_COUNTRY);
-        purchaseDescriptor.deviceModel = item.getString(FIELD_DEVICE_MODEL);
-        purchaseDescriptor.deviceName= item.getString(FIELD_DEVICE_NAME);
-        purchaseDescriptor.innerPrice = item.getString(FIELD_INNER_PRICE);
-        purchaseDescriptor.innerCurrency = item.getString(FIELD_INNER_CURRENCY);
-        purchaseDescriptor.userPrice = item.getString(FIELD_USER_PRICE);
-        purchaseDescriptor.userCurrency = item.getString(FIELD_USER_CURRENCY);
-        purchaseDescriptor.id = item.getString(FIELD_ID);
-        return  purchaseDescriptor;
+        PurchaseDescriptor descriptor = new PurchaseDescriptor();
+        descriptor.packageName = item.getString(FIELD_PACKAGE_NAME);
+        descriptor.dateTime = item.getString(FIELD_DATE_TIME);
+        descriptor.lastUpdate = item.getString(FIELD_LAST_UPDATE);
+        descriptor.build = item.getInt(FIELD_BUILD);
+        descriptor.version = item.getString(FIELD_VERSION);
+        descriptor.country = item.getString(FIELD_COUNTRY);
+        descriptor.deviceModel = item.getString(FIELD_DEVICE_MODEL);
+        descriptor.deviceName= item.getString(FIELD_DEVICE_NAME);
+        descriptor.innerPrice = item.getString(FIELD_INNER_PRICE);
+        descriptor.innerCurrency = item.getString(FIELD_INNER_CURRENCY);
+        descriptor.userPrice = item.getString(FIELD_USER_PRICE);
+        descriptor.userCurrency = item.getString(FIELD_USER_CURRENCY);
+        descriptor.id = item.getString(FIELD_ID);
+        descriptor.currPageHash = item.getInt(FIELD_CURR_PAGE_HASH);
+        descriptor.prevPageHash = item.getInt(FIELD_PREV_PAGE_HASH);
+        return  descriptor;
     }
 
 }
