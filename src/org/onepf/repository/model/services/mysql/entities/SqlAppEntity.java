@@ -1,33 +1,28 @@
 package org.onepf.repository.model.services.mysql.entities;
 
+import org.onepf.repository.model.services.DataException;
 import org.onepf.repository.utils.responsewriter.descriptors.ApplicationDescriptor;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Map;
 
 /**
  * Created by ivanoff on 18.03.14.
  */
-public class SqlAppEntity extends SqlDBEntity {
+public class SqlAppEntity extends SqlDBEntity<ApplicationDescriptor>  implements GenericFields {
 
-    public static final String FIELD_ID= "id";
-    public static final String FIELD_PACKAGE_NAME = "package";
+
     public static final String FIELD_APPSTORE_ID = "appstoreId";
     public static final String FIELD_DEVELOPERS_CONTACT = "devContact";
-    public static final String FIELD_LAST_UPDATE = "lastUpdate";
     public static final String FIELD_APPDF = "appdfLink";
     public static final String FIELD_DESCRIPTION = "descrLink";
     public static final String FIELD_VERSION = "version";
     public static final String FIELD_BUILD = "build";
 
+    public static final String TABLE_NAME = "applications";
 
     public SqlAppEntity() {
-        super();
-    }
-
-    public SqlAppEntity(Map<String, String> item) {
-        super(item);
+        super(TABLE_NAME);
     }
 
 
@@ -79,19 +74,23 @@ public class SqlAppEntity extends SqlDBEntity {
         return getString(FIELD_DESCRIPTION);
     }
 
-    public static ApplicationDescriptor getDescriptor(ResultSet item) throws SQLException {
+    public ApplicationDescriptor getDescriptor(ResultSet item) throws DataException {
         ApplicationDescriptor descriptor = new ApplicationDescriptor();
-        descriptor.packageName = item.getString(FIELD_PACKAGE_NAME);
-        descriptor.build = item.getInt(FIELD_BUILD); //TODO no information in DB
-        descriptor.version = item.getString(FIELD_VERSION); //"Unknown"; //TODO no information in DB
-        descriptor.lastUpdated = item.getString(FIELD_LAST_UPDATE);
-        descriptor.developerContact = item.getString(FIELD_DEVELOPERS_CONTACT);
-        descriptor.appstoreId = item.getString(FIELD_APPSTORE_ID);
-        descriptor.appdfLink = item.getString(FIELD_APPDF);
-        descriptor.descriptionLink = item.getString(FIELD_DESCRIPTION);
-        descriptor.currPageHash = item.getInt(FIELD_CURR_PAGE_HASH);
-        descriptor.prevPageHash = item.getInt(FIELD_PREV_PAGE_HASH);
-        return  descriptor;
+        try {
+            descriptor.packageName = item.getString(FIELD_PACKAGE_NAME);
+            descriptor.build = item.getInt(FIELD_BUILD); //TODO no information in DB
+            descriptor.version = item.getString(FIELD_VERSION); //"Unknown"; //TODO no information in DB
+            descriptor.lastUpdated = item.getString(FIELD_LAST_UPDATE);
+            descriptor.developerContact = item.getString(FIELD_DEVELOPERS_CONTACT);
+            descriptor.appstoreId = item.getString(FIELD_APPSTORE_ID);
+            descriptor.appdfLink = item.getString(FIELD_APPDF);
+            descriptor.descriptionLink = item.getString(FIELD_DESCRIPTION);
+            descriptor.currPageHash = item.getInt(FIELD_CURR_PAGE_HASH);
+            descriptor.prevPageHash = item.getInt(FIELD_PREV_PAGE_HASH);
+            return  descriptor;
+        } catch (SQLException e) {
+            throw new DataException(e);
+        }
     }
 
 }

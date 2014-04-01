@@ -7,7 +7,7 @@ import org.onepf.repository.utils.responsewriter.WriteException;
 /**
  * Created by ivanoff on 12.03.14.
  */
-public class ApplicationDescriptor implements Writable {
+public class ApplicationDescriptor extends AbstractDescriptor implements Writable {
     public String packageName;
     public String lastUpdated;
     public String version;

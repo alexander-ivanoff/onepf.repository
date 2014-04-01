@@ -9,7 +9,7 @@ import java.util.Map;
 /**
  * Created by ivanoff on 18.03.14.
  */
-public class AmazonAppEntity extends AmazonDBEntity {
+public class AmazonAppEntity extends AmazonDBEntity<ApplicationDescriptor> {
 
     public static final String FIELD_REPOSITORY = "repository";
     public static final String FIELD_PACKAGE_NAME = "packageName";
@@ -25,14 +25,15 @@ public class AmazonAppEntity extends AmazonDBEntity {
 
     public static final String DEFAULT_REPOSITORY = "default";
 
+    public static final String TABLE_NAME = "packages";
 
     public AmazonAppEntity() {
-        super();
+        super(TABLE_NAME);
         put(FIELD_REPOSITORY, DEFAULT_REPOSITORY);
     }
 
     public AmazonAppEntity(Map<String, AttributeValue> item) {
-        super(item);
+        super(TABLE_NAME);
     }
 
 
@@ -89,7 +90,7 @@ public class AmazonAppEntity extends AmazonDBEntity {
     }
 
 
-    public static ApplicationDescriptor getDescriptor(Map<String, AttributeValue> item ) {
+    public ApplicationDescriptor getDescriptor(Map<String, AttributeValue> item ) {
         ApplicationDescriptor appDescriptor = new ApplicationDescriptor();
         appDescriptor.packageName = getString(item, FIELD_PACKAGE_NAME);
         appDescriptor.build = 0; //TODO no information in DB

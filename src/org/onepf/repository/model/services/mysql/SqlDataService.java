@@ -7,14 +7,12 @@ import org.apache.commons.dbcp.PoolingDataSource;
 import org.apache.commons.pool.ObjectPool;
 import org.apache.commons.pool.impl.GenericObjectPool;
 import org.onepf.repository.model.auth.AppstoreDescriptor;
+import org.onepf.repository.model.services.DBEntity;
 import org.onepf.repository.model.services.DataException;
 import org.onepf.repository.model.services.DataService;
 import org.onepf.repository.model.services.mysql.entities.*;
 import org.onepf.repository.utils.Pair;
-import org.onepf.repository.utils.responsewriter.descriptors.ApplicationDescriptor;
-import org.onepf.repository.utils.responsewriter.descriptors.DownloadDescriptor;
-import org.onepf.repository.utils.responsewriter.descriptors.PurchaseDescriptor;
-import org.onepf.repository.utils.responsewriter.descriptors.ReviewDescriptor;
+import org.onepf.repository.utils.responsewriter.descriptors.*;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -26,7 +24,7 @@ import java.util.*;
 /**
  * Created by ivanoff on 18.03.14.
  */
-public class SqlDataService implements DataService {
+public class SqlDataService implements DataService<ResultSet, Map<String, String>> {
 
     // TODO refactoring: move method in different requests (Maybe Entities), here should be only generic requests
 
@@ -56,31 +54,7 @@ public class SqlDataService implements DataService {
         return dataSource;
     }
 
-    @Override
-    public void store(ApplicationDescriptor applicationDescriptor) throws DataException {
-        Connection conn = null;
-        PreparedStatement stmt = null;
-        try {
-            SqlAppEntity appEntity = new SqlAppEntity()
-                    .withPackageName(applicationDescriptor.packageName)
-                    .withLastUpdate(applicationDescriptor.lastUpdated)
-                    .withDevelopersContact(applicationDescriptor.developerContact)
-                    .withAppstore(applicationDescriptor.appstoreId)
-                    .withAppdf(applicationDescriptor.appdfLink)
-                    .withDescription(applicationDescriptor.descriptionLink);
-            conn = dbDataSource.getConnection();
-            stmt = insertWithHashes(conn, "applications", appEntity, PAGE_LIMIT_APPLICATIONS);
-            stmt.executeUpdate();
-        } catch (SQLException e) {
-            throw new DataException(e);
-        } finally {
-            try { if (stmt != null) stmt.close(); } catch(Exception e) { }
-            try { if (conn != null) conn.close(); } catch(Exception e) { }
-        }
-
-    }
-
-    @Override
+    /*
     public void addDownload(DownloadDescriptor downloadDescriptor) throws DataException {
         Connection conn = null;
         PreparedStatement stmt = null;
@@ -106,6 +80,8 @@ public class SqlDataService implements DataService {
         }
 
     }
+    */
+
 
     @Override
     public List<ApplicationDescriptor> getApplicationsLog() throws DataException{
@@ -115,178 +91,121 @@ public class SqlDataService implements DataService {
 
     @Override
     public List<ApplicationDescriptor> getApplicationsLog(String packageName, int currPageHash) throws DataException{
-        Connection conn = null;
-        PreparedStatement stmt = null;
-        ResultSet rset = null;
-        try {
-            String selection = null;
-            String[] selectionArgs = null;
-            conn = dbDataSource.getConnection();
-            if (packageName != null) {
-                selection = SqlAppEntity.FIELD_PACKAGE_NAME + "=?";
-                selectionArgs = new String[] {packageName};
-            } else {
-                if (currPageHash >= 0) {
-                    selection = "currPageHash=?";
-                    selectionArgs = new String[] {String.valueOf(currPageHash)};
-                } else {
-                    selection = "currPageHash = (SELECT currPageHash FROM applications ORDER BY id DESC LIMIT 1)";
-                    selectionArgs = null;
-                }
-            }
-            String orderBy = SqlAppEntity.FIELD_ID + " DESC";
-            stmt = query(conn, "applications", selection, selectionArgs, orderBy);
-            rset = stmt.executeQuery();
-            ArrayList<ApplicationDescriptor> apps = new ArrayList<ApplicationDescriptor>();
-            while (rset.next()) {
-                apps.add(SqlAppEntity.getDescriptor(rset));
-            }
-            return apps;
-        } catch (SQLException e) {
-            throw new DataException(e);
-        } finally {
-            try { if (stmt != null) rset.close(); } catch(Exception e) { }
-            try { if (stmt != null) stmt.close(); } catch(Exception e) { }
-            try { if (conn != null) conn.close(); } catch(Exception e) { }
-        }
-    }
-
-
-
-    @Override
-    public Map<String, AppstoreDescriptor> getAppstores() throws DataException{
-        Connection conn = null;
-        PreparedStatement stmt = null;
-        ResultSet rset = null;
-        try {
-            conn = dbDataSource.getConnection();
-            stmt = query(conn, "appstores", null, null, null);
-            rset = stmt.executeQuery();
-            Map<String, AppstoreDescriptor> apps = new HashMap<String, AppstoreDescriptor>();
-            AppstoreDescriptor appstore = null;
-            while (rset.next()) {
-                appstore = SqlAppstoreEntity.getDescriptor(rset);
-                apps.put(appstore.authToken, appstore);
-            }
-            return apps;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            throw new DataException(e);
-        } finally {
-            try { if (stmt != null) rset.close(); } catch(Exception e) { }
-            try { if (stmt != null) stmt.close(); } catch(Exception e) { }
-            try { if (conn != null) conn.close(); } catch(Exception e) { }
-        }
-    }
-
-    @Override
-    public ArrayList<DownloadDescriptor> getDownloads(String packageName, long currPageHash) throws DataException {
-        Connection conn = null;
-        PreparedStatement stmt = null;
-        ResultSet rset = null;
-        try {
-            String selection = SqlDownloadEntity.FIELD_PACKAGE_NAME + "=? AND ";
-            String[] selectionArgs;
+        DBEntity entity = new SqlAppEntity();
+        String selection = null;
+        String[] selectionArgs = null;
+        if (packageName != null) {
+            selection = SqlAppEntity.FIELD_PACKAGE_NAME + "=?";
+            selectionArgs = new String[] {packageName};
+        } else {
             if (currPageHash >= 0) {
-                selection += "currPageHash=?";
-                selectionArgs = new String[] {packageName, String.valueOf(currPageHash)};
+                selection = "currPageHash=?";
+                selectionArgs = new String[] {String.valueOf(currPageHash)};
             } else {
-                selection += "currPageHash = (SELECT currPageHash FROM applications ORDER BY id DESC LIMIT 1)";
-                selectionArgs = new String[] {packageName};
+                selection = "currPageHash = (SELECT currPageHash FROM applications ORDER BY id DESC LIMIT 1)";
+                selectionArgs = null;
             }
-            String order = SqlDownloadEntity.FIELD_ID + " DESC";
-            conn = dbDataSource.getConnection();
-            stmt = query(conn, "downloads", selection, selectionArgs, order);
-            rset = stmt.executeQuery();
-            ArrayList<DownloadDescriptor> downloads = new ArrayList<DownloadDescriptor>();
-            while (rset.next()) {
-                downloads.add(SqlDownloadEntity.getDescriptor(rset));
-            }
-            return downloads;
-        } catch (SQLException e) {
-            throw new DataException(e);
-        } finally {
-            try { if (stmt != null) rset.close(); } catch(Exception e) { }
-            try { if (stmt != null) stmt.close(); } catch(Exception e) { }
-            try { if (conn != null) conn.close(); } catch(Exception e) { }
         }
+        String orderBy = SqlAppEntity.FIELD_ID + " DESC";
+        return query(new SqlAppEntity(), selection, selectionArgs, orderBy);
     }
 
     @Override
-    public ArrayList<PurchaseDescriptor> getPurchases(String packageName, long currPageHash) throws DataException {
-        Connection conn = null;
-        PreparedStatement stmt = null;
-        ResultSet rset = null;
-        try {
-            String selection = SqlDownloadEntity.FIELD_PACKAGE_NAME + "=? AND ";
-            String[] selectionArgs;
-            if (currPageHash >= 0) {
-                selection += "currPageHash=?";
-                selectionArgs = new String[] {packageName, String.valueOf(currPageHash)};
-            } else {
-                selection += "currPageHash = (SELECT currPageHash FROM applications ORDER BY id DESC LIMIT 1)";
-                selectionArgs = new String[] {packageName};
-            }
-            String order = SqlDownloadEntity.FIELD_ID + " DESC";
-            conn = dbDataSource.getConnection();
-            stmt = query(conn, "purchases", selection, selectionArgs, order);
-            rset = stmt.executeQuery();
-            ArrayList<PurchaseDescriptor> purchases = new ArrayList<PurchaseDescriptor>();
-            while (rset.next()) {
-                purchases.add(SqlPurchaseEntity.getDescriptor(rset));
-            }
-            return purchases;
-        } catch (SQLException e) {
-            throw new DataException(e);
-        } finally {
-            try { if (stmt != null) rset.close(); } catch(Exception e) { }
-            try { if (stmt != null) stmt.close(); } catch(Exception e) { }
-            try { if (conn != null) conn.close(); } catch(Exception e) { }
+    public ArrayList<DownloadDescriptor> getDownloads(String packageName, int currPageHash) throws DataException {
+        DBEntity entity = new SqlDownloadEntity();
+        String selection = SqlDownloadEntity.FIELD_PACKAGE_NAME + "=? AND ";
+        String[] selectionArgs;
+        if (currPageHash >= 0) {
+            selection += "currPageHash=?";
+            selectionArgs = new String[] {packageName, String.valueOf(currPageHash)};
+        } else {
+            selection += "currPageHash = (SELECT currPageHash FROM " + entity.getTableName() + " ORDER BY id DESC LIMIT 1)";
+            selectionArgs = new String[] {packageName};
         }
+        String order = SqlDownloadEntity.FIELD_ID + " DESC";
+        return getPagedByPackage(new SqlDownloadEntity(), packageName, currPageHash);
+    }
+
+    @Override
+    public ArrayList<PurchaseDescriptor> getPurchases(String packageName, int currPageHash) throws DataException {
+        return getPagedByPackage(new SqlPurchaseEntity(), packageName, currPageHash);
     }
 
     @Override
     public ArrayList<ReviewDescriptor> getReviews(String packageName, int currPageHash) throws DataException {
+        return getPagedByPackage(new SqlReviewEntity(), packageName, currPageHash);
+    }
+
+
+    @Override
+    public Map<String, AppstoreDescriptor> getAppstores() throws DataException {
+        List<AppstoreDescriptor> appstores = query(new SqlAppstoreEntity(), null, null, null);
+        Map<String, AppstoreDescriptor> appstoresMap = new HashMap<String, AppstoreDescriptor>(appstores.size());
+        for (AppstoreDescriptor appstore : appstores) {
+            appstoresMap.put(appstore.authToken, appstore);
+        }
+        return  appstoresMap;
+    }
+
+
+    @Override
+    public void storeApplication(ApplicationDescriptor applicationDescriptor) throws DataException {
+        SqlAppEntity appEntity = new SqlAppEntity()
+                .withAppdf(applicationDescriptor.appdfLink)
+                .withPackageName(applicationDescriptor.packageName)
+                .withAppstore(applicationDescriptor.appstoreId)
+                .withDescription(applicationDescriptor.descriptionLink)
+                .withDevelopersContact(applicationDescriptor.developerContact)
+                .withLastUpdate(applicationDescriptor.lastUpdated);
+        store(appEntity);
+    }
+
+
+
+
+    @Override
+    public <T extends AbstractDescriptor> void store(DBEntity<T, ResultSet, Map<String, String>> entity) throws DataException {
         Connection conn = null;
         PreparedStatement stmt = null;
-        ResultSet rset = null;
         try {
-            String selection = SqlDownloadEntity.FIELD_PACKAGE_NAME + "=? AND ";
-            String[] selectionArgs;
-            if (currPageHash >= 0) {
-                selection += "currPageHash=?";
-                selectionArgs = new String[] {packageName, String.valueOf(currPageHash)};
-            } else {
-                selection += "currPageHash = (SELECT currPageHash FROM applications ORDER BY id DESC LIMIT 1)";
-                selectionArgs = new String[] {packageName};
-            }
-            String order = SqlDownloadEntity.FIELD_ID + " DESC";
             conn = dbDataSource.getConnection();
-            stmt = query(conn, "reviews", selection, selectionArgs, order);
-            rset = stmt.executeQuery();
-            ArrayList<ReviewDescriptor> reviews = new ArrayList<ReviewDescriptor>();
-            while (rset.next()) {
-                reviews.add(SqlReviewEntity.getDescriptor(rset));
-            }
-            return reviews;
+            stmt = insertWithHashes(conn, entity.getTableName(), entity, PAGE_LIMIT_APPLICATIONS);
+            stmt.executeUpdate();
         } catch (SQLException e) {
             throw new DataException(e);
         } finally {
-            try { if (stmt != null) rset.close(); } catch(Exception e) { }
             try { if (stmt != null) stmt.close(); } catch(Exception e) { }
             try { if (conn != null) conn.close(); } catch(Exception e) { }
         }
+    }
+
+
+    public <T extends AbstractDescriptor> ArrayList<T> getPagedByPackage(DBEntity<T, ResultSet, Map<String, String>> entity, String packageName, int currPageHash) throws DataException {
+
+            String selection = GenericFields.FIELD_PACKAGE_NAME + "=? AND ";
+            String[] selectionArgs;
+            if (currPageHash >= 0) {
+                selection += GenericFields.FIELD_CURR_PAGE_HASH +"=?";
+                selectionArgs = new String[] {packageName, String.valueOf(currPageHash)};
+            } else {
+                selection += GenericFields.FIELD_CURR_PAGE_HASH +" = (SELECT " + GenericFields.FIELD_CURR_PAGE_HASH +
+                        " FROM " + entity.getTableName() + " WHERE " + GenericFields.FIELD_PACKAGE_NAME + "=? ORDER BY id DESC LIMIT 1)";
+                selectionArgs = new String[] {packageName, packageName};
+            }
+        String order = GenericFields.FIELD_ID + " DESC";
+        return query(entity, selection, selectionArgs, order);
+
     }
 
 
     // SELECT count(currPageHash), currPageHash, prevPageHash INTO @cunt, @chash, @phash FROM onepf_repository.applications WHERE  currPageHash = (SELECT currPageHash FROM applications ORDER BY id DESC LIMIT 1);
     // INSERT INTO applications (appstoreId, currPageHash, prevPageHash, appdfLink, descrLink) VALUES ('com.appstore.test1', IF (@cunt>=3, @chash+1, @chash), IF (@cunt>=3, @chash, @phash), 'aa', 'bb');
 
-    private static PreparedStatement insertWithHashes(Connection connection, String tableName, SqlDBEntity dbEntity, int limit) throws SQLException {
+    private static PreparedStatement insertWithHashes(Connection connection, String tableName, DBEntity dbEntity, int limit) throws SQLException {
         return insertWithHashes(connection, tableName, null,  dbEntity, limit);
     }
 
-    private static PreparedStatement insertWithHashes(Connection connection, String tableName, String packageName, SqlDBEntity dbEntity, int limit) throws SQLException {
+    private static <T extends ApplicationDescriptor> PreparedStatement insertWithHashes(Connection connection, String tableName, String packageName, DBEntity<T, ResultSet, Map<String, String>> dbEntity, int limit) throws SQLException {
 
         Pair<Integer, Integer> pageHashes = getPageHashes(connection, tableName, packageName, limit);
 
@@ -319,31 +238,44 @@ public class SqlDataService implements DataService {
 
     }
 
-    private static PreparedStatement query(Connection connection,  String tableName, String selection, String[] selectionArgs, String order) throws SQLException {
 
-        StringBuilder requestBuilder = new StringBuilder().append("SELECT * FROM ").append(tableName);
-        if (selection != null) {
-            requestBuilder.append(" WHERE ").append(selection);
-        };
-        if (order != null) {
-            requestBuilder.append(" ORDER BY ").append(order);
-        }
-        requestBuilder.append(" LIMIT 1000");
-        System.out.println("QUERY: " + requestBuilder.toString());
-
+    @Override
+    public <T extends AbstractDescriptor> ArrayList<T> query(DBEntity<T, ResultSet, Map<String, String>> entity, String selection, String[] selectionArgs, String order) throws DataException {
+        Connection conn = null;
         PreparedStatement stmt = null;
+        ResultSet rset = null;
         try {
-            stmt = connection.prepareStatement(requestBuilder.toString());
+
+
+            StringBuilder requestBuilder = new StringBuilder().append("SELECT * FROM ").append(entity.getTableName());
+            if (selection != null) {
+                requestBuilder.append(" WHERE ").append(selection);
+            };
+            if (order != null) {
+                requestBuilder.append(" ORDER BY ").append(order);
+            }
+            requestBuilder.append(" LIMIT 1000");
+            System.out.println("QUERY: " + requestBuilder.toString());
+            conn = dbDataSource.getConnection();
+            stmt = conn.prepareStatement(requestBuilder.toString());
             int index = 0;
             if (selectionArgs != null) {
                 for (String value: selectionArgs) {
                     stmt.setString(++index, value);
                 }
             }
-            return stmt;
+            rset = stmt.executeQuery();
+            ArrayList<T> items = new ArrayList<T>();
+            while (rset.next()) {
+                items.add(entity.getDescriptor(rset));
+            }
+            return items;
         } catch (SQLException e) {
-            e.printStackTrace();
-            throw e;
+            throw new DataException(e);
+        } finally {
+            try { if (stmt != null) rset.close(); } catch(Exception e) { }
+            try { if (stmt != null) stmt.close(); } catch(Exception e) { }
+            try { if (conn != null) conn.close(); } catch(Exception e) { }
         }
     }
 
@@ -380,5 +312,7 @@ public class SqlDataService implements DataService {
         stmt.close();
         return  new Pair<Integer, Integer>(chash, phash);
     }
+
+
 
 }

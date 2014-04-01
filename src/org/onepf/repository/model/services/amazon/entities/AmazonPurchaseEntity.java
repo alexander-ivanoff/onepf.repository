@@ -1,21 +1,15 @@
 package org.onepf.repository.model.services.amazon.entities;
 
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
-import com.amazonaws.services.dynamodbv2.model.ComparisonOperator;
-import com.amazonaws.services.dynamodbv2.model.Condition;
-import com.amazonaws.services.dynamodbv2.model.QueryRequest;
 import org.onepf.repository.utils.responsewriter.descriptors.PurchaseDescriptor;
 
-import java.util.HashMap;
 import java.util.Map;
 
 /**
  * Created by ivanoff on 18.03.14.
  */
-public class AmazonPurchaseEntity extends AmazonDBEntity {
+public class AmazonPurchaseEntity extends AmazonDBEntity<PurchaseDescriptor> implements AmazonGenericFields{
 
-    public static final String FIELD_PACKAGE_NAME = "package"; // DynamoDB Hash key
-    public static final String FIELD_DATE_TIME = "datetime"; // DynamoDB Range key
     public static final String FIELD_ID = "id";
     public static final String FIELD_VERSION = "version";
     public static final String FIELD_BUILD = "build";
@@ -28,9 +22,15 @@ public class AmazonPurchaseEntity extends AmazonDBEntity {
     public static final String FIELD_INNER_PRICE = "inner-price";
     public static final String FIELD_INNER_CURRENCY = "inner-currency";
 
+    public static final String TABLE_NAME = "purchases";
+
+    public AmazonPurchaseEntity() {
+        super(TABLE_NAME);
+    }
+
 
     public AmazonPurchaseEntity(Map<String, AttributeValue> item) {
-        super(item);
+        super(TABLE_NAME, item);
     }
 
     public AmazonPurchaseEntity withPackageName(String packageName) {
@@ -103,7 +103,7 @@ public class AmazonPurchaseEntity extends AmazonDBEntity {
     }
 
 
-    public static PurchaseDescriptor getDescriptor(Map<String, AttributeValue> item) {
+    public PurchaseDescriptor getDescriptor(Map<String, AttributeValue> item) {
         PurchaseDescriptor purchaseDescriptor = new PurchaseDescriptor();
         purchaseDescriptor.packageName = getString(item, FIELD_PACKAGE_NAME);
         purchaseDescriptor.dateTime = getString(item, FIELD_DATE_TIME);
@@ -119,23 +119,6 @@ public class AmazonPurchaseEntity extends AmazonDBEntity {
         purchaseDescriptor.userCurrency = getString(item, FIELD_USER_CURRENCY);
         purchaseDescriptor.id = getString(item, FIELD_ID);
         return  purchaseDescriptor;
-    }
-
-    public static QueryRequest queryRequestByPackageAndDate(String packageName, long dateTime) {
-        Condition hashKeyCondition = new Condition()
-                .withComparisonOperator(ComparisonOperator.EQ.toString())
-                .withAttributeValueList(new AttributeValue().withS(packageName));
-
-        Condition rangeKeyCondition = new Condition()
-                .withComparisonOperator(ComparisonOperator.GT.toString())
-                .withAttributeValueList(new AttributeValue().withN(String.valueOf(dateTime)));
-
-        Map<String, Condition> keyConditions = new HashMap<String, Condition>();
-        keyConditions.put(AmazonPurchaseEntity.FIELD_PACKAGE_NAME, hashKeyCondition);
-        keyConditions.put(AmazonPurchaseEntity.FIELD_DATE_TIME, rangeKeyCondition);
-
-        return new QueryRequest()
-                .withKeyConditions(keyConditions);
     }
 
 }

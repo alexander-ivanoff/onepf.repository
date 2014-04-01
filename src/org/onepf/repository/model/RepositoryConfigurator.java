@@ -3,8 +3,6 @@ package org.onepf.repository.model;
 import org.onepf.repository.model.auth.AppstoreAuthenticator;
 import org.onepf.repository.model.services.DataService;
 import org.onepf.repository.model.services.StorageService;
-import org.onepf.repository.model.services.amazon.AmazonOptions;
-import org.onepf.repository.model.services.amazon.AmazonStorageService;
 import org.onepf.repository.model.services.filesystem.FilesystemOptions;
 import org.onepf.repository.model.services.filesystem.FilesystemStorageService;
 import org.onepf.repository.model.services.mysql.SqlDataService;
@@ -31,7 +29,6 @@ public class RepositoryConfigurator {
         if (repositoryFactory == null) {
             dataService = new SqlDataService(new SqlOptions());
             storageService = new FilesystemStorageService(new FilesystemOptions(context));
-            storageService = new AmazonStorageService(new AmazonOptions());
             repositoryFactory = new RepositoryFactory(dataService, storageService);
         }
         return repositoryFactory;

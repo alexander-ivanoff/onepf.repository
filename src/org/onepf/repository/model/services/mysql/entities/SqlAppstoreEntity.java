@@ -1,15 +1,15 @@
 package org.onepf.repository.model.services.mysql.entities;
 
 import org.onepf.repository.model.auth.AppstoreDescriptor;
+import org.onepf.repository.model.services.DataException;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Map;
 
 /**
  * Created by ivanoff on 18.03.14.
  */
-public class SqlAppstoreEntity extends SqlDBEntity {
+public class SqlAppstoreEntity extends SqlDBEntity<AppstoreDescriptor> {
 
     public static final String FIELD_AUTH_TOKEN = "authToken";
     public static final String FIELD_APPSTORE_ID = "appstoreId";
@@ -18,12 +18,10 @@ public class SqlAppstoreEntity extends SqlDBEntity {
     public static final String FIELD_DESCRIPTION = "description";
 
 
-    public SqlAppstoreEntity() {
-        super();
-    }
+    public static final String TABLE_NAME = "appstores";
 
-    public SqlAppstoreEntity(Map<String, String> item) {
-        super(item);
+    public SqlAppstoreEntity() {
+        super(TABLE_NAME);
     }
 
     public SqlAppstoreEntity withAuthToken(String authToken) {
@@ -55,14 +53,18 @@ public class SqlAppstoreEntity extends SqlDBEntity {
     }
 
 
-    public static AppstoreDescriptor getDescriptor(ResultSet item ) throws SQLException {
-        AppstoreDescriptor appDescriptor = new AppstoreDescriptor();
-        appDescriptor.authToken = item.getString(FIELD_AUTH_TOKEN);
-        appDescriptor.appstoreId = item.getString(FIELD_APPSTORE_ID);
-        appDescriptor.description = item.getString(FIELD_DESCRIPTION);
-        appDescriptor.openaepUrl = item.getString(FIELD_OPENAEP_URL);
-        appDescriptor.publickKey = item.getString(FIELD_PUBLICKEY);
+    public AppstoreDescriptor getDescriptor(ResultSet item) throws DataException {
+        try {
+            AppstoreDescriptor appDescriptor = new AppstoreDescriptor();
+            appDescriptor.authToken = item.getString(FIELD_AUTH_TOKEN);
+            appDescriptor.appstoreId = item.getString(FIELD_APPSTORE_ID);
+            appDescriptor.description = item.getString(FIELD_DESCRIPTION);
+            appDescriptor.openaepUrl = item.getString(FIELD_OPENAEP_URL);
+            appDescriptor.publickKey = item.getString(FIELD_PUBLICKEY);
         return  appDescriptor;
+        } catch (SQLException e) {
+            throw new DataException(e);
+        }
     }
 
 

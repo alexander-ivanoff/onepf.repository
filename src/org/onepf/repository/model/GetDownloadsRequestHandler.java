@@ -18,7 +18,7 @@ public class GetDownloadsRequestHandler extends BaseRequestHandler {
         super(dataService, storageService);
     }
 
-    public List<DownloadDescriptor> getDownloads(String packageName, long pageHash) throws DataException{
+    public List<DownloadDescriptor> getDownloads(String packageName, int pageHash) throws DataException{
         long time = System.currentTimeMillis();
         ArrayList<DownloadDescriptor> descriptors = dataService.getDownloads(packageName, pageHash);
         System.out.println("List downloads time: " + (System.currentTimeMillis() - time));  // TODO move to Log4J

@@ -1,18 +1,16 @@
 package org.onepf.repository.model.services.mysql.entities;
 
+import org.onepf.repository.model.services.DataException;
 import org.onepf.repository.utils.responsewriter.descriptors.ReviewDescriptor;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Map;
 
 /**
  * Created by ivanoff on 18.03.14.
  */
-public class SqlReviewEntity extends SqlDBEntity {
+public class SqlReviewEntity extends SqlDBEntity<ReviewDescriptor> implements GenericFields {
 
-    public static final String FIELD_ID = "id";
-    public static final String FIELD_PACKAGE_NAME = "package";
     public static final String FIELD_VERSION = "version";
     public static final String FIELD_BUILD = "build";
     public static final String FIELD_LAST_UPDATE = "lastUpdate";
@@ -26,13 +24,10 @@ public class SqlReviewEntity extends SqlDBEntity {
     public static final String FIELD_TEXT_BODY = "textBody";
 
 
+    public static final String TABLE_NAME = "reviews";
 
     public SqlReviewEntity() {
-        super();
-    }
-
-    public SqlReviewEntity(Map<String, String> item) {
-        super(item);
+        super(TABLE_NAME);
     }
 
     public SqlReviewEntity withId(String id) {
@@ -59,7 +54,7 @@ public class SqlReviewEntity extends SqlDBEntity {
         put(FIELD_DEVICE_MODEL, deviceModel);
         return this;
     }
-    
+
     public SqlReviewEntity withVersion(String version) {
         put(FIELD_VERSION, version);
         return this;
@@ -75,24 +70,28 @@ public class SqlReviewEntity extends SqlDBEntity {
         return this;
     }
 
-
-    public static ReviewDescriptor getDescriptor(ResultSet item) throws SQLException {
-        ReviewDescriptor descriptor = new ReviewDescriptor();
-        descriptor.packageName = item.getString(FIELD_PACKAGE_NAME);
-        descriptor.lastUpdate = item.getString(FIELD_LAST_UPDATE);
-        descriptor.build = item.getInt(FIELD_BUILD);
-        descriptor.version = item.getString(FIELD_VERSION);
-        descriptor.country = item.getString(FIELD_COUNTRY);
-        descriptor.deviceModel = item.getString(FIELD_DEVICE_MODEL);
-        descriptor.deviceName= item.getString(FIELD_DEVICE_NAME);
-        descriptor.stars = item.getInt(FIELD_STARS);
-        descriptor.userName = item.getString(FIELD_USER_NAME);
-        descriptor.userUrl = item.getString(FIELD_USER_URL);
-        descriptor.title = item.getString(FIELD_TITLE);
-        descriptor.body = item.getString(FIELD_TEXT_BODY);
-        descriptor.currPageHash = item.getInt(FIELD_CURR_PAGE_HASH);
-        descriptor.prevPageHash = item.getInt(FIELD_PREV_PAGE_HASH);
-        return  descriptor;
+    @Override
+    public ReviewDescriptor getDescriptor(ResultSet rs) throws DataException {
+        try {
+            ReviewDescriptor descriptor = new ReviewDescriptor();
+            descriptor.packageName = rs.getString(FIELD_PACKAGE_NAME);
+            descriptor.lastUpdate = rs.getString(FIELD_LAST_UPDATE);
+            descriptor.build = rs.getInt(FIELD_BUILD);
+            descriptor.version = rs.getString(FIELD_VERSION);
+            descriptor.country = rs.getString(FIELD_COUNTRY);
+            descriptor.deviceModel = rs.getString(FIELD_DEVICE_MODEL);
+            descriptor.deviceName = rs.getString(FIELD_DEVICE_NAME);
+            descriptor.stars = rs.getInt(FIELD_STARS);
+            descriptor.userName = rs.getString(FIELD_USER_NAME);
+            descriptor.userUrl = rs.getString(FIELD_USER_URL);
+            descriptor.title = rs.getString(FIELD_TITLE);
+            descriptor.body = rs.getString(FIELD_TEXT_BODY);
+            descriptor.currPageHash = rs.getInt(FIELD_CURR_PAGE_HASH);
+            descriptor.prevPageHash = rs.getInt(FIELD_PREV_PAGE_HASH);
+            return descriptor;
+        } catch (SQLException e) {
+            throw new DataException(e);
+        }
     }
 
 

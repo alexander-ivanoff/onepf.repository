@@ -12,7 +12,7 @@ import java.util.Map;
 /**
  * Created by ivanoff on 18.03.14.
  */
-public class AmazonAppstoreEntity extends AmazonDBEntity {
+public class AmazonAppstoreEntity extends AmazonDBEntity<AppstoreDescriptor> {
 
     public static final String FIELD_REPOSITORY = "repository";
     public static final String FIELD_AUTH_TOKEN = "authtoken";
@@ -23,14 +23,17 @@ public class AmazonAppstoreEntity extends AmazonDBEntity {
 
     public static final String DEFAULT_REPOSITORY = "default";
 
+    public static final String TABLE_NAME = "appstores";
+
+
 
     public AmazonAppstoreEntity() {
-        super();
+        super(TABLE_NAME);
         put(FIELD_REPOSITORY, DEFAULT_REPOSITORY);
     }
 
     public AmazonAppstoreEntity(Map<String, AttributeValue> item) {
-        super(item);
+        super(TABLE_NAME, item);
     }
 
 
@@ -72,7 +75,7 @@ public class AmazonAppstoreEntity extends AmazonDBEntity {
     }
 
 
-    public static AppstoreDescriptor getDescriptor(Map<String, AttributeValue> item ) {
+    public AppstoreDescriptor getDescriptor(Map<String, AttributeValue> item ) {
         AppstoreDescriptor appDescriptor = new AppstoreDescriptor();
         appDescriptor.authToken = getString(item, FIELD_AUTH_TOKEN);
         appDescriptor.appstoreId = getString(item, FIELD_APPSTORE_NAME);

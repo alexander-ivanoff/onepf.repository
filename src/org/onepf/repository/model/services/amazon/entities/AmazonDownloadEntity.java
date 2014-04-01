@@ -1,21 +1,15 @@
 package org.onepf.repository.model.services.amazon.entities;
 
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
-import com.amazonaws.services.dynamodbv2.model.ComparisonOperator;
-import com.amazonaws.services.dynamodbv2.model.Condition;
-import com.amazonaws.services.dynamodbv2.model.QueryRequest;
 import org.onepf.repository.utils.responsewriter.descriptors.DownloadDescriptor;
 
-import java.util.HashMap;
 import java.util.Map;
 
 /**
  * Created by ivanoff on 18.03.14.
  */
-public class AmazonDownloadEntity extends AmazonDBEntity {
+public class AmazonDownloadEntity extends AmazonDBEntity<DownloadDescriptor> implements AmazonGenericFields{
 
-    public static final String FIELD_PACKAGE_NAME = "package"; // DynamoDB Hash key
-    public static final String FIELD_DATE_TIME = "datetime"; // DynamoDB Range key
     public static final String FIELD_VERSION = "version";
     public static final String FIELD_BUILD = "build";
     public static final String FIELD_LAST_UPDATE = "last-updated";
@@ -24,9 +18,15 @@ public class AmazonDownloadEntity extends AmazonDBEntity {
     public static final String FIELD_COUNTRY = "country";
     public static final String FIELD_IS_UPDATE = "is-update";
 
+    public static final String TABLE_NAME = "downloads";
+
+    public AmazonDownloadEntity() {
+        super(TABLE_NAME);
+    }
+
 
     public AmazonDownloadEntity(Map<String, AttributeValue> item) {
-        super(item);
+        super(TABLE_NAME, item);
     }
 
     public AmazonDownloadEntity withPackageName(String packageName) {
@@ -79,7 +79,7 @@ public class AmazonDownloadEntity extends AmazonDBEntity {
         return getDescriptor(item);
     }
 
-    public static DownloadDescriptor getDescriptor(Map<String, AttributeValue> item) {
+    public DownloadDescriptor getDescriptor(Map<String, AttributeValue> item) {
         DownloadDescriptor downloadDescriptor = new DownloadDescriptor();
         downloadDescriptor.packageName = getString(item, FIELD_PACKAGE_NAME);
         downloadDescriptor.dateTime = getString(item, FIELD_DATE_TIME);
@@ -91,23 +91,6 @@ public class AmazonDownloadEntity extends AmazonDBEntity {
         downloadDescriptor.deviceName= getString(item, FIELD_DEVICE_NAME);
         downloadDescriptor.isUpdate = getString(item, FIELD_IS_UPDATE);
         return  downloadDescriptor;
-    }
-
-    public static QueryRequest queryRequestByPackageAndDate(String packageName, long dateTime) {
-        Condition hashKeyCondition = new Condition()
-                .withComparisonOperator(ComparisonOperator.EQ.toString())
-                .withAttributeValueList(new AttributeValue().withS(packageName));
-
-        Condition rangeKeyCondition = new Condition()
-                .withComparisonOperator(ComparisonOperator.GT.toString())
-                .withAttributeValueList(new AttributeValue().withN(String.valueOf(dateTime)));
-
-        Map<String, Condition> keyConditions = new HashMap<String, Condition>();
-        keyConditions.put(AmazonDownloadEntity.FIELD_PACKAGE_NAME, hashKeyCondition);
-        keyConditions.put(AmazonDownloadEntity.FIELD_DATE_TIME, rangeKeyCondition);
-
-        return new QueryRequest()
-                .withKeyConditions(keyConditions);
     }
 
 }

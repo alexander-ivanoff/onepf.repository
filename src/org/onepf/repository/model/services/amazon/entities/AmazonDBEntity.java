@@ -1,6 +1,8 @@
 package org.onepf.repository.model.services.amazon.entities;
 
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
+import org.onepf.repository.model.services.DBEntity;
+import org.onepf.repository.utils.responsewriter.descriptors.AbstractDescriptor;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -10,16 +12,16 @@ import java.util.Map;
 /**
  * Created by ivanoff on 18.03.14.
  */
-public class AmazonDBEntity {
+public abstract class AmazonDBEntity<T extends AbstractDescriptor> extends DBEntity<T, Map<String, AttributeValue>, Map<String, AttributeValue>> {
 
     protected Map<String, AttributeValue> item = new HashMap<String, AttributeValue>();
 
-    public AmazonDBEntity() {
-        super();
+    public AmazonDBEntity(String tableName) {
+        super(tableName);
     }
 
-    public AmazonDBEntity(Map<String, AttributeValue> item) {
-        super();
+    public AmazonDBEntity(String tableName, Map<String, AttributeValue> item) {
+        super(tableName);
         this.item = item;
     }
 

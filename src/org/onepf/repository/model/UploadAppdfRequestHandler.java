@@ -68,7 +68,7 @@ public class UploadAppdfRequestHandler extends BaseRequestHandler {
         appDescriptor.appstoreId = appstoreDescriptor.appstoreId;
 
         long time = System.currentTimeMillis();
-        dataService.store(appDescriptor);
+        dataService.storeApplication(appDescriptor);
         System.out.println("Put Request to data service: " + (System.currentTimeMillis() - time)); // TODO move to Log4J
     }
 

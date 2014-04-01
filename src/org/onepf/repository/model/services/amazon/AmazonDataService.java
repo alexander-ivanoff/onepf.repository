@@ -5,21 +5,13 @@ import com.amazonaws.auth.ClasspathPropertiesFileCredentialsProvider;
 import com.amazonaws.regions.Region;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
-import com.amazonaws.services.dynamodbv2.model.AttributeValue;
-import com.amazonaws.services.dynamodbv2.model.PutItemRequest;
-import com.amazonaws.services.dynamodbv2.model.QueryRequest;
-import com.amazonaws.services.dynamodbv2.model.QueryResult;
+import com.amazonaws.services.dynamodbv2.model.*;
 import org.onepf.repository.model.auth.AppstoreDescriptor;
+import org.onepf.repository.model.services.DBEntity;
 import org.onepf.repository.model.services.DataException;
 import org.onepf.repository.model.services.DataService;
-import org.onepf.repository.model.services.amazon.entities.AmazonAppEntity;
-import org.onepf.repository.model.services.amazon.entities.AmazonAppstoreEntity;
-import org.onepf.repository.model.services.amazon.entities.AmazonDownloadEntity;
-import org.onepf.repository.model.services.amazon.entities.AmazonPurchaseEntity;
-import org.onepf.repository.utils.responsewriter.descriptors.ApplicationDescriptor;
-import org.onepf.repository.utils.responsewriter.descriptors.DownloadDescriptor;
-import org.onepf.repository.utils.responsewriter.descriptors.PurchaseDescriptor;
-import org.onepf.repository.utils.responsewriter.descriptors.ReviewDescriptor;
+import org.onepf.repository.model.services.amazon.entities.*;
+import org.onepf.repository.utils.responsewriter.descriptors.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -29,7 +21,7 @@ import java.util.Map;
 /**
  * Created by ivanoff on 25.03.14.
  */
-public class AmazonDataService implements DataService {
+public class AmazonDataService implements DataService<Map<String, AttributeValue>, Map<String, AttributeValue>> {
 
 
     // TODO refactoring: move method in different requests (Maybe Entities), here should be only generic requests
@@ -53,7 +45,32 @@ public class AmazonDataService implements DataService {
     }
 
     @Override
-    public void store(ApplicationDescriptor applicationDescriptor) {
+    public ArrayList<DownloadDescriptor> getDownloads(String packageName, int currPageHash) throws DataException {
+        return null;
+    }
+
+    @Override
+    public ArrayList<PurchaseDescriptor> getPurchases(String packageName, int currPageHash) throws DataException {
+        return null;
+    }
+
+
+    @Override
+    public <T extends AbstractDescriptor> ArrayList<T> query(DBEntity<T, Map<String, AttributeValue>, Map<String, AttributeValue>> entity, String selection, String[] selectionArgs, String order) throws DataException {
+        QueryRequest queryRequest = queryRequestByPackageAndDate()
+                .withTableName(options.purchaseTable);
+
+        QueryResult result = amazonDynamoDB.query(queryRequest);
+
+        ArrayList<PurchaseDescriptor> purchases = new ArrayList<PurchaseDescriptor>();
+        for (Map<String, AttributeValue> item : result.getItems()) {
+            purchases.add(AmazonPurchaseEntity.getDescriptor(item));
+        }
+        return purchases;
+    }
+
+    @Override
+    public void storeApplication(ApplicationDescriptor applicationDescriptor) throws DataException {
         AmazonAppEntity appEntity = new AmazonAppEntity()
                 .withPackageName(applicationDescriptor.packageName)
                 .withLastUpdate(applicationDescriptor.lastUpdated)
@@ -61,14 +78,14 @@ public class AmazonDataService implements DataService {
                 .withAppstore(applicationDescriptor.appstoreId)
                 .withAppdf(applicationDescriptor.appdfLink)
                 .withDescription(applicationDescriptor.descriptionLink);
+        store(appEntity);
 
-        PutItemRequest itemRequest = new PutItemRequest().withTableName(options.packageTable).withItem(appEntity.getItem());
-        amazonDynamoDB.putItem(itemRequest);
     }
 
     @Override
-    public void addDownload(DownloadDescriptor downloadDescriptor) throws DataException {
-
+    public <T extends AbstractDescriptor> void store(DBEntity<T, Map<String, AttributeValue>, Map<String, AttributeValue>> entity) throws DataException {
+        PutItemRequest itemRequest = new PutItemRequest().withTableName(entity.getTableName()).withItem(entity.getItem());
+        amazonDynamoDB.putItem(itemRequest);
     }
 
     @Override
@@ -143,5 +160,22 @@ public class AmazonDataService implements DataService {
     @Override
     public ArrayList<ReviewDescriptor> getReviews(String packageName, int pageHash) throws DataException {
         return null;
+    }
+
+    public static QueryRequest queryRequestByPackageAndDate(String packageName, long dateTime) {
+        Condition hashKeyCondition = new Condition()
+                .withComparisonOperator(ComparisonOperator.EQ.toString())
+                .withAttributeValueList(new AttributeValue().withS(packageName));
+
+        Condition rangeKeyCondition = new Condition()
+                .withComparisonOperator(ComparisonOperator.GT.toString())
+                .withAttributeValueList(new AttributeValue().withN(String.valueOf(dateTime)));
+
+        Map<String, Condition> keyConditions = new HashMap<String, Condition>();
+        keyConditions.put(AmazonGenericFields.FIELD_PACKAGE_NAME, hashKeyCondition);
+        keyConditions.put(AmazonGenericFields.FIELD_DATE_TIME, rangeKeyCondition);
+
+        return new QueryRequest()
+                .withKeyConditions(keyConditions);
     }
 }
