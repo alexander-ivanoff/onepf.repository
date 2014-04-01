@@ -191,8 +191,8 @@ public class SqlDataService implements DataService {
                 selection += "currPageHash=?";
                 selectionArgs = new String[] {packageName, String.valueOf(currPageHash)};
             } else {
-                selection += "currPageHash = (SELECT currPageHash FROM applications ORDER BY id DESC LIMIT 1)";
-                selectionArgs = new String[] {packageName};
+                selection += "currPageHash = (SELECT currPageHash FROM downloads WHERE " + SqlDownloadEntity.FIELD_PACKAGE_NAME + "=? ORDER BY id DESC LIMIT 1)";
+                selectionArgs = new String[] {packageName, packageName};
             }
             String order = SqlDownloadEntity.FIELD_ID + " DESC";
             conn = dbDataSource.getConnection();
@@ -218,14 +218,14 @@ public class SqlDataService implements DataService {
         PreparedStatement stmt = null;
         ResultSet rset = null;
         try {
-            String selection = SqlDownloadEntity.FIELD_PACKAGE_NAME + "=? AND ";
+            String selection = SqlPurchaseEntity.FIELD_PACKAGE_NAME + "=? AND ";
             String[] selectionArgs;
             if (currPageHash >= 0) {
                 selection += "currPageHash=?";
                 selectionArgs = new String[] {packageName, String.valueOf(currPageHash)};
             } else {
-                selection += "currPageHash = (SELECT currPageHash FROM applications ORDER BY id DESC LIMIT 1)";
-                selectionArgs = new String[] {packageName};
+                selection += "currPageHash = (SELECT currPageHash FROM purchases WHERE " + SqlPurchaseEntity.FIELD_PACKAGE_NAME + "=? ORDER BY id DESC LIMIT 1)";
+                selectionArgs = new String[] {packageName, packageName};
             }
             String order = SqlDownloadEntity.FIELD_ID + " DESC";
             conn = dbDataSource.getConnection();
@@ -251,14 +251,14 @@ public class SqlDataService implements DataService {
         PreparedStatement stmt = null;
         ResultSet rset = null;
         try {
-            String selection = SqlDownloadEntity.FIELD_PACKAGE_NAME + "=? AND ";
+            String selection = SqlReviewEntity.FIELD_PACKAGE_NAME + "=? AND ";
             String[] selectionArgs;
             if (currPageHash >= 0) {
                 selection += "currPageHash=?";
                 selectionArgs = new String[] {packageName, String.valueOf(currPageHash)};
             } else {
-                selection += "currPageHash = (SELECT currPageHash FROM applications ORDER BY id DESC LIMIT 1)";
-                selectionArgs = new String[] {packageName};
+                selection += "currPageHash = (SELECT currPageHash FROM reviews WHERE " + SqlReviewEntity.FIELD_PACKAGE_NAME + "=? ORDER BY id DESC LIMIT 1)";
+                selectionArgs = new String[] {packageName, packageName};
             }
             String order = SqlDownloadEntity.FIELD_ID + " DESC";
             conn = dbDataSource.getConnection();
