@@ -24,4 +24,6 @@ public class GetPurchasesRequestHandler extends BaseRequestHandler {
         System.out.println("List purchases time: " + (System.currentTimeMillis() - time));  // TODO move to Log4J
         return purchases;
     }
+
+
 }

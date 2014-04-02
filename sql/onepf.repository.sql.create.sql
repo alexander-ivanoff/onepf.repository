@@ -79,7 +79,15 @@ CREATE table reviews (
 	`currPageHash` INT,
   	`prevPageHash` INT,
 	PRIMARY KEY (id)
-)
+);
+
+CREATE TABLE `appstoreupdates` (
+  `appstoreId` varchar(255) NOT NULL,
+  `lastUpdateHash` varchar(32) NOT NULL,
+  `lastUpdateDateTime` datetime NOT NULL,
+  `lastUpdateOffset` varchar(255) DEFAULT NULL,
+  FOREIGN KEY (`appstoreId`) REFERENCES `appstores`(`appstoreId`)
+);
 	
 	
 	

@@ -6,6 +6,7 @@ import org.apache.commons.dbcp.PoolableConnectionFactory;
 import org.apache.commons.dbcp.PoolingDataSource;
 import org.apache.commons.pool.ObjectPool;
 import org.apache.commons.pool.impl.GenericObjectPool;
+import org.onepf.repository.appstorelooter.LastUpdateInfo;
 import org.onepf.repository.model.auth.AppstoreDescriptor;
 import org.onepf.repository.model.services.DataException;
 import org.onepf.repository.model.services.DataService;
@@ -169,6 +170,32 @@ public class SqlDataService implements DataService {
                 apps.put(appstore.authToken, appstore);
             }
             return apps;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new DataException(e);
+        } finally {
+            try { if (stmt != null) rset.close(); } catch(Exception e) { }
+            try { if (stmt != null) stmt.close(); } catch(Exception e) { }
+            try { if (conn != null) conn.close(); } catch(Exception e) { }
+        }
+    }
+
+    @Override
+    public List<LastUpdateInfo> getLastUpdate(String appstoreId) throws DataException{
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ResultSet rset = null;
+        try {
+            conn = dbDataSource.getConnection();
+            String selection = SqlLastUpdateEntity.FIELD_APPSTORE_ID + "=?";
+            String[] selectionArgs = new String[] {appstoreId};
+            stmt = query(conn, "appstoreupdates", selection, selectionArgs, null);
+            rset = stmt.executeQuery();
+            List<LastUpdateInfo> updates = new ArrayList<LastUpdateInfo>();
+            while (rset.next()) {
+                updates.add(SqlLastUpdateEntity.getDescriptor(rset));
+            }
+            return updates;
         } catch (SQLException e) {
             e.printStackTrace();
             throw new DataException(e);

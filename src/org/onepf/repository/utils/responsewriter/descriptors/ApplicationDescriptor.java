@@ -7,7 +7,7 @@ import org.onepf.repository.utils.responsewriter.WriteException;
 /**
  * Created by ivanoff on 12.03.14.
  */
-public class ApplicationDescriptor implements Writable {
+public class ApplicationDescriptor extends AbstractDescriptor implements Writable {
     public String packageName;
     public String lastUpdated;
     public String version;
@@ -22,5 +22,18 @@ public class ApplicationDescriptor implements Writable {
     @Override
     public void write(ResponseWriter responseWriter) throws WriteException {
         responseWriter.write(this);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o instanceof ApplicationDescriptor) {
+            return packageName.equals(((ApplicationDescriptor)o).packageName);
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return packageName.hashCode();
     }
 }

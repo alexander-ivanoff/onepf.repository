@@ -7,7 +7,7 @@ import org.onepf.repository.utils.responsewriter.WriteException;
 /**
  * Created by ivanoff on 12.03.14.
  */
-public class PurchaseDescriptor implements Writable {
+public class PurchaseDescriptor extends AbstractDescriptor implements Writable {
     public String packageName;
     public String dateTime;
     public String id;

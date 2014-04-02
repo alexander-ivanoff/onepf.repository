@@ -8,7 +8,7 @@ package org.onepf.repository.utils.responsewriter.descriptors;
 /**
  * Created by ivanoff on 31.03.14.
  */
-public class ReviewDescriptor implements Writable {
+public class ReviewDescriptor extends AbstractDescriptor implements Writable {
     public String packageName;
     public String version;
     public int build;
