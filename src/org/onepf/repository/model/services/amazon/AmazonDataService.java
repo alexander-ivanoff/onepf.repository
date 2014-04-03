@@ -108,7 +108,7 @@ public class AmazonDataService implements DataService {
         AppstoreDescriptor appstore = null;
         for (Map<String, AttributeValue> item : result.getItems()) {
             appstore = AmazonAppstoreEntity.getDescriptor(item);
-            apps.put(appstore.authToken, appstore);
+            apps.put(appstore.repositoryAccessToken, appstore);
         }
         return apps;
     }

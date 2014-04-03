@@ -44,7 +44,7 @@ public class GetAppListRequest implements Runnable {
             String url = ApiMapping.LIST_APPLICATIONS.getMethodUrl(appstore.openaepUrl);
 
             HttpGet httpGet = new HttpGet(url);
-            httpGet.addHeader("authToken", "TESTTESTTEST"); //TODO here should be appstore provided token
+            httpGet.addHeader("authToken", appstore.appstoreAccessToken);
 
             Set<ApplicationDescriptor> apps = new HashSet<ApplicationDescriptor>();
             Pair<BaseListHeaderDescriptor, String> headerAndHash = null;
@@ -55,7 +55,8 @@ public class GetAppListRequest implements Runnable {
 
             if (result == HttpStatus.SC_OK) {
                 headerAndHash = ApiParser.getApplications(apps, response.getEntity().getContent());
-
+            } else {
+                System.out.println("APPLIST RESPONSE: " + result);
             }
 
             // todo parse response and store it in map
@@ -71,6 +72,8 @@ public class GetAppListRequest implements Runnable {
 
 
     }
+
+
 
 
 }

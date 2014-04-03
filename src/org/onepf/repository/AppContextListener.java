@@ -39,7 +39,8 @@ public class AppContextListener implements ServletContextListener {
         }
         if (appstores != null) {
             for (AppstoreDescriptor appstore : appstores.values()) {
-                scheduler.scheduleAtFixedRate(new GetAppListRequest(factory.getDataService(), httpClient, appstore), 30, 30, TimeUnit.SECONDS);
+                if (appstore.appstoreId.equals("localstore")) //TEST PURPOSES ONLY
+                    scheduler.scheduleAtFixedRate(new GetAppListRequest(factory.getDataService(), httpClient, appstore), 30, 30, TimeUnit.SECONDS);
             }
         }
 

@@ -17,19 +17,19 @@ public interface XMLElements {
         public static final String FIELD_OFFSET = "offset";
     }
 
-    public static interface ApplicationListHeader {
+    public static interface ApplicationListHeader extends BaseHeader {
         public static final String ELEMENT_NAME = "application-list";
     }
 
-    public static interface DownloadsListHeader {
+    public static interface DownloadsListHeader  extends BaseHeader{
         public static final String ELEMENT_NAME = "downloads";
     }
 
-    public static interface PurchasesListHeader {
+    public static interface PurchasesListHeader extends BaseHeader{
         public static final String ELEMENT_NAME = "purchases";
     }
 
-    public static interface ReviewsListHeader {
+    public static interface ReviewsListHeader extends BaseHeader{
         public static final String ELEMENT_NAME = "reviews";
     }
 }

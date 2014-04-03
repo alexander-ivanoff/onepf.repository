@@ -74,7 +74,7 @@ public class AmazonAppstoreEntity extends AmazonDBEntity {
 
     public static AppstoreDescriptor getDescriptor(Map<String, AttributeValue> item ) {
         AppstoreDescriptor appDescriptor = new AppstoreDescriptor();
-        appDescriptor.authToken = getString(item, FIELD_AUTH_TOKEN);
+        appDescriptor.repositoryAccessToken = getString(item, FIELD_AUTH_TOKEN);
         appDescriptor.appstoreId = getString(item, FIELD_APPSTORE_NAME);
         appDescriptor.description = getString(item, FIELD_DESCRIPTION);
         appDescriptor.openaepUrl = getString(item, FIELD_IP_DNS);

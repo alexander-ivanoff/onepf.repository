@@ -167,7 +167,7 @@ public class SqlDataService implements DataService {
             AppstoreDescriptor appstore = null;
             while (rset.next()) {
                 appstore = SqlAppstoreEntity.getDescriptor(rset);
-                apps.put(appstore.authToken, appstore);
+                apps.put(appstore.repositoryAccessToken, appstore);
             }
             return apps;
         } catch (SQLException e) {
