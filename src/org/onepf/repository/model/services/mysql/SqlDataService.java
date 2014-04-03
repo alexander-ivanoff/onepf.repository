@@ -6,16 +6,16 @@ import org.apache.commons.dbcp.PoolableConnectionFactory;
 import org.apache.commons.dbcp.PoolingDataSource;
 import org.apache.commons.pool.ObjectPool;
 import org.apache.commons.pool.impl.GenericObjectPool;
-import org.onepf.repository.appstorelooter.LastUpdateInfo;
+import org.onepf.repository.appstorelooter.LastUpdateDescriptor;
 import org.onepf.repository.model.auth.AppstoreDescriptor;
 import org.onepf.repository.model.services.DataException;
 import org.onepf.repository.model.services.DataService;
 import org.onepf.repository.model.services.mysql.entities.*;
-import org.onepf.repository.utils.Pair;
-import org.onepf.repository.utils.responsewriter.descriptors.ApplicationDescriptor;
-import org.onepf.repository.utils.responsewriter.descriptors.DownloadDescriptor;
-import org.onepf.repository.utils.responsewriter.descriptors.PurchaseDescriptor;
-import org.onepf.repository.utils.responsewriter.descriptors.ReviewDescriptor;
+import org.onepf.repository.api.Pair;
+import org.onepf.repository.api.responsewriter.descriptors.ApplicationDescriptor;
+import org.onepf.repository.api.responsewriter.descriptors.DownloadDescriptor;
+import org.onepf.repository.api.responsewriter.descriptors.PurchaseDescriptor;
+import org.onepf.repository.api.responsewriter.descriptors.ReviewDescriptor;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -50,7 +50,7 @@ public class SqlDataService implements DataService {
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
-        ObjectPool connectionPool = new GenericObjectPool(null, options.maxConnections, GenericObjectPool.WHEN_EXHAUSTED_BLOCK, options.maxConnections);
+        ObjectPool connectionPool = new GenericObjectPool(null, options.maxConnections, GenericObjectPool.WHEN_EXHAUSTED_BLOCK, options.maxWait);
         ConnectionFactory connectionFactory = new DriverManagerConnectionFactory(options.dbUrl, options.dbUser, options.dbPassword);
         PoolableConnectionFactory poolableConnectionFactory = new PoolableConnectionFactory (connectionFactory,connectionPool,null,null,false,true);
         PoolingDataSource dataSource = new PoolingDataSource(connectionPool);
@@ -68,7 +68,8 @@ public class SqlDataService implements DataService {
                     .withDevelopersContact(applicationDescriptor.developerContact)
                     .withAppstore(applicationDescriptor.appstoreId)
                     .withAppdf(applicationDescriptor.appdfLink)
-                    .withDescription(applicationDescriptor.descriptionLink);
+                    .withDescription(applicationDescriptor.descriptionLink)
+                    .withHash(applicationDescriptor.appdfHash);
             conn = dbDataSource.getConnection();
             stmt = insertWithHashes(conn, "applications", appEntity, PAGE_LIMIT_APPLICATIONS);
             stmt.executeUpdate();
@@ -181,7 +182,7 @@ public class SqlDataService implements DataService {
     }
 
     @Override
-    public List<LastUpdateInfo> getLastUpdate(String appstoreId) throws DataException{
+    public List<LastUpdateDescriptor> getLastUpdate(String appstoreId) throws DataException{
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rset = null;
@@ -191,7 +192,7 @@ public class SqlDataService implements DataService {
             String[] selectionArgs = new String[] {appstoreId};
             stmt = query(conn, "appstoreupdates", selection, selectionArgs, null);
             rset = stmt.executeQuery();
-            List<LastUpdateInfo> updates = new ArrayList<LastUpdateInfo>();
+            List<LastUpdateDescriptor> updates = new ArrayList<LastUpdateDescriptor>();
             while (rset.next()) {
                 updates.add(SqlLastUpdateEntity.getDescriptor(rset));
             }

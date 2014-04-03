@@ -1,7 +1,7 @@
 package org.onepf.repository.model;
 
 import org.onepf.repository.model.services.*;
-import org.onepf.repository.utils.responsewriter.descriptors.ApplicationDescriptor;
+import org.onepf.repository.api.responsewriter.descriptors.ApplicationDescriptor;
 
 import java.util.List;
 

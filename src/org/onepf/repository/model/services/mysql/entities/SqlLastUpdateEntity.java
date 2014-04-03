@@ -1,6 +1,6 @@
 package org.onepf.repository.model.services.mysql.entities;
 
-import org.onepf.repository.appstorelooter.LastUpdateInfo;
+import org.onepf.repository.appstorelooter.LastUpdateDescriptor;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -46,13 +46,13 @@ public class SqlLastUpdateEntity extends SqlDBEntity {
     }
 
 
-    public static LastUpdateInfo getDescriptor(ResultSet item ) throws SQLException {
-        LastUpdateInfo lastUpdateInfo = new LastUpdateInfo();
-        lastUpdateInfo.appstoreId = item.getString(FIELD_APPSTORE_ID);
-        lastUpdateInfo.lastResponseHash = item.getString(FIELD_LAST_UPDATE_HASH);
-        lastUpdateInfo.lastResponseDatetime = item.getString(FIELD_LAST_UPDATE_DATETIME);
-        lastUpdateInfo.prevOffset = item.getString(FIELD_LAST_UPDATE_OFFSET);
-        return  lastUpdateInfo;
+    public static LastUpdateDescriptor getDescriptor(ResultSet item ) throws SQLException {
+        LastUpdateDescriptor lastUpdateDescriptor = new LastUpdateDescriptor();
+        lastUpdateDescriptor.appstoreId = item.getString(FIELD_APPSTORE_ID);
+        lastUpdateDescriptor.lastResponseHash = item.getString(FIELD_LAST_UPDATE_HASH);
+        lastUpdateDescriptor.lastResponseDatetime = item.getString(FIELD_LAST_UPDATE_DATETIME);
+        lastUpdateDescriptor.prevOffset = item.getString(FIELD_LAST_UPDATE_OFFSET);
+        return lastUpdateDescriptor;
     }
 
 

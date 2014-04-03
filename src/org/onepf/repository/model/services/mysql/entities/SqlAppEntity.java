@@ -1,6 +1,6 @@
 package org.onepf.repository.model.services.mysql.entities;
 
-import org.onepf.repository.utils.responsewriter.descriptors.ApplicationDescriptor;
+import org.onepf.repository.api.responsewriter.descriptors.ApplicationDescriptor;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -20,6 +20,7 @@ public class SqlAppEntity extends SqlDBEntity {
     public static final String FIELD_DESCRIPTION = "descrLink";
     public static final String FIELD_VERSION = "version";
     public static final String FIELD_BUILD = "build";
+    public static final String FIELD_HASH = "hash";
 
 
     public SqlAppEntity() {
@@ -71,6 +72,11 @@ public class SqlAppEntity extends SqlDBEntity {
         return this;
     }
 
+    public SqlAppEntity withHash(String hash) {
+        put(FIELD_HASH, hash);
+        return this;
+    }
+
     public String getAppdf() {
         return getString(FIELD_APPDF);
     }
@@ -91,6 +97,7 @@ public class SqlAppEntity extends SqlDBEntity {
         descriptor.descriptionLink = item.getString(FIELD_DESCRIPTION);
         descriptor.currPageHash = item.getInt(FIELD_CURR_PAGE_HASH);
         descriptor.prevPageHash = item.getInt(FIELD_PREV_PAGE_HASH);
+        descriptor.appdfHash = item.getString(FIELD_HASH);
         return  descriptor;
     }
 

@@ -1,7 +1,7 @@
 package org.onepf.repository.model.services.amazon.entities;
 
 import com.amazonaws.services.dynamodbv2.model.*;
-import org.onepf.repository.utils.responsewriter.descriptors.ApplicationDescriptor;
+import org.onepf.repository.api.responsewriter.descriptors.ApplicationDescriptor;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -17,6 +17,7 @@ public class SqlOptions {
     public String dbPassword = "onepfPassword";
     public String dbUrl = "jdbc:mysql://onepf-repository.ca6s4oee7dbi.us-west-2.rds.amazonaws.com:3306/onepf_repository";
     public int maxConnections = 4;
+    public int maxWait = 10000; // 10sec
 
 
 }

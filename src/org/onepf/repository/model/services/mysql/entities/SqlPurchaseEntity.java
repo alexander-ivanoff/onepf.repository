@@ -1,6 +1,6 @@
 package org.onepf.repository.model.services.mysql.entities;
 
-import org.onepf.repository.utils.responsewriter.descriptors.PurchaseDescriptor;
+import org.onepf.repository.api.responsewriter.descriptors.PurchaseDescriptor;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

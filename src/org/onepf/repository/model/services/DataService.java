@@ -1,11 +1,11 @@
 package org.onepf.repository.model.services;
 
-import org.onepf.repository.appstorelooter.LastUpdateInfo;
+import org.onepf.repository.appstorelooter.LastUpdateDescriptor;
 import org.onepf.repository.model.auth.AppstoreDescriptor;
-import org.onepf.repository.utils.responsewriter.descriptors.ApplicationDescriptor;
-import org.onepf.repository.utils.responsewriter.descriptors.DownloadDescriptor;
-import org.onepf.repository.utils.responsewriter.descriptors.PurchaseDescriptor;
-import org.onepf.repository.utils.responsewriter.descriptors.ReviewDescriptor;
+import org.onepf.repository.api.responsewriter.descriptors.ApplicationDescriptor;
+import org.onepf.repository.api.responsewriter.descriptors.DownloadDescriptor;
+import org.onepf.repository.api.responsewriter.descriptors.PurchaseDescriptor;
+import org.onepf.repository.api.responsewriter.descriptors.ReviewDescriptor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +26,7 @@ public interface DataService {
     List<ApplicationDescriptor> getApplicationsLog(String packageName, int page) throws DataException;
     Map<String,AppstoreDescriptor> getAppstores() throws DataException;
 
-    List<LastUpdateInfo> getLastUpdate(String appstoreId) throws DataException;
+    List<LastUpdateDescriptor> getLastUpdate(String appstoreId) throws DataException;
 
     ArrayList<DownloadDescriptor> getDownloads(String packageName, long updateTime) throws DataException;
     ArrayList<PurchaseDescriptor> getPurchases(String packageName, long updateTime) throws DataException;

@@ -1,13 +1,14 @@
 
 CREATE DATABASE onepf_repository;
 
-CREATE table appstores (
-	appstoreId varchar(255) NOT NULL,
-	description varchar(255),
-	openaepUrl varchar(255) NOT NULL,
-	authToken text NOT NULL,
-	publicKey text,
-	PRIMARY KEY (appstoreId)
+CREATE TABLE `appstores` (
+  `appstoreId` varchar(255) NOT NULL,
+  `description` varchar(255) DEFAULT NULL,
+  `openaepUrl` varchar(255) NOT NULL,
+  `repositoryAccessToken` varchar(64) NOT NULL,
+  `appstoreAccessToken` varchar(64) NOT NULL,
+  `publicKey` text,
+  PRIMARY KEY (`appstoreId`)
 );
 
 CREATE TABLE `applications` (
