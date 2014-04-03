@@ -2,6 +2,7 @@ package org.onepf.repository.xmlapi;
 
 import org.onepf.repository.utils.Pair;
 import org.onepf.repository.utils.responsewriter.descriptors.ApplicationDescriptor;
+import org.onepf.repository.utils.responsewriter.descriptors.BaseListHeaderDescriptor;
 import org.xml.sax.SAXException;
 
 import javax.xml.bind.annotation.adapters.HexBinaryAdapter;

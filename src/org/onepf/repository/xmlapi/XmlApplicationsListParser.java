@@ -1,6 +1,7 @@
 package org.onepf.repository.xmlapi;
 
 import org.onepf.repository.utils.responsewriter.descriptors.ApplicationDescriptor;
+import org.onepf.repository.utils.responsewriter.descriptors.BaseListHeaderDescriptor;
 
 import java.util.Collection;
 

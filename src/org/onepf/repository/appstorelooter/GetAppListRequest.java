@@ -5,13 +5,14 @@ import org.apache.http.HttpStatus;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
+import org.onepf.repository.ApiMapping;
 import org.onepf.repository.model.auth.AppstoreDescriptor;
 import org.onepf.repository.model.services.DataException;
 import org.onepf.repository.model.services.DataService;
 import org.onepf.repository.utils.Pair;
 import org.onepf.repository.utils.responsewriter.descriptors.ApplicationDescriptor;
 import org.onepf.repository.xmlapi.ApiParser;
-import org.onepf.repository.xmlapi.BaseListHeaderDescriptor;
+import org.onepf.repository.utils.responsewriter.descriptors.BaseListHeaderDescriptor;
 
 import java.io.IOException;
 import java.util.HashSet;
@@ -38,10 +39,10 @@ public class GetAppListRequest implements Runnable {
     public void run() {
         try {
             List<LastUpdateInfo> updates = dataService.getLastUpdate(appstore.appstoreId);
-            LastUpdateInfo lastUpdateInfo = new LastUpdateInfo(); // TODO load Last Update Info
+            LastUpdateInfo lastUpdateInfo = (updates.size() > 0) ? updates.get(0) : null;
 
-            // String url = ApiMapping.LIST_APPLICATIONS.getMethodUrl(appstore.openaepUrl);
-            String url = "http://localhost:8181/openaep/applist";
+
+            String url = ApiMapping.LIST_APPLICATIONS.getMethodUrl(appstore.openaepUrl);
 
             HttpGet httpGet = new HttpGet(url);
             httpGet.addHeader("authToken", "TESTTESTTEST"); //TODO here should be appstore provided token
@@ -55,10 +56,7 @@ public class GetAppListRequest implements Runnable {
 
             if (result == HttpStatus.SC_OK) {
                 headerAndHash = ApiParser.getApplications(apps, response.getEntity().getContent());
-            }
 
-            for (ApplicationDescriptor app : apps) {
-                System.out.println("app: " + app.packageName + ", lastUpdated: " + app.lastUpdated);
             }
 
             // todo parse response and store it in map
@@ -74,5 +72,6 @@ public class GetAppListRequest implements Runnable {
 
 
     }
+
 
 }
