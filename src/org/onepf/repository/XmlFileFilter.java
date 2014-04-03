@@ -62,15 +62,15 @@ public class XmlFileFilter implements Filter {
             CustomizedRequestWrapper wrapper = new CustomizedRequestWrapper(httpServletRequest);
 
             if (lastPartParts[0].equals(FILTER_APPLICATIONS)) {
-                dispatcher = httpServletRequest.getRequestDispatcher("/openaep/applist");
+                dispatcher = httpServletRequest.getRequestDispatcher(ApiMapping.LIST_APPLICATIONS.toString());
                 wrapper.addParameter("page", lastPartParts[1]); // index of page hash
             } else {
                 if (lastPartParts[0].equals(FILTER_DOWNLOADS)) {
-                    dispatcher = httpServletRequest.getRequestDispatcher("/openaep/downloads");
+                    dispatcher = httpServletRequest.getRequestDispatcher(ApiMapping.LIST_DOWNLOADS.toString());
                 } else if (lastPartParts[0].equals(FILTER_PURCHASES)) {
-                    dispatcher = httpServletRequest.getRequestDispatcher("/openaep/purchases");
+                    dispatcher = httpServletRequest.getRequestDispatcher(ApiMapping.LIST_PURCHASES.toString());
                 } else if (lastPartParts[0].equals(FILTER_REVIEWS)) {
-                    dispatcher = httpServletRequest.getRequestDispatcher("/openaep/reviews");
+                    dispatcher = httpServletRequest.getRequestDispatcher(ApiMapping.LIST_REVIEWS.toString());
                 }
                 wrapper.addParameter("package", lastPartParts[1]);
                 wrapper.addParameter("page", lastPartParts[2]); // index of page hash

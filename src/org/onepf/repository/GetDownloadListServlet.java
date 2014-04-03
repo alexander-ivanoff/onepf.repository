@@ -48,16 +48,16 @@ public class GetDownloadListServlet extends BaseServlet {
             String page = request.getParameter(PARAMETER_PAGE);
             List<DownloadDescriptor> downloads = list.getDownloads(packageName, page != null? Integer.valueOf(page) : -1);
             ResponseWriter responseWriter = new XmlResponseWriter();
-            String prevFileLink = null;
+            String prevOffset = null;
             String lastUpdate = null;
             if (downloads.size() > 0 ) {
                 DownloadDescriptor lastDownload = downloads.get(0);
                 lastUpdate = lastDownload.lastUpdate;
                 if (lastDownload.currPageHash != lastDownload.prevPageHash) {
-                    prevFileLink = String.format(FILE_TEMPLATE, packageName, lastDownload.prevPageHash);
+                    prevOffset = String.format(FILE_TEMPLATE, packageName, lastDownload.prevPageHash);
                 }
             }
-            responseWriter.writeDownloads(response.getWriter(), downloads, lastUpdate, prevFileLink);
+            responseWriter.writeDownloads(response.getWriter(), downloads, prevOffset);
         } catch (WriteException e) {
             e.printStackTrace();
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);

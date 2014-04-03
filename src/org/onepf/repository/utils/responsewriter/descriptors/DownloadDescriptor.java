@@ -7,7 +7,7 @@ import org.onepf.repository.utils.responsewriter.WriteException;
 /**
  * Created by ivanoff on 12.03.14.
  */
-public class DownloadDescriptor implements Writable {
+public class DownloadDescriptor extends AbstractDescriptor implements Writable {
     public String packageName;
     public String dateTime;
     public String isUpdate;

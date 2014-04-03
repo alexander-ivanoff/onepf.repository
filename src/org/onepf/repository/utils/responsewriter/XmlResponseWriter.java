@@ -1,15 +1,13 @@
 package org.onepf.repository.utils.responsewriter;
 
-import org.onepf.repository.utils.responsewriter.descriptors.ApplicationDescriptor;
-import org.onepf.repository.utils.responsewriter.descriptors.DownloadDescriptor;
-import org.onepf.repository.utils.responsewriter.descriptors.PurchaseDescriptor;
-import org.onepf.repository.utils.responsewriter.descriptors.ReviewDescriptor;
+import org.onepf.repository.utils.responsewriter.descriptors.*;
+import org.onepf.repository.xmlapi.XMLElements;
 
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
+import java.io.Writer;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by ivanoff on 12.03.14.
@@ -19,23 +17,15 @@ public class XmlResponseWriter extends ResponseWriter {
     XMLStreamWriter out = null;
 
     @Override
-    public void write(java.io.Writer writer, String name, Map<String, String> headers, List<? extends Writable> listOfWritables) throws WriteException {
-
+    public void write(Writer writer, WritableHeader header, List<? extends Writable> items) throws WriteException {
         try {
-             out = XMLOutputFactory.newInstance().createXMLStreamWriter(writer);
-
+            out = XMLOutputFactory.newInstance().createXMLStreamWriter(writer);
             out.writeStartDocument("UTF-8", "1.0");
-            out.writeStartElement(name);
-            if (headers != null) {
-                for (Map.Entry<String, String> entry : headers.entrySet()) {
-                    out.writeAttribute(entry.getKey(), entry.getValue());
-                }
-            }
-
-            for (Writable writable : listOfWritables) {
+            header.writeOpening(this);
+            for (Writable writable : items) {
                 writable.write(this);
             }
-            out.writeEndElement();
+            header.writeClosing(this);
             out.writeEndDocument();
             out.flush();
         } catch (XMLStreamException e) {
@@ -52,6 +42,7 @@ public class XmlResponseWriter extends ResponseWriter {
         }
 
     }
+
 
     @Override
     public void write(ApplicationDescriptor app) throws WriteException{
@@ -127,7 +118,6 @@ public class XmlResponseWriter extends ResponseWriter {
         } catch (XMLStreamException e) {
             throw new WriteException(e);
         }
-
     }
 
     private static void writeElement(XMLStreamWriter out, String elementName, String elementValue) throws XMLStreamException {
@@ -135,5 +125,70 @@ public class XmlResponseWriter extends ResponseWriter {
         out.writeCharacters(elementValue);
         out.writeEndElement();
     }
+
+    @Override
+    public void writeOpening(ApplicationListHeaderDescriptor descriptor) throws WriteException {
+        writeOpeningInt(XMLElements.ApplicationListHeader.ELEMENT_NAME, descriptor);
+    }
+
+    @Override
+    public void writeOpening(DownloadsListHeaderDescriptor descriptor) throws WriteException {
+        writeOpeningInt(XMLElements.DownloadsListHeader.ELEMENT_NAME, descriptor);
+    }
+
+    @Override
+    public void writeOpening(PurchasesListHeaderDescriptor descriptor) throws WriteException {
+        writeOpeningInt(XMLElements.PurchasesListHeader.ELEMENT_NAME, descriptor);
+    }
+
+    @Override
+    public void writeOpening(ReviewsListHeaderDescriptor descriptor) throws WriteException {
+        writeOpeningInt(XMLElements.ReviewsListHeader.ELEMENT_NAME, descriptor);
+    }
+
+    @Override
+    public void writeClosing(ApplicationListHeaderDescriptor descriptor) throws WriteException {
+        writeClosingInt(descriptor);
+    }
+
+    @Override
+    public void writeClosing(DownloadsListHeaderDescriptor descriptor) throws WriteException {
+        writeClosingInt(descriptor);
+    }
+
+    @Override
+    public void writeClosing(PurchasesListHeaderDescriptor descriptor) throws WriteException {
+        writeClosingInt(descriptor);
+    }
+
+    @Override
+    public void writeClosing(ReviewsListHeaderDescriptor descriptor) throws WriteException {
+        writeClosingInt(descriptor);
+    }
+
+
+    private void writeOpeningInt(String name, BaseListHeaderDescriptor baseListHeaderDescriptor) throws WriteException {
+        try {
+            out.writeStartElement(name);
+            if (baseListHeaderDescriptor.version != null) {
+                out.writeAttribute(XMLElements.BaseHeader.FIELD_VERSION, baseListHeaderDescriptor.version);
+            }
+            if (baseListHeaderDescriptor.offset != null) {
+                out.writeAttribute(XMLElements.BaseHeader.FIELD_OFFSET, baseListHeaderDescriptor.offset);
+            }
+        } catch (XMLStreamException e) {
+            throw new WriteException(e);
+        }
+    }
+
+
+    private void writeClosingInt(BaseListHeaderDescriptor baseListHeaderDescriptor) throws WriteException {
+        try {
+            out.writeEndElement();
+        } catch (XMLStreamException e) {
+            throw  new WriteException(e);
+        }
+    }
+
 
 }

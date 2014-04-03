@@ -31,6 +31,10 @@
         <filter-class>org.onepf.repository.XmlFileFilter</filter-class>
     </filter>
 
+    <listener>
+        <listener-class>org.onepf.repository.AppContextListener</listener-class>
+    </listener>
+
     <servlet-mapping>
         <servlet-name>AppdfLoaderServlet</servlet-name>
         <url-pattern>/openaep/upload</url-pattern>
@@ -55,6 +59,7 @@
         <servlet-name>FileDownloadServlet</servlet-name>
         <url-pattern>/openaep/appdescription</url-pattern>
     </servlet-mapping>
+
     <filter-mapping>
         <filter-name>XmlFileFilter</filter-name>
         <url-pattern>/openaep/*</url-pattern>

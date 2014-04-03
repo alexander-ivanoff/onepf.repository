@@ -47,17 +47,17 @@ public class GetReviewListServlet extends BaseServlet {
             String page = request.getParameter(PARAMETER_PAGE);
             List<ReviewDescriptor> reviews = handler.getReviews(packageName, page != null ? Integer.valueOf(page) : -1);
             ResponseWriter responseWriter = new XmlResponseWriter();
-            String prevFileLink = null;
+            String prevOffset = null;
             String lastUpdate = null;
             if (reviews.size() > 0 ) {
                 ReviewDescriptor lastReview = reviews.get(0);
                 lastUpdate = lastReview.lastUpdate;
                 if (lastReview.currPageHash != lastReview.prevPageHash) {
-                    prevFileLink = String.format(FILE_TEMPLATE, packageName, lastReview.prevPageHash);
+                    prevOffset = String.format(FILE_TEMPLATE, packageName, lastReview.prevPageHash);
                 }
 
             }
-            responseWriter.writeReviews(response.getWriter(), reviews, lastUpdate, prevFileLink);
+            responseWriter.writeReviews(response.getWriter(), reviews, prevOffset);
         } catch (WriteException e) {
             e.printStackTrace();
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);

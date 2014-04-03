@@ -46,17 +46,17 @@ public class GetPurchaseListServlet extends BaseServlet {
         try {
             String page = request.getParameter(PARAMETER_PAGE);
             List<PurchaseDescriptor> purchases = getPurchasesRequestHandler.getPurchases(packageName, page != null? Integer.valueOf(page) : -1);
-            String prevFileLink = null;
+            String prevOffset = null;
             String lastUpdate = null;
             if (purchases.size() > 0 ) {
                 PurchaseDescriptor lastPurchase = purchases.get(0);
                 lastUpdate = lastPurchase.lastUpdate;
                 if (lastPurchase.currPageHash != lastPurchase.prevPageHash) {
-                    prevFileLink = String.format(FILE_TEMPLATE, packageName, lastPurchase.prevPageHash);
+                    prevOffset = String.format(FILE_TEMPLATE, packageName, lastPurchase.prevPageHash);
                 }
             }
             ResponseWriter responseWriter = new XmlResponseWriter();
-            responseWriter.writePurchases(response.getWriter(), purchases, lastUpdate, prevFileLink);
+            responseWriter.writePurchases(response.getWriter(), purchases, prevOffset);
         } catch (WriteException e) {
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         } catch (DataException e) {
