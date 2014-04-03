@@ -45,4 +45,12 @@ public class RepositoryFactory {
     public GetReviewsRequestHandler createReviewsHandler() {
         return new GetReviewsRequestHandler(dataService, storageService);
     }
+
+    public DataService getDataService() {
+        return dataService;
+    }
+
+    public StorageService getStorageService() {
+        return storageService;
+    }
 }

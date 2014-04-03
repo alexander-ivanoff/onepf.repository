@@ -40,17 +40,17 @@ public class GetApplicationsListServlet extends BaseServlet {
         try {
             List<ApplicationDescriptor> apps = appLister.getApplications(page != null? Integer.valueOf(page) : -1);
             ResponseWriter responseWriter = new XmlResponseWriter();
-            String prevFileLink = null;
+            String prevOffset = null;
             String lastUpdated = null;
             if (apps.size() > 0 ) {
                 ApplicationDescriptor lastApp = apps.get(0);
                 lastUpdated = lastApp.lastUpdated;
                 if (lastApp.currPageHash != lastApp.prevPageHash) {
-                    prevFileLink = String.format(fileTemplate, apps.get(0).prevPageHash);
+                    prevOffset = String.format(fileTemplate, apps.get(0).prevPageHash);
                 }
 
             }
-            responseWriter.writeApplications(response.getWriter(), apps, lastUpdated, prevFileLink);
+            responseWriter.writeApplications(response.getWriter(), apps, prevOffset);
         } catch (WriteException e) {
             e.printStackTrace();
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);

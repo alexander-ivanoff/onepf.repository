@@ -3,9 +3,15 @@ package org.onepf.repository;
 import org.apache.http.client.HttpClient;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.onepf.repository.appstorelooter.GetAppListRequest;
+import org.onepf.repository.model.RepositoryConfigurator;
+import org.onepf.repository.model.RepositoryFactory;
+import org.onepf.repository.model.auth.AppstoreAuthenticator;
+import org.onepf.repository.model.auth.AppstoreDescriptor;
+import org.onepf.repository.model.services.DataException;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
+import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -21,9 +27,21 @@ public class AppContextListener implements ServletContextListener {
 
     @Override
     public void contextInitialized(ServletContextEvent servletContextEvent) {
+        RepositoryFactory factory = RepositoryConfigurator.getRepositoryFactory(servletContextEvent.getServletContext());
+        AppstoreAuthenticator authenticator = RepositoryConfigurator.getAppstoreAuthenticator(servletContextEvent.getServletContext());
         scheduler = Executors.newSingleThreadScheduledExecutor();
         httpClient = new DefaultHttpClient();
-        scheduler.scheduleAtFixedRate(new GetAppListRequest(null, httpClient), 30, 30, TimeUnit.SECONDS);
+        Map<String, AppstoreDescriptor> appstores = null;
+        try {
+            appstores = authenticator.getAppstores();
+        } catch (DataException e) {
+            e.printStackTrace();
+        }
+        if (appstores != null) {
+            for (AppstoreDescriptor appstore : appstores.values()) {
+                scheduler.scheduleAtFixedRate(new GetAppListRequest(factory.getDataService(), httpClient, appstore), 30, 30, TimeUnit.SECONDS);
+            }
+        }
 
     }
 

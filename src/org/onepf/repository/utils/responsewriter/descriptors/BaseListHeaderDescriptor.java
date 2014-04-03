@@ -3,7 +3,7 @@ package org.onepf.repository.utils.responsewriter.descriptors;
 /**
  * Created by ivanoff on 02.04.14.
  */
-public abstract class BaseListHeaderDescriptor extends AbstractDescriptor {
+public class BaseListHeaderDescriptor extends AbstractDescriptor {
 
     public  String version;
     public String offset;

@@ -13,9 +13,7 @@ public abstract class XmlBaseHeaderParser extends XmlItemParser<BaseListHeaderDe
     @Override
     public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
         if (getElementName().equals(qName)) {
-            descriptor = new BaseListHeaderDescriptor();
-            descriptor.version = attributes.getValue(FIELD_VERSION);
-            descriptor.offset = attributes.getValue(FIELD_OFFSET);
+            descriptor = new BaseListHeaderDescriptor(attributes.getValue(FIELD_VERSION), attributes.getValue(FIELD_OFFSET));
         }
     }
 

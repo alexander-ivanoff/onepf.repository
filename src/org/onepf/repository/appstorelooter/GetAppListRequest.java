@@ -11,8 +11,8 @@ import org.onepf.repository.model.services.DataException;
 import org.onepf.repository.model.services.DataService;
 import org.onepf.repository.utils.Pair;
 import org.onepf.repository.utils.responsewriter.descriptors.ApplicationDescriptor;
-import org.onepf.repository.xmlapi.ApiParser;
 import org.onepf.repository.utils.responsewriter.descriptors.BaseListHeaderDescriptor;
+import org.onepf.repository.xmlapi.ApiParser;
 
 import java.io.IOException;
 import java.util.HashSet;
@@ -40,7 +40,6 @@ public class GetAppListRequest implements Runnable {
         try {
             List<LastUpdateInfo> updates = dataService.getLastUpdate(appstore.appstoreId);
             LastUpdateInfo lastUpdateInfo = (updates.size() > 0) ? updates.get(0) : null;
-
 
             String url = ApiMapping.LIST_APPLICATIONS.getMethodUrl(appstore.openaepUrl);
 

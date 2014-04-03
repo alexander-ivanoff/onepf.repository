@@ -15,7 +15,7 @@ public class AppstoreAuthenticator extends BaseRequestHandler {
 
     private static final String AUTH_TOKEN = "authToken";
 
-    Map<String, AppstoreDescriptor> appstores;
+    private Map<String, AppstoreDescriptor> appstores;
 
     public AppstoreAuthenticator(DataService dataService, StorageService storageService) {
         super(dataService, storageService);
@@ -43,14 +43,18 @@ public class AppstoreAuthenticator extends BaseRequestHandler {
     }
 
     private AppstoreDescriptor getAuthorized(String token) throws DataException {
+        return token != null ? getAppstores().get(token) : null;
+    }
+
+    public Map<String, AppstoreDescriptor> getAppstores() throws DataException {
         if (appstores == null) {
-            appstores = getAppstores();
+            appstores = getAppstoresInt();
         }
-        return token != null ? appstores.get(token) : null;
+        return appstores;
     }
 
 
-    private Map<String, AppstoreDescriptor> getAppstores() throws DataException {
+    private Map<String, AppstoreDescriptor> getAppstoresInt() throws DataException {
         long time = System.currentTimeMillis();
         Map<String, AppstoreDescriptor> apps = dataService.getAppstores();
         System.out.println("List appstores time: " + (System.currentTimeMillis() - time));  // TODO move to Log4J
