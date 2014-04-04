@@ -8,12 +8,16 @@ import org.onepf.repository.model.services.DataException;
 import org.onepf.repository.model.services.DataService;
 import org.onepf.repository.model.services.StorageException;
 import org.onepf.repository.model.services.StorageService;
-import org.onepf.repository.utils.responsewriter.descriptors.ApplicationDescriptor;
+import org.onepf.repository.api.responsewriter.descriptors.ApplicationDescriptor;
 
+import javax.xml.bind.annotation.adapters.HexBinaryAdapter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.security.DigestInputStream;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Enumeration;
@@ -30,12 +34,14 @@ public class UploadAppdfRequestHandler extends BaseRequestHandler {
 
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
+    private static HexBinaryAdapter marshaler = new HexBinaryAdapter();
+
     public UploadAppdfRequestHandler(DataService dataService, StorageService storageService) {
         super(dataService, storageService);
     }
 
 
-    public void processFile(File file, String developersContact, AppstoreDescriptor appstoreDescriptor) throws IOException, StorageException, DataException {
+    public void processFile(File file, String developersContact, AppstoreDescriptor appstoreDescriptor) throws IOException, StorageException, DataException, NoSuchAlgorithmException {
 
         AppdfFileParser parser = new AppdfFileParser(file);
         ParseResult parseResult = parser.parse();
@@ -55,7 +61,8 @@ public class UploadAppdfRequestHandler extends BaseRequestHandler {
         String appdfKey = generateObjectKey(packageName, FileType.APPDF, freeIndex);
         String descrKey = generateObjectKey(packageName, FileType.DESCRIPTION, freeIndex);
 
-        sendAppDFFile(appdfKey, file);
+        String appdfHash = sendAppDFFile(appdfKey, file);
+        System.out.println("appdf hash: " + appdfHash);
         sendDescription(descrKey, parseResult.getFile());
 
 
@@ -65,6 +72,7 @@ public class UploadAppdfRequestHandler extends BaseRequestHandler {
         appDescriptor.developerContact = developersContact;
         appDescriptor.appdfLink = appdfKey;
         appDescriptor.descriptionLink = descrKey;
+        appDescriptor.appdfHash = appdfHash;
         appDescriptor.appstoreId = appstoreDescriptor.appstoreId;
 
         long time = System.currentTimeMillis();
@@ -73,16 +81,22 @@ public class UploadAppdfRequestHandler extends BaseRequestHandler {
     }
 
 
-    private void sendAppDFFile(String appdfKey, File appdfFile) throws IOException, StorageException {
+    private String sendAppDFFile(String appdfKey, File appdfFile) throws IOException, StorageException, NoSuchAlgorithmException {
+        String hash = null;
         InputStream zis = null;
         try {
+            MessageDigest md = MessageDigest.getInstance("MD5");
             zis = new FileInputStream(appdfFile);
-            storageService.storeObject(appdfKey, zis, appdfFile.length());
+            DigestInputStream dis = new DigestInputStream(zis, md);
+            storageService.storeObject(appdfKey, dis, appdfFile.length());
+            hash = marshaler.marshal(dis.getMessageDigest().digest());
         } finally {
             if (zis != null) {
                 zis.close();
             }
         }
+        return hash;
+
     }
 
 

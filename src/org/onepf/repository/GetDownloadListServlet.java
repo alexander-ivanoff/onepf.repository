@@ -2,10 +2,10 @@ package org.onepf.repository;
 
 import org.onepf.repository.model.GetDownloadsRequestHandler;
 import org.onepf.repository.model.services.DataException;
-import org.onepf.repository.utils.responsewriter.ResponseWriter;
-import org.onepf.repository.utils.responsewriter.WriteException;
-import org.onepf.repository.utils.responsewriter.XmlResponseWriter;
-import org.onepf.repository.utils.responsewriter.descriptors.DownloadDescriptor;
+import org.onepf.repository.api.responsewriter.ResponseWriter;
+import org.onepf.repository.api.responsewriter.WriteException;
+import org.onepf.repository.api.responsewriter.XmlResponseWriter;
+import org.onepf.repository.api.responsewriter.descriptors.DownloadDescriptor;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;

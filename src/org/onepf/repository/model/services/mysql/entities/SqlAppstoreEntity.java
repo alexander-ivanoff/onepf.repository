@@ -10,13 +10,14 @@ import java.sql.SQLException;
  */
 public class SqlAppstoreEntity extends SqlDBEntity {
 
+    public static final String TABLE_NAME = "appstores";
+
     public static final String FIELD_APPSTORE_ACCESS_TOKEN = "appstoreAccessToken";
     public static final String FIELD_REPOSITORY_ACCESS_TOKEN = "repositoryAccessToken";
     public static final String FIELD_APPSTORE_ID = "appstoreId";
     public static final String FIELD_OPENAEP_URL = "openaepUrl";
     public static final String FIELD_PUBLICKEY = "publicKey";
     public static final String FIELD_DESCRIPTION = "description";
-
 
 
     public static AppstoreDescriptor getDescriptor(ResultSet item ) throws SQLException {

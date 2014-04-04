@@ -6,7 +6,7 @@ import org.onepf.repository.model.FileType;
 import org.onepf.repository.model.services.DataException;
 import org.onepf.repository.model.services.StorageException;
 import org.onepf.repository.model.services.StorageObject;
-import org.onepf.repository.utils.downloader.NoPackageException;
+import org.onepf.repository.api.downloader.NoPackageException;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;

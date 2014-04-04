@@ -1,9 +1,9 @@
 package org.onepf.repository;
 
+import org.onepf.repository.api.uploader.NoMultipartException;
+import org.onepf.repository.api.uploader.UploadFileHandler;
 import org.onepf.repository.model.UploadAppdfRequestHandler;
 import org.onepf.repository.model.auth.AppstoreDescriptor;
-import org.onepf.repository.utils.uploader.NoMultipartException;
-import org.onepf.repository.utils.uploader.UploadFileHandler;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;

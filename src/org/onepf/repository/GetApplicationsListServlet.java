@@ -2,10 +2,10 @@ package org.onepf.repository;
 
 import org.onepf.repository.model.GetApplicationsRequestHandler;
 import org.onepf.repository.model.services.DataException;
-import org.onepf.repository.utils.responsewriter.WriteException;
-import org.onepf.repository.utils.responsewriter.descriptors.ApplicationDescriptor;
-import org.onepf.repository.utils.responsewriter.ResponseWriter;
-import org.onepf.repository.utils.responsewriter.XmlResponseWriter;
+import org.onepf.repository.api.responsewriter.WriteException;
+import org.onepf.repository.api.responsewriter.descriptors.ApplicationDescriptor;
+import org.onepf.repository.api.responsewriter.ResponseWriter;
+import org.onepf.repository.api.responsewriter.XmlResponseWriter;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -46,7 +46,9 @@ public class GetApplicationsListServlet extends BaseServlet {
                 ApplicationDescriptor lastApp = apps.get(0);
                 lastUpdated = lastApp.lastUpdated;
                 if (lastApp.currPageHash != lastApp.prevPageHash) {
-                    prevOffset = String.format(fileTemplate, apps.get(0).prevPageHash);
+                    String  url = request.getRequestURL().toString();
+                    url = url.substring(0, url.lastIndexOf('/'));
+                    prevOffset = url + '/' + String.format(fileTemplate, apps.get(0).prevPageHash);
                 }
 
             }

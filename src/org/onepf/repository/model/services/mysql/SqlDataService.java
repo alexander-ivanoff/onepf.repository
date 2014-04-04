@@ -6,16 +6,16 @@ import org.apache.commons.dbcp.PoolableConnectionFactory;
 import org.apache.commons.dbcp.PoolingDataSource;
 import org.apache.commons.pool.ObjectPool;
 import org.apache.commons.pool.impl.GenericObjectPool;
-import org.onepf.repository.appstorelooter.LastUpdateInfo;
+import org.onepf.repository.appstorelooter.LastUpdateDescriptor;
 import org.onepf.repository.model.auth.AppstoreDescriptor;
 import org.onepf.repository.model.services.DataException;
 import org.onepf.repository.model.services.DataService;
 import org.onepf.repository.model.services.mysql.entities.*;
-import org.onepf.repository.utils.Pair;
-import org.onepf.repository.utils.responsewriter.descriptors.ApplicationDescriptor;
-import org.onepf.repository.utils.responsewriter.descriptors.DownloadDescriptor;
-import org.onepf.repository.utils.responsewriter.descriptors.PurchaseDescriptor;
-import org.onepf.repository.utils.responsewriter.descriptors.ReviewDescriptor;
+import org.onepf.repository.api.Pair;
+import org.onepf.repository.api.responsewriter.descriptors.ApplicationDescriptor;
+import org.onepf.repository.api.responsewriter.descriptors.DownloadDescriptor;
+import org.onepf.repository.api.responsewriter.descriptors.PurchaseDescriptor;
+import org.onepf.repository.api.responsewriter.descriptors.ReviewDescriptor;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -34,6 +34,8 @@ public class SqlDataService implements DataService {
     private static final int PAGE_LIMIT_APPLICATIONS = 3;
     private static final int PAGE_LIMIT_OTHER = 3;
 
+    private static final int DEFAULT_RESULT_LIMIT = 1000;
+
     private DataSource dbDataSource;
 
     public SqlDataService(SqlOptions options) {
@@ -50,7 +52,7 @@ public class SqlDataService implements DataService {
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
-        ObjectPool connectionPool = new GenericObjectPool(null, options.maxConnections, GenericObjectPool.WHEN_EXHAUSTED_BLOCK, options.maxConnections);
+        ObjectPool connectionPool = new GenericObjectPool(null, options.maxConnections, GenericObjectPool.WHEN_EXHAUSTED_BLOCK, options.maxWait);
         ConnectionFactory connectionFactory = new DriverManagerConnectionFactory(options.dbUrl, options.dbUser, options.dbPassword);
         PoolableConnectionFactory poolableConnectionFactory = new PoolableConnectionFactory (connectionFactory,connectionPool,null,null,false,true);
         PoolingDataSource dataSource = new PoolingDataSource(connectionPool);
@@ -68,7 +70,8 @@ public class SqlDataService implements DataService {
                     .withDevelopersContact(applicationDescriptor.developerContact)
                     .withAppstore(applicationDescriptor.appstoreId)
                     .withAppdf(applicationDescriptor.appdfLink)
-                    .withDescription(applicationDescriptor.descriptionLink);
+                    .withDescription(applicationDescriptor.descriptionLink)
+                    .withHash(applicationDescriptor.appdfHash);
             conn = dbDataSource.getConnection();
             stmt = insertWithHashes(conn, "applications", appEntity, PAGE_LIMIT_APPLICATIONS);
             stmt.executeUpdate();
@@ -78,7 +81,28 @@ public class SqlDataService implements DataService {
             try { if (stmt != null) stmt.close(); } catch(Exception e) { }
             try { if (conn != null) conn.close(); } catch(Exception e) { }
         }
+    }
 
+    @Override
+    public void saveLastUpdate(LastUpdateDescriptor lastUpdateDescriptor) throws DataException {
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        try {
+            SqlLastUpdateEntity appEntity = new SqlLastUpdateEntity()
+                    .withAppstoreId(lastUpdateDescriptor.appstoreId)
+                    .withDateTime(lastUpdateDescriptor.lastResponseDatetime)
+                    .withHash(lastUpdateDescriptor.lastResponseHash)
+                    .withOffset(lastUpdateDescriptor.prevOffset);
+
+            conn = dbDataSource.getConnection();
+            stmt = insert(conn, SqlLastUpdateEntity.TABLE_NAME, appEntity);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new DataException(e);
+        } finally {
+            try { if (stmt != null) stmt.close(); } catch(Exception e) { }
+            try { if (conn != null) conn.close(); } catch(Exception e) { }
+        }
     }
 
     @Override
@@ -128,15 +152,43 @@ public class SqlDataService implements DataService {
                 selectionArgs = new String[] {packageName};
             } else {
                 if (currPageHash >= 0) {
-                    selection = "currPageHash=?";
+                    selection = SqlAppEntity.FIELD_CURR_PAGE_HASH + "=?";
                     selectionArgs = new String[] {String.valueOf(currPageHash)};
                 } else {
-                    selection = "currPageHash = (SELECT currPageHash FROM applications ORDER BY id DESC LIMIT 1)";
+                    selection = SqlAppEntity.FIELD_CURR_PAGE_HASH + " = (SELECT " + SqlAppEntity.FIELD_CURR_PAGE_HASH +
+                            " FROM " + SqlAppEntity.TABLE_NAME + " ORDER BY " + SqlAppEntity.FIELD_ID + " DESC LIMIT 1)";
                     selectionArgs = null;
                 }
             }
             String orderBy = SqlAppEntity.FIELD_ID + " DESC";
-            stmt = query(conn, "applications", selection, selectionArgs, orderBy);
+            stmt = query(conn, SqlAppEntity.TABLE_NAME, selection, selectionArgs, orderBy, DEFAULT_RESULT_LIMIT);
+            rset = stmt.executeQuery();
+            ArrayList<ApplicationDescriptor> apps = new ArrayList<ApplicationDescriptor>();
+            while (rset.next()) {
+                apps.add(SqlAppEntity.getDescriptor(rset));
+            }
+            return apps;
+        } catch (SQLException e) {
+            throw new DataException(e);
+        } finally {
+            try { if (stmt != null) rset.close(); } catch(Exception e) { }
+            try { if (stmt != null) stmt.close(); } catch(Exception e) { }
+            try { if (conn != null) conn.close(); } catch(Exception e) { }
+        }
+    }
+
+    @Override
+    public List<ApplicationDescriptor> getApplicationByHash(String packageName, String hash) throws DataException{
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ResultSet rset = null;
+        try {
+            String selection = SqlAppEntity.FIELD_PACKAGE_NAME + "=? AND " + SqlAppEntity.FIELD_HASH + "=?";
+            String[] selectionArgs = new String[] {packageName, hash};
+            String orderBy = SqlAppEntity.FIELD_ID + " DESC";
+            conn = dbDataSource.getConnection();
+
+            stmt = query(conn, SqlAppEntity.TABLE_NAME, selection, selectionArgs, orderBy, 1);
             rset = stmt.executeQuery();
             ArrayList<ApplicationDescriptor> apps = new ArrayList<ApplicationDescriptor>();
             while (rset.next()) {
@@ -154,6 +206,7 @@ public class SqlDataService implements DataService {
 
 
 
+
     @Override
     public Map<String, AppstoreDescriptor> getAppstores() throws DataException{
         Connection conn = null;
@@ -161,7 +214,7 @@ public class SqlDataService implements DataService {
         ResultSet rset = null;
         try {
             conn = dbDataSource.getConnection();
-            stmt = query(conn, "appstores", null, null, null);
+            stmt = query(conn, SqlAppstoreEntity.TABLE_NAME, null, null, null, DEFAULT_RESULT_LIMIT);
             rset = stmt.executeQuery();
             Map<String, AppstoreDescriptor> apps = new HashMap<String, AppstoreDescriptor>();
             AppstoreDescriptor appstore = null;
@@ -181,7 +234,7 @@ public class SqlDataService implements DataService {
     }
 
     @Override
-    public List<LastUpdateInfo> getLastUpdate(String appstoreId) throws DataException{
+    public List<LastUpdateDescriptor> getLastUpdate(String appstoreId) throws DataException{
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rset = null;
@@ -189,9 +242,9 @@ public class SqlDataService implements DataService {
             conn = dbDataSource.getConnection();
             String selection = SqlLastUpdateEntity.FIELD_APPSTORE_ID + "=?";
             String[] selectionArgs = new String[] {appstoreId};
-            stmt = query(conn, "appstoreupdates", selection, selectionArgs, null);
+            stmt = query(conn, SqlLastUpdateEntity.TABLE_NAME, selection, selectionArgs, null, DEFAULT_RESULT_LIMIT);
             rset = stmt.executeQuery();
-            List<LastUpdateInfo> updates = new ArrayList<LastUpdateInfo>();
+            List<LastUpdateDescriptor> updates = new ArrayList<LastUpdateDescriptor>();
             while (rset.next()) {
                 updates.add(SqlLastUpdateEntity.getDescriptor(rset));
             }
@@ -223,7 +276,7 @@ public class SqlDataService implements DataService {
             }
             String order = SqlDownloadEntity.FIELD_ID + " DESC";
             conn = dbDataSource.getConnection();
-            stmt = query(conn, "downloads", selection, selectionArgs, order);
+            stmt = query(conn, "downloads", selection, selectionArgs, order, DEFAULT_RESULT_LIMIT);
             rset = stmt.executeQuery();
             ArrayList<DownloadDescriptor> downloads = new ArrayList<DownloadDescriptor>();
             while (rset.next()) {
@@ -256,7 +309,7 @@ public class SqlDataService implements DataService {
             }
             String order = SqlDownloadEntity.FIELD_ID + " DESC";
             conn = dbDataSource.getConnection();
-            stmt = query(conn, "purchases", selection, selectionArgs, order);
+            stmt = query(conn, "purchases", selection, selectionArgs, order, DEFAULT_RESULT_LIMIT);
             rset = stmt.executeQuery();
             ArrayList<PurchaseDescriptor> purchases = new ArrayList<PurchaseDescriptor>();
             while (rset.next()) {
@@ -289,7 +342,7 @@ public class SqlDataService implements DataService {
             }
             String order = SqlDownloadEntity.FIELD_ID + " DESC";
             conn = dbDataSource.getConnection();
-            stmt = query(conn, "reviews", selection, selectionArgs, order);
+            stmt = query(conn, "reviews", selection, selectionArgs, order, DEFAULT_RESULT_LIMIT);
             rset = stmt.executeQuery();
             ArrayList<ReviewDescriptor> reviews = new ArrayList<ReviewDescriptor>();
             while (rset.next()) {
@@ -346,7 +399,35 @@ public class SqlDataService implements DataService {
 
     }
 
-    private static PreparedStatement query(Connection connection,  String tableName, String selection, String[] selectionArgs, String order) throws SQLException {
+
+    private static PreparedStatement insert(Connection connection, String tableName, SqlDBEntity dbEntity) throws SQLException {
+
+        StringBuilder columnsBuilder = new StringBuilder().append("(");
+        StringBuilder valuesBuilder = new StringBuilder().append("(");
+        Map<String, String> item = dbEntity.getItem();
+        for (String entry : item.keySet()) {
+            columnsBuilder.append(entry).append(',');
+            valuesBuilder.append('?').append(',');
+
+        }
+        int pos = columnsBuilder.length();
+        columnsBuilder.replace(pos - 1, pos, ")");
+        pos = valuesBuilder.length();
+        valuesBuilder.replace(pos - 1, pos, ")");
+
+        String request = "REPLACE INTO " + tableName + " " + columnsBuilder.toString() + " VALUES " + valuesBuilder.toString() + ";";
+
+        PreparedStatement stmt = connection.prepareStatement(request);
+        Collection<String> values = item.values();
+        int index = 0;
+        for (String value: values) {
+            stmt.setString(++index, value);
+        }
+        return  stmt;
+
+    }
+
+    private static PreparedStatement query(Connection connection,  String tableName, String selection, String[] selectionArgs, String order, int limit) throws SQLException {
 
         StringBuilder requestBuilder = new StringBuilder().append("SELECT * FROM ").append(tableName);
         if (selection != null) {
@@ -355,7 +436,7 @@ public class SqlDataService implements DataService {
         if (order != null) {
             requestBuilder.append(" ORDER BY ").append(order);
         }
-        requestBuilder.append(" LIMIT 1000");
+        requestBuilder.append(" LIMIT " + limit);
         System.out.println("QUERY: " + requestBuilder.toString());
 
         PreparedStatement stmt = null;

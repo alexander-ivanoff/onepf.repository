@@ -3,7 +3,7 @@ package org.onepf.repository.model;
 import org.onepf.repository.model.services.DataException;
 import org.onepf.repository.model.services.DataService;
 import org.onepf.repository.model.services.StorageService;
-import org.onepf.repository.utils.responsewriter.descriptors.PurchaseDescriptor;
+import org.onepf.repository.api.responsewriter.descriptors.PurchaseDescriptor;
 
 import java.util.ArrayList;
 import java.util.List;

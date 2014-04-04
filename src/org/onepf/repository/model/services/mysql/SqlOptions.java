@@ -15,8 +15,9 @@ public class SqlOptions {
     public String driverClassName = "com.mysql.jdbc.Driver";
     public String dbUser = "onepf_user";
     public String dbPassword = "onepfPassword";
-    public String dbUrl = "jdbc:mysql://onepf-repository.ca6s4oee7dbi.us-west-2.rds.amazonaws.com:3306/onepf_repository";
+    public String dbUrl = "jdbc:mysql://onepf-repository.ca6s4oee7dbi.us-west-2.rds.amazonaws.com:3306/onepf_repository_1";
     public int maxConnections = 4;
+    public int maxWait = 10000; // 10sec
 
 
 }

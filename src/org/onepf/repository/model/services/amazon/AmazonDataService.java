@@ -9,7 +9,7 @@ import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.amazonaws.services.dynamodbv2.model.PutItemRequest;
 import com.amazonaws.services.dynamodbv2.model.QueryRequest;
 import com.amazonaws.services.dynamodbv2.model.QueryResult;
-import org.onepf.repository.appstorelooter.LastUpdateInfo;
+import org.onepf.repository.appstorelooter.LastUpdateDescriptor;
 import org.onepf.repository.model.auth.AppstoreDescriptor;
 import org.onepf.repository.model.services.DataException;
 import org.onepf.repository.model.services.DataService;
@@ -17,10 +17,10 @@ import org.onepf.repository.model.services.amazon.entities.AmazonAppEntity;
 import org.onepf.repository.model.services.amazon.entities.AmazonAppstoreEntity;
 import org.onepf.repository.model.services.amazon.entities.AmazonDownloadEntity;
 import org.onepf.repository.model.services.amazon.entities.AmazonPurchaseEntity;
-import org.onepf.repository.utils.responsewriter.descriptors.ApplicationDescriptor;
-import org.onepf.repository.utils.responsewriter.descriptors.DownloadDescriptor;
-import org.onepf.repository.utils.responsewriter.descriptors.PurchaseDescriptor;
-import org.onepf.repository.utils.responsewriter.descriptors.ReviewDescriptor;
+import org.onepf.repository.api.responsewriter.descriptors.ApplicationDescriptor;
+import org.onepf.repository.api.responsewriter.descriptors.DownloadDescriptor;
+import org.onepf.repository.api.responsewriter.descriptors.PurchaseDescriptor;
+import org.onepf.repository.api.responsewriter.descriptors.ReviewDescriptor;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -65,6 +65,11 @@ public class AmazonDataService implements DataService {
 
         PutItemRequest itemRequest = new PutItemRequest().withTableName(options.packageTable).withItem(appEntity.getItem());
         amazonDynamoDB.putItem(itemRequest);
+    }
+
+    @Override
+    public void saveLastUpdate(LastUpdateDescriptor lastUpdateDescriptor) throws DataException {
+
     }
 
     @Override
@@ -114,7 +119,12 @@ public class AmazonDataService implements DataService {
     }
 
     @Override
-    public List<LastUpdateInfo> getLastUpdate(String appstoreId) throws DataException {
+    public List<LastUpdateDescriptor> getLastUpdate(String appstoreId) throws DataException {
+        return null;
+    }
+
+    @Override
+    public List<ApplicationDescriptor> getApplicationByHash(String packageName, String hash) throws DataException {
         return null;
     }
 
