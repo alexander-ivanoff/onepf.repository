@@ -101,8 +101,8 @@ public class ApplicationsToUpdateLoader {
                 System.out.println("APPLIST RESPONSE: " + result);
             }
             iterations++;
-        } while (url != null && (prevUpdate == null || url != prevUpdate.prevOffset));
-        if (iterations == 1 && prevUpdate != null && prevUpdate.lastResponseHash == hash) {
+        } while (url != null && (prevUpdate == null || !url.equals(prevUpdate.prevOffset)));
+        if (iterations == 1 && prevUpdate != null && prevUpdate.lastResponseHash.equals(hash)) {
             //do nothind - return empty response
         } else {
             response.lastUpdate = lastUpdate;
