@@ -64,4 +64,10 @@
         <filter-name>XmlFileFilter</filter-name>
         <url-pattern>/openaep/*</url-pattern>
     </filter-mapping>
+
+    <context-param>
+        <description>Switching polling on if 'true'</description>
+        <param-name>pollStores</param-name>
+        <param-value>true</param-value>
+    </context-param>
 </web-app>
