@@ -3,11 +3,11 @@ package org.onepf.repository.appstorelooter;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.onepf.repository.api.ParserFactory;
-import org.onepf.repository.api.responsewriter.descriptors.ApplicationDescriptor;
 import org.onepf.repository.model.RepositoryFactory;
 import org.onepf.repository.model.auth.AppstoreDescriptor;
 import org.onepf.repository.model.services.DataException;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
@@ -21,15 +21,21 @@ public class GetAppListRequest implements Runnable {
     private HttpClient httpClient;
     private RepositoryFactory repositoryFactory;
     private ParserFactory parserFactory;
+    private File uploadDir;
 
     private ApplicationsToUpdateLoader applicationsToUpdateLoader;
 
-    public GetAppListRequest(ParserFactory parserFactory, RepositoryFactory repositoryFactory, HttpClient httpClient, AppstoreDescriptor appstore) {
+    public GetAppListRequest(
+            ParserFactory parserFactory,
+            RepositoryFactory repositoryFactory,
+            HttpClient httpClient,
+            AppstoreDescriptor appstore,
+            File uploadDir) {
         this.appstore = appstore;
         this.httpClient = httpClient;
         this.repositoryFactory = repositoryFactory;
         this.parserFactory = parserFactory;
-
+        this.uploadDir = uploadDir;
         applicationsToUpdateLoader = new ApplicationsToUpdateLoader(parserFactory, httpClient);
     }
 
@@ -44,13 +50,11 @@ public class GetAppListRequest implements Runnable {
                 System.out.print("update is not needed!");
             } else {
                 System.out.print("updated: " + appsToUpdateResponse.getLastUpdate().lastResponseHash);
-                for (ApplicationDescriptor app : appsToUpdateResponse.getAppsToUpdate()) {
-                    System.out.println(app.packageName + ", " + app.lastUpdated);
-                }
+                ApplicationsLoader appsLoader = new ApplicationsLoader(repositoryFactory, httpClient, uploadDir);
+                appsLoader.loadApplications(new ApplicationsLoader.Request(appstore, appsToUpdateResponse.getAppsToUpdate()));
+                // if everything was ok, store last Update
+                repositoryFactory.getDataService().saveLastUpdate(appsToUpdateResponse.getLastUpdate());
             }
-
-
-
         } catch (ClientProtocolException e) {
             e.printStackTrace();
         } catch (IOException e) {

@@ -12,6 +12,8 @@ import org.onepf.repository.api.responsewriter.descriptors.ApplicationListHeader
 import org.onepf.repository.model.auth.AppstoreDescriptor;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -19,6 +21,8 @@ import java.util.Set;
  * Created by ivanoff on 03.04.14.
  */
 public class ApplicationsToUpdateLoader {
+
+    private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     public static class Request {
 
@@ -88,6 +92,7 @@ public class ApplicationsToUpdateLoader {
                 if (lastUpdate == null) {
                     lastUpdate = new LastUpdateDescriptor();
                     lastUpdate.appstoreId = appstore.appstoreId;
+                    lastUpdate.lastResponseDatetime = dateFormat.format(new Date(System.currentTimeMillis()));
                     lastUpdate.lastResponseHash = hash;
                     lastUpdate.prevOffset = appParser.getHeader().offset;
                 }

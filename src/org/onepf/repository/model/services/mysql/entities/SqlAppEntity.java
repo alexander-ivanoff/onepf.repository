@@ -11,6 +11,8 @@ import java.util.Map;
  */
 public class SqlAppEntity extends SqlDBEntity {
 
+    public static final String TABLE_NAME= "applications";
+
     public static final String FIELD_ID= "id";
     public static final String FIELD_PACKAGE_NAME = "package";
     public static final String FIELD_APPSTORE_ID = "appstoreId";

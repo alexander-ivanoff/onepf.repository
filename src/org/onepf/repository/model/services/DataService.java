@@ -20,6 +20,8 @@ public interface DataService {
     // TODO refactoring: move method in different requests (Maybe Entities), here should be only generic requests
 
     void store(ApplicationDescriptor applicationDescriptor) throws DataException;
+
+    void saveLastUpdate(LastUpdateDescriptor lastUpdateDescriptor) throws DataException;
     void addDownload(DownloadDescriptor downloadDescriptor) throws DataException;
 
     List<ApplicationDescriptor> getApplicationsLog() throws DataException;
@@ -27,6 +29,8 @@ public interface DataService {
     Map<String,AppstoreDescriptor> getAppstores() throws DataException;
 
     List<LastUpdateDescriptor> getLastUpdate(String appstoreId) throws DataException;
+
+    List<ApplicationDescriptor> getApplicationByHash(String packageName, String hash) throws DataException;
 
     ArrayList<DownloadDescriptor> getDownloads(String packageName, long updateTime) throws DataException;
     ArrayList<PurchaseDescriptor> getPurchases(String packageName, long updateTime) throws DataException;

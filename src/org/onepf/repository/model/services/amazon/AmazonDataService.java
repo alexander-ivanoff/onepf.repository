@@ -68,6 +68,11 @@ public class AmazonDataService implements DataService {
     }
 
     @Override
+    public void saveLastUpdate(LastUpdateDescriptor lastUpdateDescriptor) throws DataException {
+
+    }
+
+    @Override
     public void addDownload(DownloadDescriptor downloadDescriptor) throws DataException {
 
     }
@@ -115,6 +120,11 @@ public class AmazonDataService implements DataService {
 
     @Override
     public List<LastUpdateDescriptor> getLastUpdate(String appstoreId) throws DataException {
+        return null;
+    }
+
+    @Override
+    public List<ApplicationDescriptor> getApplicationByHash(String packageName, String hash) throws DataException {
         return null;
     }
 

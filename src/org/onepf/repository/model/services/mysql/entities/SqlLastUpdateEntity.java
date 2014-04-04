@@ -11,6 +11,9 @@ import java.util.Map;
  */
 public class SqlLastUpdateEntity extends SqlDBEntity {
 
+
+    public static final String TABLE_NAME= "appstoreupdates";
+
     public static final String FIELD_APPSTORE_ID = "appstoreId";
     public static final String FIELD_LAST_UPDATE_HASH= "lastUpdateHash";
     public static final String FIELD_LAST_UPDATE_DATETIME = "lastUpdateDateTime";

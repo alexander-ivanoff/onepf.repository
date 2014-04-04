@@ -10,8 +10,10 @@ import org.onepf.repository.model.auth.AppstoreAuthenticator;
 import org.onepf.repository.model.auth.AppstoreDescriptor;
 import org.onepf.repository.model.services.DataException;
 
+import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
+import java.io.File;
 import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -28,9 +30,10 @@ public class AppContextListener implements ServletContextListener {
     private HttpClient httpClient;
 
     @Override
-    public void contextInitialized(ServletContextEvent servletContextEvent) {
-        RepositoryFactory factory = RepositoryConfigurator.getRepositoryFactory(servletContextEvent.getServletContext());
-        AppstoreAuthenticator authenticator = RepositoryConfigurator.getAppstoreAuthenticator(servletContextEvent.getServletContext());
+    public void contextInitialized(final ServletContextEvent servletContextEvent) {
+        final ServletContext context = servletContextEvent.getServletContext();
+        final RepositoryFactory factory = RepositoryConfigurator.getRepositoryFactory(context);
+        AppstoreAuthenticator authenticator = RepositoryConfigurator.getAppstoreAuthenticator(context);
 
         scheduler = Executors.newSingleThreadScheduledExecutor();
         httpClient = new DefaultHttpClient();
@@ -44,7 +47,7 @@ public class AppContextListener implements ServletContextListener {
         if (appstores != null) {
             for (AppstoreDescriptor appstore : appstores.values()) {
                 if (appstore.appstoreId.equals("localstore")) //TEST PURPOSES ONLY
-                    scheduler.scheduleAtFixedRate(new GetAppListRequest(parserFactory, factory, httpClient, appstore), 30, 30, TimeUnit.SECONDS);
+                    scheduler.scheduleAtFixedRate(new GetAppListRequest(parserFactory, factory, httpClient, appstore, new File(context.getRealPath("/uploads/"))), 30, 30, TimeUnit.SECONDS);
             }
         }
 
