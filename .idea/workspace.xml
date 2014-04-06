@@ -3,11 +3,35 @@
   <component name="ArtifactsWorkspaceSettings">
     <artifacts-to-build>
       <artifact name="web:war" />
-      <artifact name="web:war exploded" />
     </artifacts-to-build>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="725f9165-c5a3-4e6c-81e8-5c089a1ca901" name="Default" comment="" />
+    <list default="true" id="725f9165-c5a3-4e6c-81e8-5c089a1ca901" name="Default" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/web/WEB-INF/lib/AXMLPrinter2.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/web/WEB-INF/lib/jtidy-r938.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/web/WEB-INF/lib/mysql-connector-java-5.1.29-bin.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/org/onepf/repository/utils/uploader/utils/AXMLPrinter.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/org/onepf/repository/api/responsewriter/descriptors/ApkDescriptor.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/org/onepf/repository/utils/uploader/utils/Feature.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/org/onepf/repository/utils/uploader/utils/ManifestProcessor.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/org/onepf/repository/utils/uploader/utils/Screen.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/org/onepf/repository/model/services/mysql/entities/SqlApkEntity.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/org/onepf/repository/utils/uploader/utils/SupportsScreen.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/org/onepf/repository/utils/uploader/utils/TbdInteface.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/org/onepf/repository/api/TextUtils.java" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/com_amazonaws_aws_java_sdk_1_7_5.xml" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/org/onepf/repository/model/services/amazon/AmazonDataService.java" afterPath="$PROJECT_DIR$/src/org/onepf/repository/model/services/amazon/AmazonDataService.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/org/onepf/repository/model/services/DataService.java" afterPath="$PROJECT_DIR$/src/org/onepf/repository/model/services/DataService.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/org/onepf/repository/model/RepositoryConfigurator.java" afterPath="$PROJECT_DIR$/src/org/onepf/repository/model/RepositoryConfigurator.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/org/onepf/repository/model/services/mysql/SqlDataService.java" afterPath="$PROJECT_DIR$/src/org/onepf/repository/model/services/mysql/SqlDataService.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/org/onepf/repository/model/services/mysql/SqlOptions.java" afterPath="$PROJECT_DIR$/src/org/onepf/repository/model/services/mysql/SqlOptions.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/org/onepf/repository/model/UploadAppdfRequestHandler.java" afterPath="$PROJECT_DIR$/src/org/onepf/repository/model/UploadAppdfRequestHandler.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/compiler.xml" afterPath="$PROJECT_DIR$/.idea/compiler.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/onepf.repository.iml" afterPath="$PROJECT_DIR$/onepf.repository.iml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/vcs.xml" afterPath="$PROJECT_DIR$/.idea/vcs.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+    </list>
     <ignored path="OpenRepository.iws" />
     <ignored path=".idea/workspace.xml" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -62,7 +86,7 @@
     </breakpoint_any>
     <ui_properties default_suspend_policy="SuspendAll" default_condition_enabled="true" />
     <line_breakpoints default_suspend_policy="SuspendAll" default_condition_enabled="true">
-      <breakpoint url="file://$PROJECT_DIR$/src/org/onepf/repository/model/BaseRequestHandler.java" line="20" class="org.onepf.repository.model.BaseRequestHandler" package="org.onepf.repository.model">
+      <breakpoint url="file://$PROJECT_DIR$/src/org/onepf/repository/model/services/mysql/SqlDataService.java" line="220" class="org.onepf.repository.model.services.mysql.SqlDataService" package="org.onepf.repository.model.services.mysql">
         <option name="ENABLED" value="true" />
         <option name="LOG_ENABLED" value="false" />
         <option name="LOG_EXPRESSION_ENABLED" value="false" />
@@ -77,7 +101,7 @@
         <option name="CONDITION" value="" />
         <option name="LOG_MESSAGE" value="" />
       </breakpoint>
-      <breakpoint url="file://$PROJECT_DIR$/src/org/onepf/repository/api/uploader/UploadFileHandler.java" line="2" class="UploadFileHandler.java" package="">
+      <breakpoint url="file://$PROJECT_DIR$/src/org/onepf/repository/model/services/mysql/entities/SqlAppEntity.java" line="53" class="org.onepf.repository.model.services.mysql.entities.SqlAppEntity" package="org.onepf.repository.model.services.mysql.entities">
         <option name="ENABLED" value="true" />
         <option name="LOG_ENABLED" value="false" />
         <option name="LOG_EXPRESSION_ENABLED" value="false" />
@@ -92,7 +116,37 @@
         <option name="CONDITION" value="" />
         <option name="LOG_MESSAGE" value="" />
       </breakpoint>
-      <breakpoint url="file://$PROJECT_DIR$/src/org/onepf/repository/appstorelooter/GetAppListRequest.java" line="44" class="org.onepf.repository.appstorelooter.GetAppListRequest" package="org.onepf.repository.appstorelooter">
+      <breakpoint url="file://$PROJECT_DIR$/src/org/onepf/repository/BaseServlet.java" line="41" class="org.onepf.repository.BaseServlet" package="org.onepf.repository">
+        <option name="ENABLED" value="true" />
+        <option name="LOG_ENABLED" value="false" />
+        <option name="LOG_EXPRESSION_ENABLED" value="false" />
+        <option name="REMOVE_AFTER_HIT" value="false" />
+        <option name="SUSPEND_POLICY" value="SuspendAll" />
+        <option name="SUSPEND" value="true" />
+        <option name="COUNT_FILTER_ENABLED" value="false" />
+        <option name="COUNT_FILTER" value="0" />
+        <option name="CONDITION_ENABLED" value="true" />
+        <option name="CLASS_FILTERS_ENABLED" value="false" />
+        <option name="INSTANCE_FILTERS_ENABLED" value="false" />
+        <option name="CONDITION" value="" />
+        <option name="LOG_MESSAGE" value="" />
+      </breakpoint>
+      <breakpoint url="file://$PROJECT_DIR$/src/org/onepf/repository/BaseServlet.java" line="54" class="org.onepf.repository.BaseServlet" package="org.onepf.repository">
+        <option name="ENABLED" value="true" />
+        <option name="LOG_ENABLED" value="false" />
+        <option name="LOG_EXPRESSION_ENABLED" value="false" />
+        <option name="REMOVE_AFTER_HIT" value="false" />
+        <option name="SUSPEND_POLICY" value="SuspendAll" />
+        <option name="SUSPEND" value="true" />
+        <option name="COUNT_FILTER_ENABLED" value="false" />
+        <option name="COUNT_FILTER" value="0" />
+        <option name="CONDITION_ENABLED" value="true" />
+        <option name="CLASS_FILTERS_ENABLED" value="false" />
+        <option name="INSTANCE_FILTERS_ENABLED" value="false" />
+        <option name="CONDITION" value="" />
+        <option name="LOG_MESSAGE" value="" />
+      </breakpoint>
+      <breakpoint url="file://$PROJECT_DIR$/src/org/onepf/repository/model/services/mysql/SqlDataService.java" line="109" class="org.onepf.repository.model.services.mysql.SqlDataService" package="org.onepf.repository.model.services.mysql">
         <option name="ENABLED" value="true" />
         <option name="LOG_ENABLED" value="false" />
         <option name="LOG_EXPRESSION_ENABLED" value="false" />
@@ -116,149 +170,231 @@
     <favorites_list name="OpenRepository" />
   </component>
   <component name="FileEditorManager">
-    <leaf>
-      <file leaf-file-name="ApplicationsLoader.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/appstorelooter/ApplicationsLoader.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="89" column="0" selection-start="3545" selection-end="3545" vertical-scroll-proportion="0.0" vertical-offset="1197" max-vertical-offset="1635">
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="AppstoreRequester.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/appstorelooter/AppstoreRequester.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="34" column="11" selection-start="1116" selection-end="1116" vertical-scroll-proportion="0.0" vertical-offset="293" max-vertical-offset="1095">
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="RepositoryConfigurator.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/model/RepositoryConfigurator.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="39" column="53" selection-start="1653" selection-end="1653" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="645">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ApplicationsToUpdateLoader.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/appstorelooter/ApplicationsToUpdateLoader.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="53" column="0" selection-start="1825" selection-end="1825" vertical-scroll-proportion="0.0" vertical-offset="402" max-vertical-offset="1545">
-              <folding>
-                <element signature="e#1866#1867#0" expanded="true" />
-                <element signature="e#2489#2512#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="AppContextListener.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/AppContextListener.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="21" column="0" selection-start="605" selection-end="605" vertical-scroll-proportion="0.0" vertical-offset="117" max-vertical-offset="555">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="GetAppListRequest.java" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/appstorelooter/GetAppListRequest.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="44" column="0" selection-start="1380" selection-end="1380" vertical-scroll-proportion="0.33173078" vertical-offset="387" max-vertical-offset="1020">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="RepositoryFactory.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/model/RepositoryFactory.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="49" column="0" selection-start="1624" selection-end="1624" vertical-scroll-proportion="0.0" vertical-offset="454" max-vertical-offset="870">
-              <folding>
-                <element signature="e#1656#1657#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="web.xml" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/web/WEB-INF/web.xml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="68" column="39" selection-start="2536" selection-end="2536" vertical-scroll-proportion="0.0" vertical-offset="466" max-vertical-offset="1185">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-    </leaf>
+    <splitter split-orientation="horizontal" split-proportion="0.7570694">
+      <split-first>
+        <leaf>
+          <file leaf-file-name="UploadAppdfRequestHandler.java" pinned="false" current="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/model/UploadAppdfRequestHandler.java">
+              <provider selected="true" editor-type-id="text-editor">
+                <state line="189" column="31" selection-start="7837" selection-end="7848" vertical-scroll-proportion="0.0" vertical-offset="2041" max-vertical-offset="3405">
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="AmazonDataService.java" pinned="false" current="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/model/services/amazon/AmazonDataService.java">
+              <provider selected="true" editor-type-id="text-editor">
+                <state line="67" column="44" selection-start="3141" selection-end="3141" vertical-scroll-proportion="0.0" vertical-offset="248" max-vertical-offset="2235">
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="SqlOptions.java" pinned="false" current="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/model/services/mysql/SqlOptions.java">
+              <provider selected="true" editor-type-id="text-editor">
+                <state line="18" column="34" selection-start="711" selection-end="711" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="435">
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="ApkDescriptor.java" pinned="false" current="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/api/responsewriter/descriptors/ApkDescriptor.java">
+              <provider selected="true" editor-type-id="text-editor">
+                <state line="10" column="43" selection-start="260" selection-end="260" vertical-scroll-proportion="0.0" vertical-offset="1630" max-vertical-offset="2175">
+                  <folding>
+                    <element signature="imports" expanded="true" />
+                    <element signature="e#672#680#0" expanded="true" />
+                    <element signature="e#717#718#0" expanded="true" />
+                    <element signature="e#751#752#0" expanded="true" />
+                    <element signature="e#802#803#0" expanded="true" />
+                    <element signature="e#848#849#0" expanded="true" />
+                    <element signature="e#886#887#0" expanded="true" />
+                    <element signature="e#920#921#0" expanded="true" />
+                    <element signature="e#974#975#0" expanded="true" />
+                    <element signature="e#1020#1021#0" expanded="true" />
+                    <element signature="e#1050#1051#0" expanded="true" />
+                    <element signature="e#1079#1080#0" expanded="true" />
+                    <element signature="e#1120#1121#0" expanded="true" />
+                    <element signature="e#1156#1157#0" expanded="true" />
+                    <element signature="e#1186#1187#0" expanded="true" />
+                    <element signature="e#1215#1216#0" expanded="true" />
+                    <element signature="e#1256#1257#0" expanded="true" />
+                    <element signature="e#1292#1293#0" expanded="true" />
+                    <element signature="e#1325#1326#0" expanded="true" />
+                    <element signature="e#1357#1358#0" expanded="true" />
+                    <element signature="e#1404#1405#0" expanded="true" />
+                    <element signature="e#1446#1447#0" expanded="true" />
+                    <element signature="e#1484#1485#0" expanded="true" />
+                    <element signature="e#1518#1519#0" expanded="true" />
+                    <element signature="e#1572#1573#0" expanded="true" />
+                    <element signature="e#1618#1619#0" expanded="true" />
+                    <element signature="e#1658#1659#0" expanded="true" />
+                    <element signature="e#1689#1690#0" expanded="true" />
+                    <element signature="e#1742#1743#0" expanded="true" />
+                    <element signature="e#1782#1783#0" expanded="true" />
+                    <element signature="e#1813#1814#0" expanded="true" />
+                    <element signature="e#1840#1841#0" expanded="true" />
+                    <element signature="e#1880#1881#0" expanded="true" />
+                    <element signature="e#1912#1913#0" expanded="true" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="MD5Checksum.java" pinned="false" current="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/api/uploader/MD5Checksum.java">
+              <provider selected="true" editor-type-id="text-editor">
+                <state line="33" column="0" selection-start="897" selection-end="897" vertical-scroll-proportion="0.0" vertical-offset="143" max-vertical-offset="690">
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="SqlApkEntity.java" pinned="false" current="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/model/services/mysql/entities/SqlApkEntity.java">
+              <provider selected="true" editor-type-id="text-editor">
+                <state line="62" column="5" selection-start="1803" selection-end="1803" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1230">
+                  <folding>
+                    <element signature="imports" expanded="true" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="SqlDataService.java" pinned="false" current="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/model/services/mysql/SqlDataService.java">
+              <provider selected="true" editor-type-id="text-editor">
+                <state line="150" column="0" selection-start="6755" selection-end="6755" vertical-scroll-proportion="0.0" vertical-offset="1286" max-vertical-offset="6345">
+                  <folding>
+                    <element signature="method#store#0;class#SqlDataService#0" expanded="false" />
+                    <element signature="method#getApplicationsLog#0;class#SqlDataService#0" expanded="false" />
+                    <element signature="method#getApplicationsLog#1;class#SqlDataService#0" expanded="false" />
+                    <element signature="method#getApplicationByHash#0;class#SqlDataService#0" expanded="false" />
+                    <marker date="1396819902000" expanded="true" signature="19106:19177" placeholder="INSERT INTO ..." />
+                    <marker date="1396819902000" expanded="true" signature="22080:22231" placeholder="SELECT count..missingValue..." />
+                    <marker date="1396819902000" expanded="true" signature="22206:22231" placeholder="SELECT currP..missingValue..." />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="GetAppListRequest.java" pinned="false" current="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/appstorelooter/GetAppListRequest.java">
+              <provider selected="true" editor-type-id="text-editor">
+                <state line="55" column="54" selection-start="2407" selection-end="2407" vertical-scroll-proportion="0.0" vertical-offset="153" max-vertical-offset="1020">
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="DataService.java" pinned="false" current="true" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/model/services/DataService.java">
+              <provider selected="true" editor-type-id="text-editor">
+                <state line="25" column="81" selection-start="1080" selection-end="1080" vertical-scroll-proportion="0.49234137" vertical-offset="0" max-vertical-offset="540">
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="AbstractDescriptor.java" pinned="false" current="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/api/responsewriter/descriptors/AbstractDescriptor.java">
+              <provider selected="true" editor-type-id="text-editor">
+                <state line="5" column="13" selection-start="118" selection-end="118" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="195">
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+        </leaf>
+      </split-first>
+      <split-second>
+        <leaf>
+          <file leaf-file-name="SqlAppEntity.java" pinned="false" current="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/model/services/mysql/entities/SqlAppEntity.java">
+              <provider selected="true" editor-type-id="text-editor">
+                <state line="21" column="0" selection-start="746" selection-end="746" vertical-scroll-proportion="0.6745182" vertical-offset="0" max-vertical-offset="1680">
+                  <folding>
+                    <element signature="imports" expanded="true" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+        </leaf>
+      </split-second>
+    </splitter>
   </component>
   <component name="FindManager">
     <FindUsagesManager>
       <setting name="OPEN_NEW_TAB" value="false" />
     </FindUsagesManager>
   </component>
+  <component name="Git.Settings">
+    <option name="UPDATE_TYPE" value="REBASE" />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="master" />
+      </map>
+    </option>
+  </component>
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/src/org/onepf/repository/utils/responsewriter/descriptors/BaseListHeaderDescriptor.java" />
-        <option value="$PROJECT_DIR$/src/org/onepf/repository/GetReviewListServlet.java" />
+        <option value="$PROJECT_DIR$/src/org/onepf/repository/model/services/mysql/entities/SqlDownloadEntity.java" />
+        <option value="$PROJECT_DIR$/src/org/onepf/repository/utils/responsewriter/descriptors/PurchaseDescriptor.java" />
+        <option value="$PROJECT_DIR$/src/org/onepf/repository/model/services/mysql/entities/SqlPurchaseEntity.java" />
+        <option value="$PROJECT_DIR$/src/org/onepf/repository/model/ApplicationsListV2.java" />
+        <option value="$PROJECT_DIR$/src/org/onepf/repository/model/services/amazon/entities/AmazonDownloadEntity.java" />
+        <option value="$PROJECT_DIR$/src/org/onepf/repository/model/services/amazon/entities/AmazonPurchaseEntity.java" />
+        <option value="$PROJECT_DIR$/src/org/onepf/repository/model/auth/AppstoreAuthenticatorV2.java" />
+        <option value="$PROJECT_DIR$/src/org/onepf/repository/BaseServlet.java" />
+        <option value="$PROJECT_DIR$/src/org/onepf/repository/model/AppdfToUploadV2.java" />
+        <option value="$PROJECT_DIR$/src/org/onepf/repository/model/PurchasesListV2.java" />
+        <option value="$PROJECT_DIR$/src/org/onepf/repository/model/DownloadsListV2.java" />
+        <option value="$PROJECT_DIR$/src/org/onepf/repository/GetApplicationsListServlet.java" />
         <option value="$PROJECT_DIR$/src/org/onepf/repository/GetDownloadListServlet.java" />
         <option value="$PROJECT_DIR$/src/org/onepf/repository/GetPurchaseListServlet.java" />
-        <option value="$PROJECT_DIR$/src/org/onepf/repository/model/RepositoryFactory.java" />
+        <option value="$PROJECT_DIR$/src/org/onepf/repository/model/services/mysql/SqlDataServices.java" />
+        <option value="$PROJECT_DIR$/src/org/onepf/repository/utils/responsewriter/XmlResponseWriter.java" />
         <option value="$PROJECT_DIR$/src/org/onepf/repository/model/auth/AppstoreAuthenticator.java" />
-        <option value="$PROJECT_DIR$/src/org/onepf/repository/model/auth/AppstoreDescriptor.java" />
-        <option value="$PROJECT_DIR$/src/org/onepf/repository/model/services/amazon/entities/AmazonAppstoreEntity.java" />
-        <option value="$PROJECT_DIR$/src/org/onepf/repository/xmlapi/XmlBaseHeaderParser.java" />
-        <option value="$PROJECT_DIR$/src/org/onepf/repository/xmlapi/XMLElements.java" />
-        <option value="$PROJECT_DIR$/src/org/onepf/repository/xmlapi/XmlApplicationItemParser.java" />
-        <option value="$PROJECT_DIR$/src/org/onepf/repository/xmlapi/XmlApplicationHeaderParser.java" />
-        <option value="$PROJECT_DIR$/src/org/onepf/repository/xmlapi/XmlApplicationsListParser.java" />
-        <option value="$PROJECT_DIR$/src/org/onepf/repository/xmlapi/ApiParser.java" />
-        <option value="$PROJECT_DIR$/src/org/onepf/repository/xmlapi/XmlItemParser.java" />
-        <option value="$PROJECT_DIR$/src/org/onepf/repository/api/Parser.java" />
-        <option value="$PROJECT_DIR$/src/org/onepf/repository/api/xmlapi/ApiParser.java" />
-        <option value="$PROJECT_DIR$/src/org/onepf/repository/api/xmlapi/ListParser.java" />
-        <option value="$PROJECT_DIR$/src/org/onepf/repository/api/ListParser.java" />
-        <option value="$PROJECT_DIR$/src/org/onepf/repository/api/XmlItemParser.java" />
-        <option value="$PROJECT_DIR$/src/org/onepf/repository/api/ItemParser.java" />
-        <option value="$PROJECT_DIR$/src/org/onepf/repository/api/xmlapi/XmlItemParser.java" />
-        <option value="$PROJECT_DIR$/src/org/onepf/repository/api/xmlapi/XmlListParser.java" />
-        <option value="$PROJECT_DIR$/src/org/onepf/repository/api/xmlapi/XmlApplicationsListParser.java" />
-        <option value="$PROJECT_DIR$/src/org/onepf/repository/api/ParserFactory.java" />
-        <option value="$PROJECT_DIR$/src/org/onepf/repository/appstorelooter/LastUpdateDescriptor.java" />
-        <option value="$PROJECT_DIR$/src/org/onepf/repository/GetApplicationsListServlet.java" />
-        <option value="$PROJECT_DIR$/src/org/onepf/repository/appstorelooter/UpdatesLoader.java" />
-        <option value="$PROJECT_DIR$/src/org/onepf/repository/appstorelooter/AppsLoader.java" />
-        <option value="$PROJECT_DIR$/src/org/onepf/repository/api/uploader/UploadFileHandler.java" />
-        <option value="$PROJECT_DIR$/src/org/onepf/repository/api/xmlapi/XmlParserFactory.java" />
-        <option value="$PROJECT_DIR$/src/org/onepf/repository/UploadAppdfFileServlet.java" />
-        <option value="$PROJECT_DIR$/src/org/onepf/repository/api/responsewriter/descriptors/ApplicationDescriptor.java" />
-        <option value="$PROJECT_DIR$/src/org/onepf/repository/api/xmlapi/XmlApplicationHeaderParser.java" />
-        <option value="$PROJECT_DIR$/src/org/onepf/repository/api/xmlapi/XMLElements.java" />
-        <option value="$PROJECT_DIR$/src/org/onepf/repository/api/responsewriter/XmlResponseWriter.java" />
-        <option value="$PROJECT_DIR$/src/org/onepf/repository/model/UploadAppdfRequestHandler.java" />
+        <option value="$PROJECT_DIR$/src/org/onepf/repository/model/DownloadsList.java" />
+        <option value="$PROJECT_DIR$/src/org/onepf/repository/model/GetPurchasesRequestHandler.java" />
+        <option value="$PROJECT_DIR$/src/org/onepf/repository/model/GetApplicationsRequestHandler.java" />
+        <option value="$PROJECT_DIR$/src/org/onepf/repository/model/services/filesystem/FilesystemOptions.java" />
+        <option value="$PROJECT_DIR$/src/org/onepf/repository/model/services/StorageException.java" />
+        <option value="$PROJECT_DIR$/src/org/onepf/repository/model/services/StorageService.java" />
+        <option value="$PROJECT_DIR$/src/org/onepf/repository/model/services/amazon/AmazonStorageService.java" />
+        <option value="$PROJECT_DIR$/src/org/onepf/repository/model/BaseRequestHandler.java" />
+        <option value="$PROJECT_DIR$/src/org/onepf/repository/model/services/filesystem/FilesystemStorageService.java" />
+        <option value="$PROJECT_DIR$/src/org/onepf/repository/model/services/StorageObject.java" />
+        <option value="$PROJECT_DIR$/src/org/onepf/repository/model/DownloadObjectRequestHandler.java" />
+        <option value="$PROJECT_DIR$/src/org/onepf/repository/DownloadObjectServlet.java" />
+        <option value="$PROJECT_DIR$/src/org/onepf/repository/model/RepositoryConfigurator.java" />
+        <option value="$PROJECT_DIR$/src/org/onepf/repository/utils/uploader/AXMLPrinter.java" />
+        <option value="$PROJECT_DIR$/src/org/onepf/repository/utils/uploader/TextUtils.java" />
+        <option value="$PROJECT_DIR$/src/org/onepf/repository/utils/uploader/BuildConfig.java" />
         <option value="$PROJECT_DIR$/src/org/onepf/repository/model/services/mysql/SqlOptions.java" />
-        <option value="$PROJECT_DIR$/src/org/onepf/repository/model/services/DataService.java" />
-        <option value="$PROJECT_DIR$/src/org/onepf/repository/model/services/mysql/entities/SqlAppEntity.java" />
-        <option value="$PROJECT_DIR$/src/org/onepf/repository/model/services/mysql/entities/SqlLastUpdateEntity.java" />
-        <option value="$PROJECT_DIR$/src/org/onepf/repository/model/services/mysql/entities/SqlAppstoreEntity.java" />
-        <option value="$PROJECT_DIR$/src/org/onepf/repository/api/xmlapi/XmlApplicationItemParser.java" />
-        <option value="$PROJECT_DIR$/src/org/onepf/repository/model/services/amazon/AmazonDataService.java" />
-        <option value="$PROJECT_DIR$/src/org/onepf/repository/appstorelooter/ApplicationsLoader.java" />
+        <option value="$PROJECT_DIR$/src/org/onepf/repository/api/TextUtils.java" />
+        <option value="$PROJECT_DIR$/src/org/onepf/repository/utils/uploader/ApkComparable.java" />
+        <option value="$PROJECT_DIR$/src/org/onepf/repository/UploadAppdfFileServlet.java" />
+        <option value="$PROJECT_DIR$/src/org/onepf/repository/utils/uploader/SupportsScreen.java" />
+        <option value="$PROJECT_DIR$/src/org/onepf/repository/utils/uploader/Manifest.java" />
+        <option value="$PROJECT_DIR$/src/org/onepf/repository/utils/uploader/TbdInteface.java" />
+        <option value="$PROJECT_DIR$/src/org/onepf/repository/utils/uploader/Feature.java" />
+        <option value="$PROJECT_DIR$/src/org/onepf/repository/utils/uploader/Screen.java" />
+        <option value="$PROJECT_DIR$/src/org/onepf/repository/model/services/mysql/entities/SqlApkEntity.java" />
+        <option value="$PROJECT_DIR$/src/org/onepf/repository/utils/uploader/ManifestProcessor.java" />
+        <option value="$PROJECT_DIR$/src/org/onepf/repository/utils/uploader/Apk.java" />
+        <option value="$PROJECT_DIR$/src/org/onepf/repository/utils/uploader/ApkDescriptor.java" />
         <option value="$PROJECT_DIR$/src/org/onepf/repository/model/services/mysql/SqlDataService.java" />
-        <option value="$PROJECT_DIR$/src/org/onepf/repository/appstorelooter/AppstoreRequester.java" />
-        <option value="$PROJECT_DIR$/src/org/onepf/repository/AppContextListener.java" />
-        <option value="$PROJECT_DIR$/web/WEB-INF/web.xml" />
-        <option value="$PROJECT_DIR$/src/org/onepf/repository/appstorelooter/GetAppListRequest.java" />
-        <option value="$PROJECT_DIR$/src/org/onepf/repository/appstorelooter/ApplicationsToUpdateLoader.java" />
+        <option value="$PROJECT_DIR$/src/org/onepf/repository/model/services/amazon/AmazonDataService.java" />
+        <option value="$PROJECT_DIR$/src/org/onepf/repository/model/UploadAppdfRequestHandler.java" />
+        <option value="$PROJECT_DIR$/src/org/onepf/repository/api/responsewriter/descriptors/ApkDescriptor.java" />
+        <option value="$PROJECT_DIR$/src/org/onepf/repository/model/services/DataService.java" />
       </list>
     </option>
   </component>
@@ -278,10 +414,9 @@
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="-254" />
-    <option name="y" value="-1058" />
+    <option name="y" value="22" />
     <option name="width" value="1920" />
-    <option name="height" value="1058" />
+    <option name="height" value="987" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="false">
     <OptionsSetting value="true" id="Add" />
@@ -290,6 +425,8 @@
     <OptionsSetting value="true" id="Update" />
     <OptionsSetting value="true" id="Status" />
     <OptionsSetting value="true" id="Edit" />
+    <OptionsSetting value="true" id="Undo Check Out" />
+    <OptionsSetting value="true" id="Get Latest Version" />
     <ConfirmationsSetting value="0" id="Add" />
     <ConfirmationsSetting value="0" id="Remove" />
   </component>
@@ -298,7 +435,8 @@
   </component>
   <component name="ProjectStructureProblems">
     <ignored-problems>
-      <problem id="library-invalid-classes-path(library:project:mysql-connector-java-5.1.29-bin)" />
+      <problem id="library-missing-from-artifact(artifact:web:war,WEB-INF/classes/module-output)" />
+      <problem id="unused-library(library:project:com.amazonaws:aws-java-sdk:1.7.3)" />
     </ignored-problems>
   </component>
   <component name="ProjectView">
@@ -315,7 +453,6 @@
     </navigator>
     <panes>
       <pane id="PackagesPane" />
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -376,28 +513,6 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="web" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="WEB-INF" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="lib" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="onepf.repository" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="onepf.repository" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
               <option name="myItemId" value="src" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
@@ -424,149 +539,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="model" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="onepf.repository" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="onepf.repository" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="repository" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="model" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="services" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="onepf.repository" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="onepf.repository" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="repository" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="model" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="services" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="mysql" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="onepf.repository" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="onepf.repository" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="repository" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="model" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="services" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="mysql" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="entities" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="onepf.repository" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="onepf.repository" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="repository" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="model" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="services" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="amazon" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="onepf.repository" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="onepf.repository" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="repository" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="appstorelooter" />
+              <option name="myItemId" value="utils" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -589,145 +562,12 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="api" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="onepf.repository" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="onepf.repository" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="repository" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="api" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="xmlapi" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="onepf.repository" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="onepf.repository" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="repository" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="api" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="uploader" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="onepf.repository" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="onepf.repository" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="repository" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="api" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="responsewriter" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="onepf.repository" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="onepf.repository" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="repository" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="api" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="responsewriter" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="descriptors" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="onepf.repository" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="onepf.repository" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="repository" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="api" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="downloader" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -738,38 +578,48 @@
     <property name="MemberChooser.showClasses" value="true" />
     <property name="MemberChooser.copyJavadoc" value="false" />
     <property name="recentsLimit" value="5" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="restartRequiresConfirmation" value="true" />
     <property name="project.structure.last.edited" value="Libraries" />
     <property name="project.structure.proportion" value="0.15" />
-    <property name="project.structure.side.proportion" value="0.2" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
-    <property name="SearchEverywhereHistory" value="&#10;/" />
-    <property name="options.lastSelected" value="reference.settings.project.maven.repository.indices" />
+    <property name="project.structure.side.proportion" value="0.396292" />
+    <property name="FullScreen" value="false" />
+    <property name="options.lastSelected" value="project.propVCSSupport.Mappings" />
     <property name="options.splitter.main.proportions" value="0.3" />
     <property name="options.splitter.details.proportions" value="0.2" />
     <property name="options.searchVisible" value="true" />
+    <property name="last_opened_file_path" value="/usr/local/Cellar/tomcat/7.0.52/libexec/lib/jsp-api.jar!/" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatWidth0" value="259" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatOrder0" value="0" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatWidth1" value="261" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatOrder1" value="1" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatWidth2" value="266" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatOrder2" value="2" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatWidth3" value="1049" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatOrder3" value="3" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_treeWidth0" value="261" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_treeOrder0" value="0" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_treeWidth1" value="263" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_treeOrder1" value="1" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_treeWidth2" value="268" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_treeOrder2" value="2" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_treeWidth3" value="1056" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_treeOrder3" value="3" />
     <property name="LayoutCode.rearrangeEntriesJava" value="false" />
-    <property name="OverrideImplement.combined" value="true" />
-    <property name="OverrideImplement.overriding.sorted" value="false" />
-    <property name="restartRequiresConfirmation" value="true" />
-    <property name="GenerateAntBuildDialog.generateSingleFile" value="false" />
-    <property name="GenerateAntBuildDialog.enableUiFormCompile" value="true" />
-    <property name="GenerateAntBuildDialog.forceTargetJdk" value="true" />
-    <property name="GenerateAntBuildDialog.backupFiles" value="true" />
-    <property name="GenerateAntBuildDialog.inclineRuntiemClasspath" value="false" />
-    <property name="GenerateAntBuildDialog.generateIdeaHomeProperty" value="false" />
-    <property name="GenerateAntBuildDialog.outputFileNameProperty" value="openrepository" />
-    <property name="FullScreen" value="false" />
+    <property name="extract.method.default.visibility" value="private" />
+    <property name="Downloaded.Files.Path" value="$PROJECT_DIR$/lib" />
     <property name="Repository.Attach.JavaDocs" value="false" />
     <property name="Repository.Attach.Sources" value="false" />
-    <property name="Downloaded.Files.Path" value="$PROJECT_DIR$/web/WEB-INF/lib" />
+    <property name="OverrideImplement.combined" value="true" />
+    <property name="OverrideImplement.overriding.sorted" value="false" />
   </component>
   <component name="RecentsManager">
     <key name="CopyClassDialog.RECENTS_KEY">
-      <recent name="org.onepf.repository.api.xmlapi" />
-      <recent name="org.onepf.repository.utils.responsewriter.descriptors" />
-      <recent name="org.onepf.repository.utils.responsewriter" />
+      <recent name="org.onepf.repository.model.services.filesystem" />
       <recent name="org.onepf.repository.model.services.mysql.entities" />
-      <recent name="org.onepf.repository.xmlapi" />
+      <recent name="org.onepf.repository.model.services" />
+      <recent name="org.onepf.repository.model" />
+      <recent name="org.onepf.repository.model.storage" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/src/org/onepf/repository/model/services/mysql/entities" />
@@ -794,12 +644,59 @@
     </key>
   </component>
   <component name="RunManager" selected="Tomcat Server.Tomcat 7.0.52">
+    <configuration default="true" type="#org.jetbrains.idea.devkit.run.PluginConfigurationType" factoryName="Plugin" singleton="true">
+      <module name="" />
+      <option name="VM_PARAMETERS" value="-Xmx512m -Xms256m -XX:MaxPermSize=250m -ea" />
+      <option name="PROGRAM_PARAMETERS" />
+      <method />
+    </configuration>
+    <configuration default="true" type="GrailsRunConfigurationType" factoryName="Grails" singleton="true">
+      <module name="" />
+      <setting name="vmparams" value="" />
+      <setting name="cmdLine" value="run-app" />
+      <setting name="depsClasspath" value="false" />
+      <setting name="passParentEnv" value="true" />
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <setting name="launchBrowser" value="false" />
+      <method />
+    </configuration>
     <configuration default="true" type="Remote" factoryName="Remote">
       <option name="USE_SOCKET_TRANSPORT" value="true" />
       <option name="SERVER_MODE" value="false" />
       <option name="SHMEM_ADDRESS" value="javadebug" />
       <option name="HOST" value="localhost" />
       <option name="PORT" value="5005" />
+      <method />
+    </configuration>
+    <configuration default="true" type="JavascriptDebugType" factoryName="JavaScript Debug" singleton="true">
+      <method />
+    </configuration>
+    <configuration default="true" type="TestNG" factoryName="TestNG">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <module name="" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="SUITE_NAME" />
+      <option name="PACKAGE_NAME" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="METHOD_NAME" />
+      <option name="GROUP_NAME" />
+      <option name="TEST_OBJECT" value="CLASS" />
+      <option name="VM_PARAMETERS" value="-ea" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="OUTPUT_DIRECTORY" />
+      <option name="ANNOTATION_TYPE" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="moduleWithDependencies" />
+      </option>
+      <option name="USE_DEFAULT_REPORTERS" value="false" />
+      <option name="PROPERTIES_FILE" />
+      <envs />
+      <properties />
+      <listeners />
       <method />
     </configuration>
     <configuration default="true" type="Applet" factoryName="Applet">
@@ -815,7 +712,128 @@
       <option name="ALTERNATIVE_JRE_PATH" />
       <method />
     </configuration>
+    <configuration default="true" type="JUnit" factoryName="JUnit">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <module name="" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PACKAGE_NAME" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="METHOD_NAME" />
+      <option name="TEST_OBJECT" value="class" />
+      <option name="VM_PARAMETERS" value="-ea" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="moduleWithDependencies" />
+      </option>
+      <envs />
+      <patterns />
+      <method />
+    </configuration>
+    <configuration default="true" type="#com.intellij.j2ee.web.tomcat.TomcatRunConfigurationFactory" factoryName="Local" ALTERNATIVE_JRE_ENABLED="false">
+      <deployment />
+      <server-settings />
+      <predefined_log_file id="Tomcat" enabled="true" />
+      <predefined_log_file id="Tomcat Catalina" enabled="true" />
+      <predefined_log_file id="Tomcat Manager" enabled="false" />
+      <predefined_log_file id="Tomcat Host Manager" enabled="false" />
+      <predefined_log_file id="Tomcat Localhost Access" enabled="false" />
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <method />
+    </configuration>
+    <configuration default="true" type="FlashRunConfigurationType" factoryName="Flash App">
+      <option name="BCName" value="" />
+      <option name="IOSSimulatorSdkPath" value="" />
+      <option name="adlOptions" value="" />
+      <option name="airProgramParameters" value="" />
+      <option name="appDescriptorForEmulator" value="Android" />
+      <option name="debugTransport" value="USB" />
+      <option name="debuggerSdkRaw" value="BC SDK" />
+      <option name="emulator" value="NexusOne" />
+      <option name="emulatorAdlOptions" value="" />
+      <option name="fastPackaging" value="true" />
+      <option name="fullScreenHeight" value="0" />
+      <option name="fullScreenWidth" value="0" />
+      <option name="launchUrl" value="false" />
+      <option name="launcherParameters">
+        <LauncherParameters>
+          <option name="browserFamily" value="FIREFOX" />
+          <option name="launcherType" value="OSDefault" />
+          <option name="newPlayerInstance" value="false" />
+          <option name="playerPath" value="/Applications/Flash Player Debugger.app" />
+        </LauncherParameters>
+      </option>
+      <option name="mobileRunTarget" value="Emulator" />
+      <option name="moduleName" value="" />
+      <option name="overriddenMainClass" value="" />
+      <option name="overriddenOutputFileName" value="" />
+      <option name="overrideMainClass" value="false" />
+      <option name="runTrusted" value="true" />
+      <option name="screenDpi" value="0" />
+      <option name="screenHeight" value="0" />
+      <option name="screenWidth" value="0" />
+      <option name="url" value="http://" />
+      <option name="usbDebugPort" value="7936" />
+      <method />
+    </configuration>
+    <configuration default="true" type="AndroidTestRunConfigurationType" factoryName="Android Tests">
+      <module name="" />
+      <option name="TESTING_TYPE" value="0" />
+      <option name="INSTRUMENTATION_RUNNER_CLASS" value="" />
+      <option name="METHOD_NAME" value="" />
+      <option name="CLASS_NAME" value="" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="TARGET_SELECTION_MODE" value="EMULATOR" />
+      <option name="USE_LAST_SELECTED_DEVICE" value="false" />
+      <option name="PREFERRED_AVD" value="" />
+      <option name="USE_COMMAND_LINE" value="true" />
+      <option name="COMMAND_LINE" value="" />
+      <option name="WIPE_USER_DATA" value="false" />
+      <option name="DISABLE_BOOT_ANIMATION" value="false" />
+      <option name="NETWORK_SPEED" value="full" />
+      <option name="NETWORK_LATENCY" value="none" />
+      <option name="CLEAR_LOGCAT" value="false" />
+      <option name="SHOW_LOGCAT_AUTOMATICALLY" value="true" />
+      <method />
+    </configuration>
+    <configuration default="true" type="FlexUnitRunConfigurationType" factoryName="FlexUnit" appDescriptorForEmulator="Android" class_name="" emulatorAdlOptions="" method_name="" output_log_level="null" package_name="" scope="Class">
+      <option name="BCName" value="" />
+      <option name="launcherParameters">
+        <LauncherParameters>
+          <option name="browserFamily" value="FIREFOX" />
+          <option name="launcherType" value="OSDefault" />
+          <option name="newPlayerInstance" value="false" />
+          <option name="playerPath" value="/Applications/Flash Player Debugger.app" />
+        </LauncherParameters>
+      </option>
+      <option name="moduleName" value="" />
+      <option name="trusted" value="true" />
+      <method />
+    </configuration>
+    <configuration default="true" type="CucumberJavaRunConfigurationType" factoryName="Cucumber java">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <option name="myFilePath" />
+      <option name="GLUE" />
+      <option name="myNameFilter" />
+      <option name="myGeneratedName" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="VM_PARAMETERS" />
+      <option name="PROGRAM_PARAMETERS" />
+      <option name="WORKING_DIRECTORY" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="ENABLE_SWING_INSPECTOR" value="false" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <module name="" />
+      <envs />
+      <method />
+    </configuration>
     <configuration default="true" type="Application" factoryName="Application">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
       <option name="MAIN_CLASS_NAME" />
       <option name="VM_PARAMETERS" />
       <option name="PROGRAM_PARAMETERS" />
@@ -829,17 +847,27 @@
       <envs />
       <method />
     </configuration>
-    <configuration default="true" type="#com.intellij.j2ee.web.tomcat.TomcatRunConfigurationFactory" factoryName="Local" ALTERNATIVE_JRE_ENABLED="false">
-      <deployment />
-      <server-settings />
-      <predefined_log_file id="Tomcat" enabled="true" />
-      <predefined_log_file id="Tomcat Catalina" enabled="true" />
-      <predefined_log_file id="Tomcat Manager" enabled="false" />
-      <predefined_log_file id="Tomcat Host Manager" enabled="false" />
-      <predefined_log_file id="Tomcat Localhost Access" enabled="false" />
+    <configuration default="true" type="AndroidRunConfigurationType" factoryName="Android Application">
+      <module name="" />
+      <option name="ACTIVITY_CLASS" value="" />
+      <option name="MODE" value="default_activity" />
+      <option name="DEPLOY" value="true" />
+      <option name="ARTIFACT_NAME" value="" />
+      <option name="TARGET_SELECTION_MODE" value="EMULATOR" />
+      <option name="USE_LAST_SELECTED_DEVICE" value="false" />
+      <option name="PREFERRED_AVD" value="" />
+      <option name="USE_COMMAND_LINE" value="true" />
+      <option name="COMMAND_LINE" value="" />
+      <option name="WIPE_USER_DATA" value="false" />
+      <option name="DISABLE_BOOT_ANIMATION" value="false" />
+      <option name="NETWORK_SPEED" value="full" />
+      <option name="NETWORK_LATENCY" value="none" />
+      <option name="CLEAR_LOGCAT" value="false" />
+      <option name="SHOW_LOGCAT_AUTOMATICALLY" value="true" />
       <method />
     </configuration>
     <configuration default="false" name="Tomcat 7.0.52" type="#com.intellij.j2ee.web.tomcat.TomcatRunConfigurationFactory" factoryName="Local" APPLICATION_SERVER_NAME="Tomcat 7.0.52" ALTERNATIVE_JRE_ENABLED="false" ALTERNATIVE_JRE_PATH="">
+      <option name="OPEN_IN_BROWSER_URL" value="http://localhost:8181/" />
       <deployment>
         <artifact name="web:war exploded">
           <settings>
@@ -856,12 +884,29 @@
       <predefined_log_file id="Tomcat Manager" enabled="false" />
       <predefined_log_file id="Tomcat Host Manager" enabled="false" />
       <predefined_log_file id="Tomcat Localhost Access" enabled="false" />
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <RunnerSettings RunnerId="Cover" />
       <RunnerSettings RunnerId="Debug">
         <option name="DEBUG_PORT" value="57582" />
         <option name="TRANSPORT" value="0" />
         <option name="LOCAL" value="true" />
       </RunnerSettings>
       <RunnerSettings RunnerId="Run" />
+      <ConfigurationWrapper VM_VAR="JAVA_OPTS" RunnerId="Cover">
+        <option name="USE_ENV_VARIABLES" value="true" />
+        <STARTUP>
+          <option name="USE_DEFAULT" value="true" />
+          <option name="SCRIPT" value="" />
+          <option name="VM_PARAMETERS" value="" />
+          <option name="PROGRAM_PARAMETERS" value="" />
+        </STARTUP>
+        <SHUTDOWN>
+          <option name="USE_DEFAULT" value="true" />
+          <option name="SCRIPT" value="" />
+          <option name="VM_PARAMETERS" value="" />
+          <option name="PROGRAM_PARAMETERS" value="" />
+        </SHUTDOWN>
+      </ConfigurationWrapper>
       <ConfigurationWrapper VM_VAR="JAVA_OPTS" RunnerId="Debug">
         <option name="USE_ENV_VARIABLES" value="true" />
         <STARTUP>
@@ -901,21 +946,6 @@
     <list size="1">
       <item index="0" class="java.lang.String" itemvalue="Tomcat Server.Tomcat 7.0.52" />
     </list>
-    <configuration name="&lt;template&gt;" type="JUnit" default="true" selected="false">
-      <option name="MAIN_CLASS_NAME" />
-      <option name="VM_PARAMETERS" value="-ea" />
-      <option name="PARAMETERS" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-    </configuration>
-    <configuration name="&lt;template&gt;" type="TestNG" default="true" selected="false">
-      <option name="MAIN_CLASS_NAME" />
-      <option name="VM_PARAMETERS" value="-ea" />
-      <option name="PARAMETERS" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-    </configuration>
-    <configuration name="&lt;template&gt;" type="#org.jetbrains.idea.devkit.run.PluginConfigurationType" default="true" selected="false">
-      <option name="VM_PARAMETERS" value="-Xmx512m -Xms256m -XX:MaxPermSize=250m -ea" />
-    </configuration>
     <configuration name="&lt;template&gt;" type="WebApp" default="true" selected="false">
       <Host>localhost</Host>
       <Port>5050</Port>
@@ -939,35 +969,112 @@
     <option name="IGNORE_EXTERNALS" value="false" />
     <myIsUseDefaultProxy>false</myIsUseDefaultProxy>
   </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="725f9165-c5a3-4e6c-81e8-5c089a1ca901" name="Default" comment="" />
+      <created>1396023602180</created>
+      <updated>1396023602180</updated>
+      <workItem from="1396123103239" duration="1300000" />
+      <workItem from="1396124598686" duration="3401000" />
+      <workItem from="1396260794202" duration="7259000" />
+      <workItem from="1396286134330" duration="2859000" />
+      <workItem from="1396337098285" duration="5741000" />
+      <workItem from="1396378045410" duration="28170000" />
+      <workItem from="1396529595373" duration="7651000" />
+      <workItem from="1396556202364" duration="703000" />
+      <workItem from="1396557273709" duration="2139000" />
+      <workItem from="1396590993432" duration="932000" />
+      <workItem from="1396599355829" duration="15872000" />
+      <workItem from="1396733687962" duration="23005000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TimeTrackingManager">
+    <option name="totallyTimeSpent" value="99032000" />
+  </component>
+  <component name="TodoView" selected-index="0">
+    <todo-panel id="selected-file">
+      <are-packages-shown value="false" />
+      <are-modules-shown value="false" />
+      <flatten-packages value="false" />
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+    <todo-panel id="all">
+      <are-packages-shown value="true" />
+      <are-modules-shown value="false" />
+      <flatten-packages value="false" />
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+    <todo-panel id="default-changelist">
+      <are-packages-shown value="false" />
+      <are-modules-shown value="false" />
+      <flatten-packages value="false" />
+      <is-autoscroll-to-source value="false" />
+    </todo-panel>
+  </component>
   <component name="ToolWindowManager">
-    <frame x="-254" y="-1058" width="1920" height="1058" extended-state="6" />
+    <frame x="0" y="22" width="1920" height="987" extended-state="0" />
     <editor active="false" />
     <layout>
-      <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="13" side_tool="false" content_ui="tabs" />
+      <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Changes" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.41542003" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Java Enterprise" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.5510617" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.44113666" sideWeight="0.5" order="9" side_tool="true" content_ui="tabs" />
-      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.16683519" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
-      <window_info id="Web" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.18229167" sideWeight="0.5008264" order="3" side_tool="true" content_ui="tabs" />
-      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.1796875" sideWeight="0.49917355" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.41569087" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3265925" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32918552" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25431532" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Java Enterprise" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32918552" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.50747985" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="IDEtalk Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.44113666" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="IDEtalk" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.21749137" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.2255466" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Web" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.18229167" sideWeight="0.5008264" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.18181819" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Dependency Viewer" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32962587" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.39955604" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32918552" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.171459" sideWeight="0.49917355" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.51668584" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.39955604" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
     </layout>
+    <layout-to-restore>
+      <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.31458095" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Java Enterprise" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32918552" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.44113666" sideWeight="0.5" order="9" side_tool="true" content_ui="tabs" />
+      <window_info id="IDEtalk Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="14" side_tool="false" content_ui="tabs" />
+      <window_info id="IDEtalk" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.21749137" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.18181819" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32918552" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.15601704" sideWeight="0.49917355" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.16225547" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32918552" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
+      <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25431532" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.50747985" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.2255466" sideWeight="0.5" order="13" side_tool="false" content_ui="tabs" />
+      <window_info id="Web" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.18229167" sideWeight="0.5008264" order="4" side_tool="true" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.39955604" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+    </layout-to-restore>
   </component>
   <component name="Vcs.Log.UiProperties">
     <option name="RECENTLY_FILTERED_USER_GROUPS">
@@ -985,131 +1092,49 @@
   <component name="XDebuggerManager">
     <breakpoint-manager />
   </component>
+  <component name="antWorkspaceConfiguration">
+    <option name="IS_AUTOSCROLL_TO_SOURCE" value="false" />
+    <option name="FILTER_TARGETS" value="false" />
+  </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/api/ItemParser.java">
+    <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/model/services/mysql/entities/SqlPurchaseEntity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="12" column="33" selection-start="283" selection-end="283" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="360">
+        <state line="11" column="44" selection-start="308" selection-end="308" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1875">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/api/Pair.java">
+    <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/model/services/mysql/entities/SqlAppstoreEntity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="5" column="13" selection-start="91" selection-end="91" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="315">
+        <state line="10" column="13" selection-start="235" selection-end="235" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="555">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/api/ParserFactory.java">
+    <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/model/auth/AppstoreAuthenticator.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="27" column="27" selection-start="689" selection-end="689" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="480">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/model/DownloadObjectRequestHandler.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="10" column="13" selection-start="246" selection-end="246" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="615">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/model/GetPurchasesRequestHandler.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="13" column="13" selection-start="398" selection-end="398" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="435">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/api/responsewriter/descriptors/ApplicationListHeaderDescriptor.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="9" column="71" selection-start="366" selection-end="366" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="465" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/api/responsewriter/descriptors/DownloadsListHeaderDescriptor.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="11" column="4" selection-start="405" selection-end="405" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="435" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/api/responsewriter/descriptors/PurchasesListHeaderDescriptor.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="9" column="13" selection-start="308" selection-end="308" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="435" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/api/responsewriter/descriptors/PurchaseDescriptor.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="9" column="13" selection-start="302" selection-end="302" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="525">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/api/responsewriter/descriptors/ReviewDescriptor.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="10" column="13" selection-start="327" selection-end="327" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="510">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/api/responsewriter/descriptors/ReviewsListHeaderDescriptor.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="9" column="13" selection-start="308" selection-end="308" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="435">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/api/responsewriter/descriptors/AbstractDescriptor.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="5" column="13" selection-start="118" selection-end="118" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="195">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/api/uploader/UploadFileHandler.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="61" column="0" selection-start="1771" selection-end="2136" vertical-scroll-proportion="0.0" vertical-offset="285" max-vertical-offset="1305">
-          <folding>
-            <element signature="imports" expanded="false" />
-            <element signature="e#646#652#0" expanded="false" />
-            <element signature="e#712#728#0" expanded="false" />
-            <element signature="e#2179#2180#0" expanded="false" />
-            <element signature="e#2215#2216#0" expanded="false" />
-            <element signature="e#2265#2266#0" expanded="false" />
-            <element signature="e#2298#2299#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/ApiMapping.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="12" column="4" selection-start="318" selection-end="318" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="555">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/api/responsewriter/ResponseWriter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="50" column="1" selection-start="2535" selection-end="2535" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="795">
+        <state line="54" column="0" selection-start="1821" selection-end="1821" vertical-scroll-proportion="0.0" vertical-offset="338" max-vertical-offset="945">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/api/xmlapi/XmlApplicationHeaderParser.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="10" column="0" selection-start="383" selection-end="383" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="360">
+        <state line="9" column="13" selection-start="255" selection-end="255" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="360">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/api/xmlapi/XmlApplicationItemParser.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="21" column="23" selection-start="692" selection-end="692" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="435">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/api/xmlapi/XmlApplicationsListParser.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="14" column="42" selection-start="534" selection-end="534" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="300">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/api/xmlapi/XMLElements.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="12" column="45" selection-start="404" selection-end="404" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="630">
+        <state line="10" column="13" selection-start="303" selection-end="303" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="300">
           <folding />
         </state>
       </provider>
@@ -1121,79 +1146,44 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/api/xmlapi/XMLElements.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="5" column="17" selection-start="102" selection-end="102" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="630">
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/api/xmlapi/XmlListParser.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="16" column="13" selection-start="525" selection-end="525" vertical-scroll-proportion="0.0" vertical-offset="480" max-vertical-offset="1110">
+        <state line="13" column="13" selection-start="359" selection-end="359" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1110">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/api/xmlapi/XmlParserFactory.java">
+    <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/AppContextListener.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="53" column="25" selection-start="2005" selection-end="2005" vertical-scroll-proportion="0.0" vertical-offset="20" max-vertical-offset="705">
+        <state line="11" column="13" selection-start="275" selection-end="275" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="555">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/model/auth/AppstoreAuthenticator.java">
+    <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/BaseServlet.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="58" column="63" selection-start="2019" selection-end="2019" vertical-scroll-proportion="0.0" vertical-offset="365" max-vertical-offset="945">
+        <state line="16" column="47" selection-start="553" selection-end="553" vertical-scroll-proportion="0.0" vertical-offset="30" max-vertical-offset="870">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="jar:///System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Classes/classes.jar!/java/lang/StringBuilder.class">
+    <entry file="jar:///usr/local/Cellar/tomcat/7.0.52/libexec/lib/servlet-api.jar!/javax/servlet/http/HttpServlet.class">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="51" column="35" selection-start="2120" selection-end="2120" vertical-scroll-proportion="0.3325893" vertical-offset="601" max-vertical-offset="1455">
+        <state line="6" column="62" selection-start="210" selection-end="210" vertical-scroll-proportion="-3.0" vertical-offset="0" max-vertical-offset="750">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/model/services/DataService.java">
+    <entry file="jar:///usr/local/Cellar/tomcat/7.0.52/libexec/lib/servlet-api.jar!/javax/servlet/GenericServlet.class">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="23" column="88" selection-start="924" selection-end="924" vertical-scroll-proportion="0.0" vertical-offset="46" max-vertical-offset="495">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/api/ListParser.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="12" column="25" selection-start="342" selection-end="342" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="300">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/UploadAppdfFileServlet.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="47" column="44" selection-start="1749" selection-end="1760" vertical-scroll-proportion="0.0" vertical-offset="74" max-vertical-offset="1035">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/GetReviewListServlet.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="18" column="13" selection-start="659" selection-end="659" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="975">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/GetPurchaseListServlet.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="58" column="85" selection-start="2515" selection-end="2515" vertical-scroll-proportion="0.0" vertical-offset="350" max-vertical-offset="930">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/GetDownloadListServlet.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="59" column="85" selection-start="2450" selection-end="2450" vertical-scroll-proportion="0.0" vertical-offset="392" max-vertical-offset="975">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/GetApplicationsListServlet.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="54" column="0" selection-start="2132" selection-end="2132" vertical-scroll-proportion="0.0" vertical-offset="120" max-vertical-offset="900">
+        <state line="6" column="22" selection-start="165" selection-end="165" vertical-scroll-proportion="-3.0" vertical-offset="0" max-vertical-offset="600">
           <folding />
         </state>
       </provider>
@@ -1205,72 +1195,100 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/model/UploadAppdfRequestHandler.java">
+    <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/api/Pair.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="34" column="99" selection-start="1237" selection-end="1331" vertical-scroll-proportion="-6.3461537" vertical-offset="0" max-vertical-offset="2085">
+        <state line="5" column="13" selection-start="91" selection-end="91" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="315">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/appstorelooter/LastUpdateDescriptor.java">
+    <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/appstorelooter/ApplicationsLoader.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="11" column="5" selection-start="343" selection-end="343" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="285">
+        <state line="29" column="13" selection-start="1031" selection-end="1031" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1305">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/model/services/mysql/entities/SqlDBEntity.java">
+    <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/appstorelooter/ApplicationsToUpdateLoader.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="27" column="31" selection-start="668" selection-end="668" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1095">
+        <state line="22" column="13" selection-start="763" selection-end="763" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1515">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/model/services/mysql/entities/SqlAppEntity.java">
+    <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/api/TextUtils.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="12" column="0" selection-start="315" selection-end="374" vertical-scroll-proportion="0.0" vertical-offset="30" max-vertical-offset="1620">
+        <state line="4" column="3" selection-start="79" selection-end="79" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="345">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/model/services/mysql/entities/SqlLastUpdateEntity.java">
+    <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/api/responsewriter/descriptors/PurchaseDescriptor.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="14" column="59" selection-start="366" selection-end="366" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="960">
+        <state line="9" column="13" selection-start="302" selection-end="302" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="525">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/model/services/mysql/entities/SqlAppstoreEntity.java">
+    <entry file="jar:///System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Classes/classes.jar!/java/util/Collections.class">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="12" column="54" selection-start="330" selection-end="330" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="570">
+        <state line="53" column="28" selection-start="2718" selection-end="2718" vertical-scroll-proportion="0.33199194" vertical-offset="615" max-vertical-offset="15225">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/model/services/mysql/SqlOptions.java">
+    <entry file="jar:///System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Classes/classes.jar!/org/xml/sax/helpers/DefaultHandler.class">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="19" column="27" selection-start="739" selection-end="739" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="435">
+        <state line="25" column="16" selection-start="1363" selection-end="1363" vertical-scroll-proportion="0.0" vertical-offset="121" max-vertical-offset="705">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/api/xmlapi/XmlApplicationItemParser.java">
+    <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/UploadAppdfFileServlet.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="21" column="16" selection-start="685" selection-end="685" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="435">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/model/services/amazon/AmazonDataService.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="127" column="8" selection-start="5294" selection-end="5306" vertical-scroll-proportion="0.0" vertical-offset="787" max-vertical-offset="2160">
+        <state line="44" column="0" selection-start="1512" selection-end="1512" vertical-scroll-proportion="0.0" vertical-offset="375" max-vertical-offset="1035">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/api/responsewriter/descriptors/ApplicationDescriptor.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="20" column="18" selection-start="690" selection-end="690" vertical-scroll-proportion="0.0" vertical-offset="77" max-vertical-offset="660">
+        <state line="10" column="23" selection-start="396" selection-end="396" vertical-scroll-proportion="0.0" vertical-offset="63" max-vertical-offset="660">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/api/responsewriter/descriptors/ApplicationListHeaderDescriptor.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="9" column="13" selection-start="308" selection-end="308" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="435">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/api/responsewriter/descriptors/ReviewsListHeaderDescriptor.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="9" column="13" selection-start="308" selection-end="308" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="435">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/api/responsewriter/descriptors/ReviewDescriptor.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="10" column="13" selection-start="327" selection-end="327" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="510">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/api/responsewriter/descriptors/PurchasesListHeaderDescriptor.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="9" column="13" selection-start="308" selection-end="308" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="435">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/api/responsewriter/descriptors/DownloadDescriptor.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="9" column="13" selection-start="302" selection-end="302" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="465">
           <folding />
         </state>
       </provider>
@@ -1282,76 +1300,233 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/model/services/mysql/SqlDataService.java">
+    <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/utils/uploader/utils/SupportsScreen.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="185" column="73" selection-start="8244" selection-end="8244" vertical-scroll-proportion="0.0" vertical-offset="2131" max-vertical-offset="7140">
-          <folding>
-            <element signature="e#8663#8686#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/model/RepositoryConfigurator.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="39" column="53" selection-start="1653" selection-end="1653" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="645">
+        <state line="7" column="5" selection-start="157" selection-end="157" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="330">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/appstorelooter/AppstoreRequester.java">
+    <entry file="jar:///System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Classes/classes.jar!/com/sun/org/apache/xerces/internal/impl/XMLDocumentFragmentScannerImpl.class">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="34" column="11" selection-start="1116" selection-end="1116" vertical-scroll-proportion="0.0" vertical-offset="293" max-vertical-offset="1095">
+        <state line="305" column="0" selection-start="16953" selection-end="16953" vertical-scroll-proportion="0.0" vertical-offset="4136" max-vertical-offset="4650">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/utils/uploader/utils/Screen.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="21" column="20" selection-start="464" selection-end="464" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="615">
+          <folding>
+            <element signature="e#242#243#0" expanded="false" />
+            <element signature="e#275#276#0" expanded="false" />
+            <element signature="e#327#328#0" expanded="false" />
+            <element signature="e#371#372#0" expanded="false" />
+            <element signature="e#411#412#0" expanded="false" />
+            <element signature="e#447#448#0" expanded="false" />
+            <element signature="e#505#506#0" expanded="false" />
+            <element signature="e#555#556#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/utils/uploader/utils/TbdInteface.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="10" column="1" selection-start="206" selection-end="206" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="255">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/utils/uploader/utils/AXMLPrinter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="46" column="56" selection-start="1563" selection-end="1563" vertical-scroll-proportion="0.0" vertical-offset="1965" max-vertical-offset="2610">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/utils/uploader/utils/Feature.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="5" column="43" selection-start="134" selection-end="134" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="945">
+          <folding>
+            <element signature="e#256#257#0" expanded="true" />
+            <element signature="e#283#284#0" expanded="true" />
+            <element signature="e#323#324#0" expanded="true" />
+            <element signature="e#355#356#0" expanded="true" />
+            <element signature="e#390#391#0" expanded="true" />
+            <element signature="e#424#425#0" expanded="true" />
+            <element signature="e#475#476#0" expanded="true" />
+            <element signature="e#521#522#0" expanded="true" />
+            <element signature="e#556#557#0" expanded="true" />
+            <element signature="e#587#588#0" expanded="true" />
+            <element signature="e#636#637#0" expanded="true" />
+            <element signature="e#676#677#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/ApiMapping.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="5" column="12" selection-start="86" selection-end="86" vertical-scroll-proportion="0.0" vertical-offset="28" max-vertical-offset="555">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/XmlFileFilter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="23" column="48" selection-start="697" selection-end="697" vertical-scroll-proportion="0.0" vertical-offset="90" max-vertical-offset="1380">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/model/services/mysql/entities/SqlLastUpdateEntity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="17" column="34" selection-start="305" selection-end="1918" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="960">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/appstorelooter/LastUpdateDescriptor.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="7" column="47" selection-start="216" selection-end="216" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="285">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/utils/uploader/utils/ManifestProcessor.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="71" column="32" selection-start="3858" selection-end="3858" vertical-scroll-proportion="0.0" vertical-offset="900" max-vertical-offset="2850">
           <folding>
             <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/web/WEB-INF/web.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="68" column="39" selection-start="2536" selection-end="2536" vertical-scroll-proportion="0.0" vertical-offset="466" max-vertical-offset="1185">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/AppContextListener.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="21" column="0" selection-start="605" selection-end="605" vertical-scroll-proportion="0.0" vertical-offset="117" max-vertical-offset="555">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/model/RepositoryFactory.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="49" column="0" selection-start="1624" selection-end="1624" vertical-scroll-proportion="0.0" vertical-offset="454" max-vertical-offset="870">
-          <folding>
-            <element signature="e#1656#1657#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/appstorelooter/ApplicationsToUpdateLoader.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="53" column="0" selection-start="1825" selection-end="1825" vertical-scroll-proportion="0.0" vertical-offset="402" max-vertical-offset="1545">
-          <folding>
-            <element signature="e#1866#1867#0" expanded="true" />
-            <element signature="e#2489#2512#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/appstorelooter/ApplicationsLoader.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="89" column="0" selection-start="3545" selection-end="3545" vertical-scroll-proportion="0.0" vertical-offset="1197" max-vertical-offset="1635">
-          <folding>
-            <element signature="imports" expanded="true" />
+            <element signature="e#576#594#0" expanded="true" />
+            <element signature="e#3560#3568#0" expanded="true" />
+            <element signature="e#3635#3643#0" expanded="true" />
+            <element signature="e#3717#3734#0" expanded="true" />
+            <element signature="e#3818#3826#0" expanded="true" />
+            <element signature="e#7640#7648#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/appstorelooter/GetAppListRequest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="44" column="0" selection-start="1380" selection-end="1380" vertical-scroll-proportion="0.33173078" vertical-offset="387" max-vertical-offset="1020">
+        <state line="55" column="54" selection-start="2407" selection-end="2407" vertical-scroll-proportion="0.0" vertical-offset="153" max-vertical-offset="1020">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/model/services/amazon/AmazonDataService.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="67" column="44" selection-start="3141" selection-end="3141" vertical-scroll-proportion="0.0" vertical-offset="248" max-vertical-offset="2235">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/model/UploadAppdfRequestHandler.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="189" column="31" selection-start="7837" selection-end="7848" vertical-scroll-proportion="0.0" vertical-offset="2041" max-vertical-offset="3405">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/model/services/mysql/SqlOptions.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="18" column="34" selection-start="711" selection-end="711" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="435">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/model/services/mysql/SqlDataService.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="150" column="0" selection-start="6755" selection-end="6755" vertical-scroll-proportion="0.0" vertical-offset="1286" max-vertical-offset="6345">
+          <folding>
+            <element signature="method#store#0;class#SqlDataService#0" expanded="false" />
+            <element signature="method#getApplicationsLog#0;class#SqlDataService#0" expanded="false" />
+            <element signature="method#getApplicationsLog#1;class#SqlDataService#0" expanded="false" />
+            <element signature="method#getApplicationByHash#0;class#SqlDataService#0" expanded="false" />
+            <marker date="1396819902000" expanded="true" signature="19106:19177" placeholder="INSERT INTO ..." />
+            <marker date="1396819902000" expanded="true" signature="22080:22231" placeholder="SELECT count..missingValue..." />
+            <marker date="1396819902000" expanded="true" signature="22206:22231" placeholder="SELECT currP..missingValue..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/model/services/mysql/entities/SqlAppEntity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="21" column="0" selection-start="746" selection-end="746" vertical-scroll-proportion="0.6745182" vertical-offset="0" max-vertical-offset="1680">
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/model/services/mysql/entities/SqlApkEntity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="62" column="5" selection-start="1803" selection-end="1803" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1230">
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/api/responsewriter/descriptors/AbstractDescriptor.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="5" column="13" selection-start="118" selection-end="118" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="195">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/api/responsewriter/descriptors/ApkDescriptor.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="10" column="43" selection-start="260" selection-end="260" vertical-scroll-proportion="0.0" vertical-offset="1630" max-vertical-offset="2175">
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#672#680#0" expanded="true" />
+            <element signature="e#717#718#0" expanded="true" />
+            <element signature="e#751#752#0" expanded="true" />
+            <element signature="e#802#803#0" expanded="true" />
+            <element signature="e#848#849#0" expanded="true" />
+            <element signature="e#886#887#0" expanded="true" />
+            <element signature="e#920#921#0" expanded="true" />
+            <element signature="e#974#975#0" expanded="true" />
+            <element signature="e#1020#1021#0" expanded="true" />
+            <element signature="e#1050#1051#0" expanded="true" />
+            <element signature="e#1079#1080#0" expanded="true" />
+            <element signature="e#1120#1121#0" expanded="true" />
+            <element signature="e#1156#1157#0" expanded="true" />
+            <element signature="e#1186#1187#0" expanded="true" />
+            <element signature="e#1215#1216#0" expanded="true" />
+            <element signature="e#1256#1257#0" expanded="true" />
+            <element signature="e#1292#1293#0" expanded="true" />
+            <element signature="e#1325#1326#0" expanded="true" />
+            <element signature="e#1357#1358#0" expanded="true" />
+            <element signature="e#1404#1405#0" expanded="true" />
+            <element signature="e#1446#1447#0" expanded="true" />
+            <element signature="e#1484#1485#0" expanded="true" />
+            <element signature="e#1518#1519#0" expanded="true" />
+            <element signature="e#1572#1573#0" expanded="true" />
+            <element signature="e#1618#1619#0" expanded="true" />
+            <element signature="e#1658#1659#0" expanded="true" />
+            <element signature="e#1689#1690#0" expanded="true" />
+            <element signature="e#1742#1743#0" expanded="true" />
+            <element signature="e#1782#1783#0" expanded="true" />
+            <element signature="e#1813#1814#0" expanded="true" />
+            <element signature="e#1840#1841#0" expanded="true" />
+            <element signature="e#1880#1881#0" expanded="true" />
+            <element signature="e#1912#1913#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/api/uploader/MD5Checksum.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="33" column="0" selection-start="897" selection-end="897" vertical-scroll-proportion="0.0" vertical-offset="143" max-vertical-offset="690">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/model/services/DataService.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="25" column="81" selection-start="1080" selection-end="1080" vertical-scroll-proportion="0.49234137" vertical-offset="0" max-vertical-offset="540">
           <folding />
         </state>
       </provider>
@@ -1362,11 +1537,11 @@
       <state key="ArtifactsStructureConfigurable.UI">
         <settings>
           <artifact-editor />
-          <last-edited>web:war exploded</last-edited>
+          <last-edited>web:war</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>
-                <option value="0.2" />
+                <option value="0.396292" />
                 <option value="0.5" />
               </list>
             </option>
@@ -1379,7 +1554,7 @@
           <splitter-proportions>
             <option name="proportions">
               <list>
-                <option value="0.2" />
+                <option value="0.396292" />
               </list>
             </option>
           </splitter-proportions>
@@ -1387,7 +1562,6 @@
       </state>
       <state key="GlobalLibrariesConfigurable.UI">
         <settings>
-          <last-edited>dom4jrrrrr</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>
@@ -1399,7 +1573,7 @@
       </state>
       <state key="JdkListConfigurable.UI">
         <settings>
-          <last-edited>1.6</last-edited>
+          <last-edited>JDK</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>
@@ -1423,11 +1597,11 @@
       </state>
       <state key="ProjectJDKs.UI">
         <settings>
-          <last-edited>1.6</last-edited>
+          <last-edited>JDK</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>
-                <option value="0.31152633" />
+                <option value="0.2" />
               </list>
             </option>
           </splitter-proportions>
@@ -1435,11 +1609,11 @@
       </state>
       <state key="ProjectLibrariesConfigurable.UI">
         <settings>
-          <last-edited>com.amazonaws:aws-java-sdk:1.7.5</last-edited>
+          <last-edited>commons-dbcp-1.4</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>
-                <option value="0.2" />
+                <option value="0.396292" />
               </list>
             </option>
           </splitter-proportions>

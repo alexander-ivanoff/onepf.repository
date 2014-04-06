@@ -1,5 +1,7 @@
 package org.onepf.repository.model;
 
+import org.apache.commons.io.IOUtils;
+import org.onepf.appdf.model.ApkFilesInfo;
 import org.onepf.appdf.model.Application;
 import org.onepf.appdf.parser.AppdfFileParser;
 import org.onepf.appdf.parser.ParseResult;
@@ -9,12 +11,12 @@ import org.onepf.repository.model.services.DataService;
 import org.onepf.repository.model.services.StorageException;
 import org.onepf.repository.model.services.StorageService;
 import org.onepf.repository.api.responsewriter.descriptors.ApplicationDescriptor;
+import org.onepf.repository.utils.uploader.utils.AXMLPrinter;
+import org.onepf.repository.api.responsewriter.descriptors.ApkDescriptor;
+import org.onepf.repository.utils.uploader.utils.ManifestProcessor;
 
 import javax.xml.bind.annotation.adapters.HexBinaryAdapter;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.security.DigestInputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -65,6 +67,7 @@ public class UploadAppdfRequestHandler extends BaseRequestHandler {
         System.out.println("appdf hash: " + appdfHash);
         sendDescription(descrKey, parseResult.getFile());
 
+        processApkFiles(file, application);
 
         ApplicationDescriptor appDescriptor = new ApplicationDescriptor();
         appDescriptor.packageName = packageName;
@@ -104,7 +107,7 @@ public class UploadAppdfRequestHandler extends BaseRequestHandler {
 
         Enumeration<? extends ZipEntry> entries = zipFile.entries();
 
-        while ( entries.hasMoreElements()){
+        while (entries.hasMoreElements()) {
             ZipEntry elem = entries.nextElement();
             String name = elem.getName();
 
@@ -149,8 +152,95 @@ public class UploadAppdfRequestHandler extends BaseRequestHandler {
     }
 
     private static String generateObjectKey(String packageName, FileType fileType, int index) {
-        return  packageName + '/' + fileType.addExtention(packageName + "_" + index);
+        return packageName + '/' + fileType.addExtention(packageName + "_" + index);
 
     }
 
+    private void processApkFiles(File file, Application application) throws IOException {
+        ApkFilesInfo filesInfo = application.getFilesInfo();
+        List<ApkFilesInfo.ApkFile> apkFiles = filesInfo.getApkFiles();
+        ZipFile zip = new ZipFile(file, ZipFile.OPEN_READ);
+        for (ApkFilesInfo.ApkFile apk : apkFiles) {
+            String innerZipFileEntryName = apk.getFileName();
+            File tempFile = null;
+            FileOutputStream tempOut = null;
+            ZipFile innerZipFile = null;
+            try {
+                tempFile = File.createTempFile("tempFile" + innerZipFileEntryName, "zip");
+                tempOut = new FileOutputStream(tempFile);
+                IOUtils.copy(zip.getInputStream(new ZipEntry(innerZipFileEntryName)), tempOut);
+                innerZipFile = new ZipFile(tempFile);
+                String sha1 = "";
+                try {
+                    sha1 = ApkDescriptor.sha1(tempFile);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                ZipEntry manifestEntry = innerZipFile.getEntry("AndroidManifest.xml");
+                String manifestXMLFromAPK = AXMLPrinter.getManifestXMLFromAPK(innerZipFile.getInputStream(manifestEntry));
+                //todo builder
+                ManifestProcessor manifest = new ManifestProcessor().parse(manifestXMLFromAPK);
+                //todo return apk or builder
+                //todo just for test purpose
+                ApkDescriptor apkDescriptor = new ApkDescriptor();
+                apkDescriptor.setSha1(sha1);
+                apkDescriptor.setPackageName(manifest.getPackageName());
+                apkDescriptor.setVersionCode(Integer.valueOf(manifest.getVersionCode()));
+                try {
+                    dataService.addApk(apkDescriptor);
+                } catch (DataException e) {
+                    e.printStackTrace();
+                }
+
+                if (!manifest.getPackageName().equals(application.getPackageName())) {
+                    //todo throw an excepton
+                }
+                boolean hasInApps = application.getContentDescription().getIncludedActivites().isInAppBilling();
+                boolean hasOIABPermission = manifest.hasPermission("org.onepf.openiab.permission.BILLING");
+                if (hasInApps && !hasOIABPermission) {
+                    //todo throw an exception
+                }
+
+                System.out.println("org.onepf.repository.model.UploadAppdfRequestHandler.readInnerZipFile: " + manifestXMLFromAPK);
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                try {
+                    if (zip != null)
+                        zip.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                IOUtils.closeQuietly(tempOut);
+                if (tempFile != null && !tempFile.delete()) {
+                    //todo
+                    System.out.println("Could not delete " + tempFile);
+                }
+                try {
+                    if (innerZipFile != null)
+                        innerZipFile.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+//    private void validate(List<ManifestProcessor> manifests) {
+//        for (int i = 0; i < manifests.size(); i++) {
+//            ManifestProcessor manifest1 = manifests.get(i);
+//            for (int j = i + 1; j < manifests.size(); j++) {
+//                ManifestProcessor manifest2 = manifests.get(j);
+//                if (manifest1.getVersionCode().equals(manifest2.getVersionCode())) {
+//                    throw new IllegalStateException();
+//                }
+//                List<Feature> features = manifest1.getFeatures();
+//                for (int k = 0; k < features.size(); k++) {
+//                    Feature feature = features.get(k);
+//
+//                }
+//            }
+//        }
+//    }
 }

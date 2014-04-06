@@ -6,6 +6,7 @@ import org.onepf.repository.api.responsewriter.descriptors.ApplicationDescriptor
 import org.onepf.repository.api.responsewriter.descriptors.DownloadDescriptor;
 import org.onepf.repository.api.responsewriter.descriptors.PurchaseDescriptor;
 import org.onepf.repository.api.responsewriter.descriptors.ReviewDescriptor;
+import org.onepf.repository.api.responsewriter.descriptors.ApkDescriptor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +24,7 @@ public interface DataService {
 
     void saveLastUpdate(LastUpdateDescriptor lastUpdateDescriptor) throws DataException;
     void addDownload(DownloadDescriptor downloadDescriptor) throws DataException;
+    void addApk(ApkDescriptor apk) throws DataException;
 
     List<ApplicationDescriptor> getApplicationsLog() throws DataException;
     List<ApplicationDescriptor> getApplicationsLog(String packageName, int page) throws DataException;

@@ -16,6 +16,7 @@ import org.onepf.repository.api.responsewriter.descriptors.ApplicationDescriptor
 import org.onepf.repository.api.responsewriter.descriptors.DownloadDescriptor;
 import org.onepf.repository.api.responsewriter.descriptors.PurchaseDescriptor;
 import org.onepf.repository.api.responsewriter.descriptors.ReviewDescriptor;
+import org.onepf.repository.api.responsewriter.descriptors.ApkDescriptor;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -130,6 +131,36 @@ public class SqlDataService implements DataService {
             try { if (conn != null) conn.close(); } catch(Exception e) { }
         }
 
+    }
+
+    @Override
+    public void addApk(ApkDescriptor apk) throws DataException {
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        try {
+            SqlApkEntity sqlApkEntity = new SqlApkEntity()
+                    .withPackageName(apk.getPackageName())
+                    .withSha1(apk.getSha1())
+                    .withVersionCode(String.valueOf(apk.getVersionCode()))
+                    .withVersionName(apk.getVersionName())
+                    .withMaxSdk(String.valueOf(apk.getMaxSdk()))
+                    .withMinSdk(String.valueOf(apk.getMinSdk()))
+                    .withTargetSdk(String.valueOf(apk.getTargetSdk()));
+            conn = dbDataSource.getConnection();
+            stmt = insert(conn, SqlApkEntity.TABLE_NAME, sqlApkEntity);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new DataException(e);
+        } finally {
+            try {
+                if (stmt != null) stmt.close();
+            } catch (Exception e) {
+            }
+            try {
+                if (conn != null) conn.close();
+            } catch (Exception e) {
+            }
+        }
     }
 
     @Override

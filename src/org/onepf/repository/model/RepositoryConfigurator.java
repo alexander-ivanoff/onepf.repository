@@ -31,7 +31,7 @@ public class RepositoryConfigurator {
         if (repositoryFactory == null) {
             dataService = new SqlDataService(new SqlOptions());
             storageService = new FilesystemStorageService(new FilesystemOptions(context));
-            storageService = new AmazonStorageService(new AmazonOptions());
+//            storageService = new AmazonStorageService(new AmazonOptions());
             repositoryFactory = new RepositoryFactory(dataService, storageService);
         }
         return repositoryFactory;
