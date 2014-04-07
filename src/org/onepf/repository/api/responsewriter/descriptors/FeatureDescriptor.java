@@ -1,12 +1,16 @@
-package org.onepf.repository.utils.uploader.utils;
+package org.onepf.repository.api.responsewriter.descriptors;
+
+import org.onepf.repository.api.responsewriter.descriptors.AbstractDescriptor;
+import org.onepf.repository.utils.uploader.utils.TbdInteface;
 
 /**
  * Created by akarimova on 03.04.14.
  */
-public class Feature implements TbdInteface {
+public class FeatureDescriptor extends AbstractDescriptor implements TbdInteface {
     private String name;
     private int glEsVersion;
     private boolean required;
+    private int apkId;
 
     public String getName() {
         return name;
@@ -39,19 +43,28 @@ public class Feature implements TbdInteface {
     public void setUpFromString(String source) {
         String[] split = source.split(",");
         if (split.length != 3) {
-            throw new IllegalStateException("Feature must contains 3 parts: name, required, glTexture");
+            throw new IllegalStateException("FeatureDescriptor must contains 3 parts: name, required, glTexture");
         }
         name = split[0];
         required = Boolean.valueOf(split[1]);
         glEsVersion = Integer.valueOf(split[2]);
     }
 
+    public int getApkId() {
+        return apkId;
+    }
+
+    public void setApkId(int apkId) {
+        this.apkId = apkId;
+    }
+
     @Override
     public String toString() {
-        return "Feature{" +
+        return "FeatureDescriptor{" +
                 "name='" + name + '\'' +
                 ", glEsVersion=" + glEsVersion +
                 ", required=" + required +
+                ", apkId=" + apkId +
                 '}';
     }
 }

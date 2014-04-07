@@ -7,29 +7,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="725f9165-c5a3-4e6c-81e8-5c089a1ca901" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/web/WEB-INF/lib/AXMLPrinter2.jar" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/web/WEB-INF/lib/jtidy-r938.jar" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/web/WEB-INF/lib/mysql-connector-java-5.1.29-bin.jar" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/org/onepf/repository/utils/uploader/utils/AXMLPrinter.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/org/onepf/repository/api/responsewriter/descriptors/ApkDescriptor.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/org/onepf/repository/utils/uploader/utils/Feature.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/org/onepf/repository/utils/uploader/utils/ManifestProcessor.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/org/onepf/repository/utils/uploader/utils/Screen.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/org/onepf/repository/model/services/mysql/entities/SqlApkEntity.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/org/onepf/repository/utils/uploader/utils/SupportsScreen.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/org/onepf/repository/utils/uploader/utils/TbdInteface.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/org/onepf/repository/api/TextUtils.java" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/com_amazonaws_aws_java_sdk_1_7_5.xml" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/org/onepf/repository/model/services/amazon/AmazonDataService.java" afterPath="$PROJECT_DIR$/src/org/onepf/repository/model/services/amazon/AmazonDataService.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/org/onepf/repository/model/services/DataService.java" afterPath="$PROJECT_DIR$/src/org/onepf/repository/model/services/DataService.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/org/onepf/repository/model/RepositoryConfigurator.java" afterPath="$PROJECT_DIR$/src/org/onepf/repository/model/RepositoryConfigurator.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/org/onepf/repository/model/services/mysql/SqlDataService.java" afterPath="$PROJECT_DIR$/src/org/onepf/repository/model/services/mysql/SqlDataService.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/org/onepf/repository/model/services/mysql/SqlOptions.java" afterPath="$PROJECT_DIR$/src/org/onepf/repository/model/services/mysql/SqlOptions.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/org/onepf/repository/model/services/mysql/entities/SqlFeatureEntity.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/org/onepf/repository/utils/uploader/utils/Feature.java" afterPath="$PROJECT_DIR$/src/org/onepf/repository/api/responsewriter/descriptors/FeatureDescriptor.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/org/onepf/repository/utils/uploader/utils/ManifestProcessor.java" afterPath="$PROJECT_DIR$/src/org/onepf/repository/utils/uploader/utils/ManifestProcessor.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/org/onepf/repository/model/UploadAppdfRequestHandler.java" afterPath="$PROJECT_DIR$/src/org/onepf/repository/model/UploadAppdfRequestHandler.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/compiler.xml" afterPath="$PROJECT_DIR$/.idea/compiler.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/onepf.repository.iml" afterPath="$PROJECT_DIR$/onepf.repository.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/vcs.xml" afterPath="$PROJECT_DIR$/.idea/vcs.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="OpenRepository.iws" />
@@ -162,6 +143,25 @@
         <option name="LOG_MESSAGE" value="" />
       </breakpoint>
     </line_breakpoints>
+    <method_breakpoints>
+      <breakpoint url="file://$PROJECT_DIR$/src/org/onepf/repository/model/services/mysql/entities/SqlAppEntity.java" line="36" class="org.onepf.repository.model.services.mysql.entities.SqlAppEntity" package="org.onepf.repository.model.services.mysql.entities">
+        <option name="WATCH_ENTRY" value="true" />
+        <option name="WATCH_EXIT" value="true" />
+        <option name="ENABLED" value="true" />
+        <option name="LOG_ENABLED" value="false" />
+        <option name="LOG_EXPRESSION_ENABLED" value="false" />
+        <option name="REMOVE_AFTER_HIT" value="false" />
+        <option name="SUSPEND_POLICY" value="SuspendAll" />
+        <option name="SUSPEND" value="true" />
+        <option name="COUNT_FILTER_ENABLED" value="false" />
+        <option name="COUNT_FILTER" value="0" />
+        <option name="CONDITION_ENABLED" value="true" />
+        <option name="CLASS_FILTERS_ENABLED" value="false" />
+        <option name="INSTANCE_FILTERS_ENABLED" value="false" />
+        <option name="CONDITION" value="" />
+        <option name="LOG_MESSAGE" value="" />
+      </breakpoint>
+    </method_breakpoints>
     <breakpoint_rules />
     <ui_properties />
   </component>
@@ -173,33 +173,6 @@
     <splitter split-orientation="horizontal" split-proportion="0.7570694">
       <split-first>
         <leaf>
-          <file leaf-file-name="UploadAppdfRequestHandler.java" pinned="false" current="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/model/UploadAppdfRequestHandler.java">
-              <provider selected="true" editor-type-id="text-editor">
-                <state line="189" column="31" selection-start="7837" selection-end="7848" vertical-scroll-proportion="0.0" vertical-offset="2041" max-vertical-offset="3405">
-                  <folding />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="AmazonDataService.java" pinned="false" current="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/model/services/amazon/AmazonDataService.java">
-              <provider selected="true" editor-type-id="text-editor">
-                <state line="67" column="44" selection-start="3141" selection-end="3141" vertical-scroll-proportion="0.0" vertical-offset="248" max-vertical-offset="2235">
-                  <folding />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="SqlOptions.java" pinned="false" current="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/model/services/mysql/SqlOptions.java">
-              <provider selected="true" editor-type-id="text-editor">
-                <state line="18" column="34" selection-start="711" selection-end="711" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="435">
-                  <folding />
-                </state>
-              </provider>
-            </entry>
-          </file>
           <file leaf-file-name="ApkDescriptor.java" pinned="false" current="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/api/responsewriter/descriptors/ApkDescriptor.java">
               <provider selected="true" editor-type-id="text-editor">
@@ -256,10 +229,54 @@
           <file leaf-file-name="SqlApkEntity.java" pinned="false" current="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/model/services/mysql/entities/SqlApkEntity.java">
               <provider selected="true" editor-type-id="text-editor">
-                <state line="62" column="5" selection-start="1803" selection-end="1803" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1230">
+                <state line="23" column="5" selection-start="313" selection-end="2440" vertical-scroll-proportion="0.0" vertical-offset="96" max-vertical-offset="1230">
                   <folding>
                     <element signature="imports" expanded="true" />
                   </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="FeatureDescriptor.java" pinned="false" current="true" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/api/responsewriter/descriptors/FeatureDescriptor.java">
+              <provider selected="true" editor-type-id="text-editor">
+                <state line="47" column="24" selection-start="1278" selection-end="1278" vertical-scroll-proportion="1.0026178" vertical-offset="142" max-vertical-offset="960">
+                  <folding>
+                    <element signature="imports" expanded="true" />
+                    <element signature="e#1407#1408#0" expanded="true" />
+                    <element signature="e#1435#1436#0" expanded="true" />
+                    <element signature="e#1474#1475#0" expanded="true" />
+                    <element signature="e#1508#1509#0" expanded="true" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="SqlFeatureEntity.java" pinned="false" current="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/model/services/mysql/entities/SqlFeatureEntity.java">
+              <provider selected="true" editor-type-id="text-editor">
+                <state line="51" column="67" selection-start="1708" selection-end="1708" vertical-scroll-proportion="0.0" vertical-offset="318" max-vertical-offset="915">
+                  <folding>
+                    <element signature="imports" expanded="true" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="README.md" pinned="false" current="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/README.md">
+              <provider selected="true" editor-type-id="text-editor">
+                <state line="12" column="75" selection-start="387" selection-end="387" vertical-scroll-proportion="-7.2" vertical-offset="0" max-vertical-offset="795">
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="onepf.repository.sql.create.sql" pinned="false" current="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/sql/onepf.repository.sql.create.sql">
+              <provider selected="true" editor-type-id="text-editor">
+                <state line="33" column="36" selection-start="1130" selection-end="1130" vertical-scroll-proportion="-9.6" vertical-offset="15" max-vertical-offset="2010">
+                  <folding />
                 </state>
               </provider>
             </entry>
@@ -281,19 +298,10 @@
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="GetAppListRequest.java" pinned="false" current="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/appstorelooter/GetAppListRequest.java">
-              <provider selected="true" editor-type-id="text-editor">
-                <state line="55" column="54" selection-start="2407" selection-end="2407" vertical-scroll-proportion="0.0" vertical-offset="153" max-vertical-offset="1020">
-                  <folding />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="DataService.java" pinned="false" current="true" current-in-tab="true">
+          <file leaf-file-name="DataService.java" pinned="false" current="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/model/services/DataService.java">
               <provider selected="true" editor-type-id="text-editor">
-                <state line="25" column="81" selection-start="1080" selection-end="1080" vertical-scroll-proportion="0.49234137" vertical-offset="0" max-vertical-offset="540">
+                <state line="40" column="0" selection-start="1899" selection-end="1899" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="540">
                   <folding />
                 </state>
               </provider>
@@ -315,7 +323,7 @@
           <file leaf-file-name="SqlAppEntity.java" pinned="false" current="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/model/services/mysql/entities/SqlAppEntity.java">
               <provider selected="true" editor-type-id="text-editor">
-                <state line="21" column="0" selection-start="746" selection-end="746" vertical-scroll-proportion="0.6745182" vertical-offset="0" max-vertical-offset="1680">
+                <state line="21" column="0" selection-start="746" selection-end="746" vertical-scroll-proportion="0.8035714" vertical-offset="0" max-vertical-offset="1680">
                   <folding>
                     <element signature="imports" expanded="true" />
                   </folding>
@@ -344,10 +352,6 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/src/org/onepf/repository/model/services/mysql/entities/SqlDownloadEntity.java" />
-        <option value="$PROJECT_DIR$/src/org/onepf/repository/utils/responsewriter/descriptors/PurchaseDescriptor.java" />
-        <option value="$PROJECT_DIR$/src/org/onepf/repository/model/services/mysql/entities/SqlPurchaseEntity.java" />
-        <option value="$PROJECT_DIR$/src/org/onepf/repository/model/ApplicationsListV2.java" />
         <option value="$PROJECT_DIR$/src/org/onepf/repository/model/services/amazon/entities/AmazonDownloadEntity.java" />
         <option value="$PROJECT_DIR$/src/org/onepf/repository/model/services/amazon/entities/AmazonPurchaseEntity.java" />
         <option value="$PROJECT_DIR$/src/org/onepf/repository/model/auth/AppstoreAuthenticatorV2.java" />
@@ -395,6 +399,10 @@
         <option value="$PROJECT_DIR$/src/org/onepf/repository/model/UploadAppdfRequestHandler.java" />
         <option value="$PROJECT_DIR$/src/org/onepf/repository/api/responsewriter/descriptors/ApkDescriptor.java" />
         <option value="$PROJECT_DIR$/src/org/onepf/repository/model/services/DataService.java" />
+        <option value="$PROJECT_DIR$/src/org/onepf/repository/utils/uploader/utils/Feature.java" />
+        <option value="$PROJECT_DIR$/src/org/onepf/repository/api/responsewriter/descriptors/Feature.java" />
+        <option value="$PROJECT_DIR$/src/org/onepf/repository/api/responsewriter/descriptors/FeatureDescriptor.java" />
+        <option value="$PROJECT_DIR$/src/org/onepf/repository/model/services/mysql/entities/SqlFeatureEntity.java" />
       </list>
     </option>
   </component>
@@ -500,68 +508,6 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="WEB-INF" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="onepf.repository" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="onepf.repository" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="repository" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="onepf.repository" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="onepf.repository" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="repository" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="utils" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="onepf.repository" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="onepf.repository" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="repository" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="api" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -985,12 +931,17 @@
       <workItem from="1396557273709" duration="2139000" />
       <workItem from="1396590993432" duration="932000" />
       <workItem from="1396599355829" duration="15872000" />
-      <workItem from="1396733687962" duration="23005000" />
+      <workItem from="1396733687962" duration="24720000" />
     </task>
+    <task id="LOCAL-00001" summary="initial commit">
+      <created>1396820113199</created>
+      <updated>1396820113199</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="99032000" />
+    <option name="totallyTimeSpent" value="100747000" />
   </component>
   <component name="TodoView" selected-index="0">
     <todo-panel id="selected-file">
@@ -1017,7 +968,7 @@
     <editor active="false" />
     <layout>
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Changes" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.41542003" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Changes" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.50172615" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32918552" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -1038,7 +989,7 @@
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32918552" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.171459" sideWeight="0.49917355" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.19062833" sideWeight="0.49917355" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.51668584" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -1088,6 +1039,8 @@
     <option name="myTodoPanelSettings">
       <TodoPanelSettings />
     </option>
+    <MESSAGE value="initial commit" />
+    <option name="LAST_COMMIT_MESSAGE" value="initial commit" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
@@ -1097,34 +1050,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/model/services/mysql/entities/SqlPurchaseEntity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="11" column="44" selection-start="308" selection-end="308" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1875">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/model/services/mysql/entities/SqlAppstoreEntity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="10" column="13" selection-start="235" selection-end="235" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="555">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/model/auth/AppstoreAuthenticator.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="54" column="0" selection-start="1821" selection-end="1821" vertical-scroll-proportion="0.0" vertical-offset="338" max-vertical-offset="945">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/api/xmlapi/XmlApplicationHeaderParser.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="9" column="13" selection-start="255" selection-end="255" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="360">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/api/xmlapi/XmlApplicationItemParser.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="21" column="23" selection-start="692" selection-end="692" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="435">
@@ -1344,26 +1269,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/utils/uploader/utils/Feature.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="5" column="43" selection-start="134" selection-end="134" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="945">
-          <folding>
-            <element signature="e#256#257#0" expanded="true" />
-            <element signature="e#283#284#0" expanded="true" />
-            <element signature="e#323#324#0" expanded="true" />
-            <element signature="e#355#356#0" expanded="true" />
-            <element signature="e#390#391#0" expanded="true" />
-            <element signature="e#424#425#0" expanded="true" />
-            <element signature="e#475#476#0" expanded="true" />
-            <element signature="e#521#522#0" expanded="true" />
-            <element signature="e#556#557#0" expanded="true" />
-            <element signature="e#587#588#0" expanded="true" />
-            <element signature="e#636#637#0" expanded="true" />
-            <element signature="e#676#677#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/ApiMapping.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="5" column="12" selection-start="86" selection-end="86" vertical-scroll-proportion="0.0" vertical-offset="28" max-vertical-offset="555">
@@ -1397,12 +1302,12 @@
         <state line="71" column="32" selection-start="3858" selection-end="3858" vertical-scroll-proportion="0.0" vertical-offset="900" max-vertical-offset="2850">
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#576#594#0" expanded="true" />
-            <element signature="e#3560#3568#0" expanded="true" />
-            <element signature="e#3635#3643#0" expanded="true" />
-            <element signature="e#3717#3734#0" expanded="true" />
-            <element signature="e#3818#3826#0" expanded="true" />
-            <element signature="e#7640#7648#0" expanded="true" />
+            <element signature="e#654#672#0" expanded="true" />
+            <element signature="e#3638#3646#0" expanded="true" />
+            <element signature="e#3713#3721#0" expanded="true" />
+            <element signature="e#3805#3832#0" expanded="true" />
+            <element signature="e#3916#3924#0" expanded="true" />
+            <element signature="e#7758#7766#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1446,24 +1351,6 @@
             <marker date="1396819902000" expanded="true" signature="19106:19177" placeholder="INSERT INTO ..." />
             <marker date="1396819902000" expanded="true" signature="22080:22231" placeholder="SELECT count..missingValue..." />
             <marker date="1396819902000" expanded="true" signature="22206:22231" placeholder="SELECT currP..missingValue..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/model/services/mysql/entities/SqlAppEntity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="21" column="0" selection-start="746" selection-end="746" vertical-scroll-proportion="0.6745182" vertical-offset="0" max-vertical-offset="1680">
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/model/services/mysql/entities/SqlApkEntity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="62" column="5" selection-start="1803" selection-end="1803" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1230">
-          <folding>
-            <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1526,8 +1413,69 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/model/services/DataService.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="25" column="81" selection-start="1080" selection-end="1080" vertical-scroll-proportion="0.49234137" vertical-offset="0" max-vertical-offset="540">
+        <state line="40" column="0" selection-start="1899" selection-end="1899" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="540">
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/model/services/mysql/entities/SqlApkEntity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="23" column="5" selection-start="313" selection-end="2440" vertical-scroll-proportion="0.0" vertical-offset="96" max-vertical-offset="1230">
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/model/services/mysql/entities/SqlAppEntity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="21" column="0" selection-start="746" selection-end="746" vertical-scroll-proportion="0.8035714" vertical-offset="0" max-vertical-offset="1680">
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar:///System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Classes/classes.jar!/java/beans/FeatureDescriptor.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="6" column="13" selection-start="153" selection-end="153" vertical-scroll-proportion="0.095846646" vertical-offset="15" max-vertical-offset="1050">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/model/services/mysql/entities/SqlFeatureEntity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="51" column="67" selection-start="1708" selection-end="1708" vertical-scroll-proportion="0.0" vertical-offset="318" max-vertical-offset="915">
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/README.md">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="12" column="75" selection-start="387" selection-end="387" vertical-scroll-proportion="-7.2" vertical-offset="0" max-vertical-offset="795">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sql/onepf.repository.sql.create.sql">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="33" column="36" selection-start="1130" selection-end="1130" vertical-scroll-proportion="-9.6" vertical-offset="15" max-vertical-offset="2010">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/api/responsewriter/descriptors/FeatureDescriptor.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="47" column="24" selection-start="1278" selection-end="1278" vertical-scroll-proportion="1.0026178" vertical-offset="142" max-vertical-offset="960">
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#1407#1408#0" expanded="true" />
+            <element signature="e#1435#1436#0" expanded="true" />
+            <element signature="e#1474#1475#0" expanded="true" />
+            <element signature="e#1508#1509#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

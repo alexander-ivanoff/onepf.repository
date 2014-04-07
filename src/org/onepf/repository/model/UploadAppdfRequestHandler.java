@@ -235,9 +235,9 @@ public class UploadAppdfRequestHandler extends BaseRequestHandler {
 //                if (manifest1.getVersionCode().equals(manifest2.getVersionCode())) {
 //                    throw new IllegalStateException();
 //                }
-//                List<Feature> features = manifest1.getFeatures();
+//                List<FeatureDescriptor> features = manifest1.getFeatures();
 //                for (int k = 0; k < features.size(); k++) {
-//                    Feature feature = features.get(k);
+//                    FeatureDescriptor feature = features.get(k);
 //
 //                }
 //            }

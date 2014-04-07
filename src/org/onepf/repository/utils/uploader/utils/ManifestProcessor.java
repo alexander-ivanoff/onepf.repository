@@ -1,6 +1,7 @@
 package org.onepf.repository.utils.uploader.utils;
 
 import org.onepf.repository.api.TextUtils;
+import org.onepf.repository.api.responsewriter.descriptors.FeatureDescriptor;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
@@ -64,7 +65,7 @@ public class ManifestProcessor extends DefaultHandler {
     //textures
     private Set<String> glTextures = new HashSet<String>();
     //features
-    private Map<String, Feature> features = new HashMap<String, Feature>();
+    private Map<String, FeatureDescriptor> features = new HashMap<String, FeatureDescriptor>();
     //compatible screens
     private Set<Screen> cоmpatibleScreens = new HashSet<Screen>();
 
@@ -112,7 +113,7 @@ public class ManifestProcessor extends DefaultHandler {
             targetSdkVersion = integerValue(attributes.getValue("android:targetSdkVersion"), minSdkVersion);
             maxSdkVersion = integerValue(attributes.getValue("android:maxSdkVersion"), Integer.MAX_VALUE);
         } else if (qName.equals("uses-feature")) {
-            Feature feature = new Feature();
+            FeatureDescriptor feature = new FeatureDescriptor();
             feature.setName(attributes.getValue("android:name"));
             feature.setRequired(booleanValue(attributes.getValue("android:required"), true));
             feature.setGlEsVersion(integerValue(attributes.getValue("android:glEsVersion"), 0x00010000)); //todo check default value
@@ -140,9 +141,9 @@ public class ManifestProcessor extends DefaultHandler {
                 }
             }
             for (String impliedFeature : impliedFeatures) {
-                Feature feature = features.get(impliedFeature);
+                FeatureDescriptor feature = features.get(impliedFeature);
                 if (feature == null) {
-                    Feature newFeature = new Feature();
+                    FeatureDescriptor newFeature = new FeatureDescriptor();
                     newFeature.setName(impliedFeature);
                     newFeature.setRequired(true);
                     features.put(newFeature.getName(), newFeature);
