@@ -99,6 +99,7 @@ public class ApplicationsToUpdateLoader {
 
             } else {
                 System.out.println("APPLIST RESPONSE: " + result);
+                throw new IOException("Applis request failed with HTTP errorcode: " + result);
             }
             iterations++;
         } while (url != null && (prevUpdate == null || !url.equals(prevUpdate.prevOffset)));

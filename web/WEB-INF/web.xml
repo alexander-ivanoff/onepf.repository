@@ -65,9 +65,32 @@
         <url-pattern>/openaep/*</url-pattern>
     </filter-mapping>
 
+    <!-- Web application parameters -->
+
     <context-param>
         <description>Switching polling on if 'true'</description>
         <param-name>pollStores</param-name>
         <param-value>true</param-value>
     </context-param>
+
+    <!-- DataService settings-->
+    <context-param>
+        <description>Switching between database realisations. only mysql is supported now. </description>
+        <param-name>dataService</param-name>
+        <param-value>mysql</param-value> <!-- possible values: mysql -->
+    </context-param>
+    <context-param>
+        <description>Url to database realization. </description>
+        <param-name>dbUrl</param-name>
+        <param-value>jdbc:mysql://onepf-repository.ca6s4oee7dbi.us-west-2.rds.amazonaws.com:3306/onepf_repository_1</param-value> <!-- possible values: mysql -->
+    </context-param>
+
+    <!-- StorageServise settings -->
+    <context-param>
+        <description>Switching between file storage realization. Supported: Local filesystem and AmazonS3. </description>
+        <param-name>storageService</param-name>
+        <param-value>filesystem</param-value> <!-- possible values: filesystem, amazons3 -->
+    </context-param>
+
+
 </web-app>

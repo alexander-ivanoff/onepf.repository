@@ -73,7 +73,7 @@ public class SqlDataService implements DataService {
                     .withDescription(applicationDescriptor.descriptionLink)
                     .withHash(applicationDescriptor.appdfHash);
             conn = dbDataSource.getConnection();
-            stmt = insertWithHashes(conn, "applications", appEntity, PAGE_LIMIT_APPLICATIONS);
+            stmt = insertWithHashes(conn, SqlAppEntity.TABLE_NAME, appEntity, PAGE_LIMIT_APPLICATIONS);
             stmt.executeUpdate();
         } catch (SQLException e) {
             throw new DataException(e);
@@ -121,7 +121,7 @@ public class SqlDataService implements DataService {
                     .withIsUpdate(downloadDescriptor.isUpdate);
 
             conn = dbDataSource.getConnection();
-            stmt = insertWithHashes(conn, "downloads", downloadDescriptor.packageName, entity, PAGE_LIMIT_OTHER);
+            stmt = insertWithHashes(conn, SqlDownloadEntity.TABLE_NAME, downloadDescriptor.packageName, entity, PAGE_LIMIT_OTHER);
             stmt.executeUpdate();
         } catch (SQLException e) {
             throw new DataException(e);
