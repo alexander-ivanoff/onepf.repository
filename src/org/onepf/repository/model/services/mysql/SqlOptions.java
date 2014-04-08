@@ -1,15 +1,12 @@
 package org.onepf.repository.model.services.mysql;
 
+import org.onepf.repository.model.services.DataService;
+import org.onepf.repository.model.services.DataServiceOptions;
+
 /**
  * Created by ivanoff on 25.03.14.
  */
-public class SqlOptions {
-
-    // TODO maybe move all setting to separate .properties file
-    public String appstoreTable = "appstores";
-    public String packageTable = "packages";
-    public String purchaseTable = "purchases";
-    public String downloadTable = "downloads";
+public class SqlOptions implements DataServiceOptions {
 
     // sql connection options
     public String driverClassName = "com.mysql.jdbc.Driver";
@@ -20,4 +17,8 @@ public class SqlOptions {
     public int maxWait = 10000; // 10sec
 
 
+    @Override
+    public DataService createDataService() {
+        return new SqlDataService(this);
+    }
 }

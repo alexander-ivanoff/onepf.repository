@@ -21,6 +21,7 @@ public class SqlDownloadEntity extends SqlDBEntity {
     public static final String FIELD_DEVICE_NAME = "deviceName";
     public static final String FIELD_COUNTRY = "country";
     public static final String FIELD_IS_UPDATE = "isUpdate";
+    public static final String TABLE_NAME = "downloads";
 
     public SqlDownloadEntity() {
         super();

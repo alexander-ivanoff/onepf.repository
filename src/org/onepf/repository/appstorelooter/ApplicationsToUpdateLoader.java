@@ -67,7 +67,6 @@ public class ApplicationsToUpdateLoader {
 
     public Response getUpdates(final Request request) throws IOException, ParserFactory.ParseException {
         Response response = new Response();
-
         final AppstoreDescriptor appstore = request.appstore;
         final LastUpdateDescriptor prevUpdate = request.prevUpdate;
 
@@ -98,7 +97,7 @@ public class ApplicationsToUpdateLoader {
                 }
 
             } else {
-                System.out.println("APPLIST RESPONSE: " + result);
+                throw new IOException("Applist request failed with result: " + httpResponse.getStatusLine());
             }
             iterations++;
         } while (url != null && (prevUpdate == null || !url.equals(prevUpdate.prevOffset)));

@@ -5,6 +5,44 @@
 		  http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
            version="2.5">
 
+    <!-- Log4J Setup -->
+
+    <listener>
+        <listener-class>org.apache.logging.log4j.core.web.Log4jServletContextListener</listener-class>
+    </listener>
+    <filter>
+        <filter-name>log4jServletFilter</filter-name>
+        <filter-class>org.apache.logging.log4j.core.web.Log4jServletFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>log4jServletFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+        <dispatcher>REQUEST</dispatcher>
+        <dispatcher>FORWARD</dispatcher>
+        <dispatcher>INCLUDE</dispatcher>
+        <dispatcher>ERROR</dispatcher>
+    </filter-mapping>
+
+    <context-param>
+        <param-name>log4jConfiguration</param-name>
+        <param-value>classpath:log4j2.xml</param-value>
+    </context-param>
+
+    <!-- Listeners -->
+
+    <listener>
+        <listener-class>org.onepf.repository.AppContextListener</listener-class>
+    </listener>
+
+    <!-- Filters -->
+
+    <filter>
+        <filter-name>XmlFileFilter</filter-name>
+        <filter-class>org.onepf.repository.XmlFileFilter</filter-class>
+    </filter>
+
+    <!-- Servlets -->
+
     <servlet>
         <servlet-name>AppdfLoaderServlet</servlet-name>
         <servlet-class>org.onepf.repository.UploadAppdfFileServlet</servlet-class>
@@ -26,14 +64,12 @@
         <servlet-class>org.onepf.repository.GetDownloadListServlet</servlet-class>
     </servlet>
 
-    <filter>
-        <filter-name>XmlFileFilter</filter-name>
-        <filter-class>org.onepf.repository.XmlFileFilter</filter-class>
-    </filter>
+    <!-- Mappings -->
 
-    <listener>
-        <listener-class>org.onepf.repository.AppContextListener</listener-class>
-    </listener>
+    <filter-mapping>
+        <filter-name>XmlFileFilter</filter-name>
+        <url-pattern>/openaep/*</url-pattern>
+    </filter-mapping>
 
     <servlet-mapping>
         <servlet-name>AppdfLoaderServlet</servlet-name>
@@ -60,14 +96,32 @@
         <url-pattern>/openaep/appdescription</url-pattern>
     </servlet-mapping>
 
-    <filter-mapping>
-        <filter-name>XmlFileFilter</filter-name>
-        <url-pattern>/openaep/*</url-pattern>
-    </filter-mapping>
+    <!-- Web application parameters -->
 
     <context-param>
         <description>Switching polling on if 'true'</description>
         <param-name>pollStores</param-name>
         <param-value>true</param-value>
     </context-param>
+
+    <!-- DataService settings-->
+    <context-param>
+        <description>Switching between database realisations. only mysql is supported now. </description>
+        <param-name>dataService</param-name>
+        <param-value>mysql</param-value> <!-- possible values: mysql -->
+    </context-param>
+    <context-param>
+        <description>Url to database realization. </description>
+        <param-name>dbUrl</param-name>
+        <param-value>jdbc:mysql://onepf-repository.ca6s4oee7dbi.us-west-2.rds.amazonaws.com:3306/onepf_repository_1</param-value> <!-- possible values: mysql -->
+    </context-param>
+
+    <!-- StorageServise settings -->
+    <context-param>
+        <description>Switching between file storage realization. Supported: Local filesystem and AmazonS3. </description>
+        <param-name>storageService</param-name>
+        <param-value>filesystem</param-value> <!-- possible values: filesystem, amazons3 -->
+    </context-param>
+
+
 </web-app>

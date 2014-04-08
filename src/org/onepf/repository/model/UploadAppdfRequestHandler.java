@@ -1,5 +1,7 @@
 package org.onepf.repository.model;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.onepf.appdf.model.Application;
 import org.onepf.appdf.parser.AppdfFileParser;
 import org.onepf.appdf.parser.ParseResult;
@@ -36,13 +38,15 @@ public class UploadAppdfRequestHandler extends BaseRequestHandler {
 
     private static HexBinaryAdapter marshaler = new HexBinaryAdapter();
 
+    private final Logger logger = LogManager.getLogger(UploadAppdfRequestHandler.class.getName());
+
     public UploadAppdfRequestHandler(DataService dataService, StorageService storageService) {
         super(dataService, storageService);
     }
 
 
     public void processFile(File file, String developersContact, AppstoreDescriptor appstoreDescriptor) throws IOException, StorageException, DataException, NoSuchAlgorithmException {
-
+        long time = System.currentTimeMillis();
         AppdfFileParser parser = new AppdfFileParser(file);
         ParseResult parseResult = parser.parse();
 
@@ -62,7 +66,7 @@ public class UploadAppdfRequestHandler extends BaseRequestHandler {
         String descrKey = generateObjectKey(packageName, FileType.DESCRIPTION, freeIndex);
 
         String appdfHash = sendAppDFFile(appdfKey, file);
-        System.out.println("appdf hash: " + appdfHash);
+        logger.debug("Appdf file hash: {}", appdfHash);
         sendDescription(descrKey, parseResult.getFile());
 
 
@@ -75,9 +79,8 @@ public class UploadAppdfRequestHandler extends BaseRequestHandler {
         appDescriptor.appdfHash = appdfHash;
         appDescriptor.appstoreId = appstoreDescriptor.appstoreId;
 
-        long time = System.currentTimeMillis();
         dataService.store(appDescriptor);
-        System.out.println("Put Request to data service: " + (System.currentTimeMillis() - time)); // TODO move to Log4J
+        logger.debug("Store Appdf time: {} ", (System.currentTimeMillis() - time));
     }
 
 

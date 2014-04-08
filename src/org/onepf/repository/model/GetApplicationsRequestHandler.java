@@ -1,5 +1,7 @@
 package org.onepf.repository.model;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.onepf.repository.model.services.DataException;
 import org.onepf.repository.model.services.DataService;
 import org.onepf.repository.model.services.StorageService;
@@ -12,6 +14,8 @@ import java.util.List;
  */
 public class GetApplicationsRequestHandler extends BaseRequestHandler {
 
+    private final Logger logger = LogManager.getLogger(GetApplicationsRequestHandler.class.getName());
+
     public GetApplicationsRequestHandler(DataService dataService, StorageService storageService) {
         super(dataService, storageService);
     }
@@ -19,7 +23,7 @@ public class GetApplicationsRequestHandler extends BaseRequestHandler {
     public List<ApplicationDescriptor> getApplications(int pageHash) throws DataException {
         long time = System.currentTimeMillis();
         List<ApplicationDescriptor> apps = dataService.getApplicationsLog(null, pageHash);
-        System.out.println("List applications time: " + (System.currentTimeMillis() - time));  // TODO move to Log4J
+        logger.debug("List application time: {}", (System.currentTimeMillis() - time));
         return apps;
     }
 }

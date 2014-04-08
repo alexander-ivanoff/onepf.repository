@@ -52,7 +52,7 @@ public class AppstoreRequester {
         }
         if (appstores != null) {
             for (AppstoreDescriptor appstore : appstores.values()) {
-                if (appstore.appstoreId.equals("localstore")) //TEST PURPOSES ONLY
+                if (appstore.appstoreId.equals("onepf.repository")) //TEST PURPOSES ONLY
                     scheduler.scheduleAtFixedRate(
                             new GetAppListRequest(parserFactory, repositoryFactory, httpClient, appstore, uploadDir ),
                             POLLING_PERIOD, POLLING_PERIOD, TimeUnit.SECONDS);
