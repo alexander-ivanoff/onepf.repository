@@ -6,16 +6,18 @@ import org.apache.commons.dbcp.PoolableConnectionFactory;
 import org.apache.commons.dbcp.PoolingDataSource;
 import org.apache.commons.pool.ObjectPool;
 import org.apache.commons.pool.impl.GenericObjectPool;
-import org.onepf.repository.appstorelooter.LastUpdateDescriptor;
-import org.onepf.repository.model.auth.AppstoreDescriptor;
-import org.onepf.repository.model.services.DataException;
-import org.onepf.repository.model.services.DataService;
-import org.onepf.repository.model.services.mysql.entities.*;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.onepf.repository.api.Pair;
 import org.onepf.repository.api.responsewriter.descriptors.ApplicationDescriptor;
 import org.onepf.repository.api.responsewriter.descriptors.DownloadDescriptor;
 import org.onepf.repository.api.responsewriter.descriptors.PurchaseDescriptor;
 import org.onepf.repository.api.responsewriter.descriptors.ReviewDescriptor;
+import org.onepf.repository.appstorelooter.LastUpdateDescriptor;
+import org.onepf.repository.model.auth.AppstoreDescriptor;
+import org.onepf.repository.model.services.DataException;
+import org.onepf.repository.model.services.DataService;
+import org.onepf.repository.model.services.mysql.entities.*;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -35,6 +37,11 @@ public class SqlDataService implements DataService {
     private static final int PAGE_LIMIT_OTHER = 3;
 
     private static final int DEFAULT_RESULT_LIMIT = 1000;
+
+    private static final String AUTH_TOKEN = "authToken";
+
+    private static final Logger logger = LogManager.getLogger(SqlDataService.class.getName());
+
 
     private DataSource dbDataSource;
 
@@ -385,7 +392,7 @@ public class SqlDataService implements DataService {
         valuesBuilder.append("?").append(')');
 
         String request = "INSERT INTO " + tableName + " " + columnsBuilder.toString() + " VALUES " + valuesBuilder.toString() + ";";
-        System.out.println("QUERY: " + request);
+        logger.info("INSERT: {}", request);
 
         PreparedStatement stmt = connection.prepareStatement(request);
         Collection<String> values = item.values();
@@ -437,11 +444,12 @@ public class SqlDataService implements DataService {
             requestBuilder.append(" ORDER BY ").append(order);
         }
         requestBuilder.append(" LIMIT " + limit);
-        System.out.println("QUERY: " + requestBuilder.toString());
+        String request = requestBuilder.toString();
+        logger.info("QUERY: {}", request);
 
         PreparedStatement stmt = null;
         try {
-            stmt = connection.prepareStatement(requestBuilder.toString());
+            stmt = connection.prepareStatement(request);
             int index = 0;
             if (selectionArgs != null) {
                 for (String value: selectionArgs) {

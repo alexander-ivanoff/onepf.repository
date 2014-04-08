@@ -4,6 +4,8 @@ import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.onepf.repository.ApiMapping;
 import org.onepf.repository.api.responsewriter.descriptors.ApplicationDescriptor;
 import org.onepf.repository.model.FileType;
@@ -20,14 +22,14 @@ import java.io.InputStream;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
 import java.security.NoSuchAlgorithmException;
-import java.util.List;
-import java.util.Random;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by ivanoff on 03.04.14.
  */
 public class ApplicationsLoader {
+
+    private final Logger alarmCauseLogger = LogManager.getLogger("AlarmCauseLogger");
 
     public static class Request {
 
@@ -61,8 +63,28 @@ public class ApplicationsLoader {
         final AppstoreDescriptor appstore = request.appstore;
         final Set<ApplicationDescriptor> applications = request.application;
 
+        Map<ApplicationDescriptor, String> failedAppsWithReason = loadApplications(appstore, applications);
+        // trying one more time:
+        failedAppsWithReason = loadApplications(appstore, failedAppsWithReason.keySet());
+        // if second try failed, log to alarm file
+        if (failedAppsWithReason.size() > 0) {
+            for (ApplicationDescriptor failedToLoadApp : failedAppsWithReason.keySet()) {
+                alarmCauseLogger.error("failed to load package: {}, reason {}", failedToLoadApp.packageName, failedAppsWithReason.get(failedToLoadApp));
+            }
+        }
+    }
+
+    /**
+     *
+     * @param appstore
+     * @param apps
+     * @return Map of ApplicationDescriptor and String represented reason why it was failed
+     * @throws IOException
+     */
+    private Map<ApplicationDescriptor, String> loadApplications(final AppstoreDescriptor appstore, final Set<ApplicationDescriptor> apps) throws IOException {
+        Map<ApplicationDescriptor, String> failedAppsWithReason = new HashMap<ApplicationDescriptor, String>();
         String url;
-        for (ApplicationDescriptor appToLoad : applications) {
+        for (ApplicationDescriptor appToLoad : apps) {
             try {
                 // check if there are appdf file with the same hash, it is here means appdf is up to date
                 List<ApplicationDescriptor> uptodateApp = factory.getDataService().getApplicationByHash(appToLoad.packageName, appToLoad.appdfHash);
@@ -78,17 +100,21 @@ public class ApplicationsLoader {
                         File  file = storeToUploadDir(response.getEntity().getContent(), appToLoad.packageName);
                         appdfHandler.processFile(file, "No contact", appstore);
                     } else {
-                        System.out.println("APPLIST RESPONSE: " + result);
+                        failedAppsWithReason.put(appToLoad, response.getStatusLine().toString());
                     }
                 }
             } catch (StorageException e) {
                 e.printStackTrace();
+                failedAppsWithReason.put(appToLoad, e.getMessage());
             } catch (DataException e) {
                 e.printStackTrace();
+                failedAppsWithReason.put(appToLoad, e.getMessage());
             } catch (NoSuchAlgorithmException e) {
                 e.printStackTrace();
+                failedAppsWithReason.put(appToLoad, e.getMessage());
             }
         }
+        return failedAppsWithReason;
     }
 
     private File storeToUploadDir(InputStream is, String packageName) throws IOException {

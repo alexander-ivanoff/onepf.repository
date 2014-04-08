@@ -1,5 +1,7 @@
 package org.onepf.repository.model.auth;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.onepf.repository.model.BaseRequestHandler;
 import org.onepf.repository.model.services.DataException;
 import org.onepf.repository.model.services.DataService;
@@ -14,6 +16,8 @@ import java.util.Map;
 public class AppstoreAuthenticator extends BaseRequestHandler {
 
     private static final String AUTH_TOKEN = "authToken";
+
+    private final Logger logger = LogManager.getLogger(AppstoreAuthenticator.class.getName());
 
     private Map<String, AppstoreDescriptor> appstores;
 
@@ -57,7 +61,7 @@ public class AppstoreAuthenticator extends BaseRequestHandler {
     private Map<String, AppstoreDescriptor> getAppstoresInt() throws DataException {
         long time = System.currentTimeMillis();
         Map<String, AppstoreDescriptor> apps = dataService.getAppstores();
-        System.out.println("List appstores time: " + (System.currentTimeMillis() - time));  // TODO move to Log4J
+        logger.debug("List appstores time: {}", (System.currentTimeMillis() - time));
         return apps;
     }
 }

@@ -8,12 +8,6 @@ import org.onepf.repository.model.services.DataServiceOptions;
  */
 public class SqlOptions implements DataServiceOptions {
 
-    // TODO maybe move all setting to separate .properties file
-    public String appstoreTable = "appstores";
-    public String packageTable = "packages";
-    public String purchaseTable = "purchases";
-    public String downloadTable = "downloads";
-
     // sql connection options
     public String driverClassName = "com.mysql.jdbc.Driver";
     public String dbUser = "onepf_user";

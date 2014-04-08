@@ -5,6 +5,44 @@
 		  http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
            version="2.5">
 
+    <!-- Log4J Setup -->
+
+    <listener>
+        <listener-class>org.apache.logging.log4j.core.web.Log4jServletContextListener</listener-class>
+    </listener>
+    <filter>
+        <filter-name>log4jServletFilter</filter-name>
+        <filter-class>org.apache.logging.log4j.core.web.Log4jServletFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>log4jServletFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+        <dispatcher>REQUEST</dispatcher>
+        <dispatcher>FORWARD</dispatcher>
+        <dispatcher>INCLUDE</dispatcher>
+        <dispatcher>ERROR</dispatcher>
+    </filter-mapping>
+
+    <context-param>
+        <param-name>log4jConfiguration</param-name>
+        <param-value>classpath:log4j2.xml</param-value>
+    </context-param>
+
+    <!-- Listeners -->
+
+    <listener>
+        <listener-class>org.onepf.repository.AppContextListener</listener-class>
+    </listener>
+
+    <!-- Filters -->
+
+    <filter>
+        <filter-name>XmlFileFilter</filter-name>
+        <filter-class>org.onepf.repository.XmlFileFilter</filter-class>
+    </filter>
+
+    <!-- Servlets -->
+
     <servlet>
         <servlet-name>AppdfLoaderServlet</servlet-name>
         <servlet-class>org.onepf.repository.UploadAppdfFileServlet</servlet-class>
@@ -26,14 +64,12 @@
         <servlet-class>org.onepf.repository.GetDownloadListServlet</servlet-class>
     </servlet>
 
-    <filter>
-        <filter-name>XmlFileFilter</filter-name>
-        <filter-class>org.onepf.repository.XmlFileFilter</filter-class>
-    </filter>
+    <!-- Mappings -->
 
-    <listener>
-        <listener-class>org.onepf.repository.AppContextListener</listener-class>
-    </listener>
+    <filter-mapping>
+        <filter-name>XmlFileFilter</filter-name>
+        <url-pattern>/openaep/*</url-pattern>
+    </filter-mapping>
 
     <servlet-mapping>
         <servlet-name>AppdfLoaderServlet</servlet-name>
@@ -59,11 +95,6 @@
         <servlet-name>FileDownloadServlet</servlet-name>
         <url-pattern>/openaep/appdescription</url-pattern>
     </servlet-mapping>
-
-    <filter-mapping>
-        <filter-name>XmlFileFilter</filter-name>
-        <url-pattern>/openaep/*</url-pattern>
-    </filter-mapping>
 
     <!-- Web application parameters -->
 
