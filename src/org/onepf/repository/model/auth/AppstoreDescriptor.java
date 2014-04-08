@@ -1,7 +1,15 @@
 package org.onepf.repository.model.auth;
 
 /**
- * Created by ivanoff on 12.03.14.
+ * This class contains appstore description:
+ * Appstore ID,
+ * Token for appstore access to repository,
+ * Token for repository access to appstore,
+ * Appstore description,
+ * Public key for signing receipts,
+ * OpenAEP URL.
+ *
+ * @author Alexander Ivanov
  */
 public class AppstoreDescriptor {
     public String appstoreAccessToken;

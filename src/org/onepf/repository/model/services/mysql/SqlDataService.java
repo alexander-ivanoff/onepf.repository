@@ -27,7 +27,9 @@ import java.sql.SQLException;
 import java.util.*;
 
 /**
- * Created by ivanoff on 18.03.14.
+ * MySQL database wrapper.
+ *
+ * @author Alexander Ivanov
  */
 public class SqlDataService implements DataService {
 

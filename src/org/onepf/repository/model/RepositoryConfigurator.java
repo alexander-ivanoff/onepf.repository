@@ -12,7 +12,10 @@ import org.onepf.repository.model.services.mysql.SqlOptions;
 import javax.servlet.ServletContext;
 
 /**
- * Created by ivanoff on 14.03.14.
+ * This class generate repositoryFactory with specified data and storage services.
+ *
+ * @see RepositoryFactory
+ * @author Alexander Ivanov
  */
 public class RepositoryConfigurator {
 

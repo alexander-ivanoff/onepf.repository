@@ -12,7 +12,11 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by ivanoff on 25.03.14.
+ * Database wrapper.
+ *
+ * @see org.onepf.repository.model.services.mysql.SqlDataService
+ * @see org.onepf.repository.model.services.amazon.AmazonDataService
+ * @author Alexander Ivanov
  */
 public interface DataService {
 
@@ -28,6 +32,11 @@ public interface DataService {
     List<ApplicationDescriptor> getApplicationsLog(String packageName, int page) throws DataException;
     Map<String,AppstoreDescriptor> getAppstores() throws DataException;
 
+    /**
+     * @param appstoreId
+     * @return List of LastUpdateDescriptor for specified appstore ID
+     * @throws DataException
+     */
     List<LastUpdateDescriptor> getLastUpdate(String appstoreId) throws DataException;
 
     List<ApplicationDescriptor> getApplicationByHash(String packageName, String hash) throws DataException;

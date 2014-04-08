@@ -17,7 +17,10 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Created by ivanoff on 04.04.14.
+ * This class schedule GetAppListRequest.
+ *
+ * @see GetAppListRequest
+ * @author Alexander Ivanov
  */
 public class AppstoreRequester {
 
