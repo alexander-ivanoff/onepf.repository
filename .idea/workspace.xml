@@ -119,7 +119,7 @@
       <file leaf-file-name="ApplicationsToUpdateLoader.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/appstorelooter/ApplicationsToUpdateLoader.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="70" column="42" selection-start="2400" selection-end="2400" vertical-scroll-proportion="0.0" vertical-offset="778" max-vertical-offset="1500">
+            <state line="70" column="42" selection-start="2400" selection-end="2400" vertical-scroll-proportion="0.0" vertical-offset="1050" max-vertical-offset="1785">
               <folding />
             </state>
           </provider>
@@ -128,7 +128,7 @@
       <file leaf-file-name="BaseRequestHandler.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/model/BaseRequestHandler.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="11" column="22" selection-start="292" selection-end="292" vertical-scroll-proportion="0.0" vertical-offset="23" max-vertical-offset="390">
+            <state line="11" column="22" selection-start="292" selection-end="292" vertical-scroll-proportion="0.0" vertical-offset="165" max-vertical-offset="405">
               <folding />
             </state>
           </provider>
@@ -137,10 +137,8 @@
       <file leaf-file-name="DownloadObjectRequestHandler.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/model/DownloadObjectRequestHandler.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="10" column="28" selection-start="261" selection-end="261" vertical-scroll-proportion="0.0" vertical-offset="90" max-vertical-offset="615">
-              <folding>
-                <element signature="imports" expanded="false" />
-              </folding>
+            <state line="10" column="28" selection-start="261" selection-end="261" vertical-scroll-proportion="0.0" vertical-offset="150" max-vertical-offset="660">
+              <folding />
             </state>
           </provider>
         </entry>
@@ -148,10 +146,8 @@
       <file leaf-file-name="GetApplicationsRequestHandler.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/model/GetApplicationsRequestHandler.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="23" column="47" selection-start="910" selection-end="910" vertical-scroll-proportion="0.0" vertical-offset="53" max-vertical-offset="420">
-              <folding>
-                <element signature="imports" expanded="false" />
-              </folding>
+            <state line="23" column="47" selection-start="910" selection-end="910" vertical-scroll-proportion="0.0" vertical-offset="345" max-vertical-offset="525">
+              <folding />
             </state>
           </provider>
         </entry>
@@ -159,10 +155,8 @@
       <file leaf-file-name="GetDownloadsRequestHandler.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/model/GetDownloadsRequestHandler.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="31" column="0" selection-start="1165" selection-end="1165" vertical-scroll-proportion="0.0" vertical-offset="38" max-vertical-offset="435">
-              <folding>
-                <element signature="imports" expanded="false" />
-              </folding>
+            <state line="31" column="0" selection-start="1165" selection-end="1165" vertical-scroll-proportion="0.0" vertical-offset="465" max-vertical-offset="555">
+              <folding />
             </state>
           </provider>
         </entry>
@@ -170,7 +164,7 @@
       <file leaf-file-name="GetAppListRequest.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/appstorelooter/GetAppListRequest.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="49" column="51" selection-start="1845" selection-end="1845" vertical-scroll-proportion="0.0" vertical-offset="418" max-vertical-offset="945">
+            <state line="49" column="51" selection-start="1845" selection-end="1845" vertical-scroll-proportion="0.0" vertical-offset="735" max-vertical-offset="1065">
               <folding />
             </state>
           </provider>
@@ -185,13 +179,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="SqlDataService.java" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="SqlDataService.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/model/services/mysql/SqlDataService.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="361" column="26" selection-start="16394" selection-end="16394" vertical-scroll-proportion="-2.8632326" vertical-offset="6667" max-vertical-offset="7230">
-              <folding>
-                <element signature="e#8929#8952#0" expanded="true" />
-              </folding>
+            <state line="361" column="26" selection-start="16357" selection-end="16357" vertical-scroll-proportion="0.0" vertical-offset="6291" max-vertical-offset="7260">
+              <folding />
             </state>
           </provider>
         </entry>
@@ -199,18 +191,16 @@
       <file leaf-file-name="XmlFileFilter.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/XmlFileFilter.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="12" column="13" selection-start="287" selection-end="287" vertical-scroll-proportion="0.0" vertical-offset="795" max-vertical-offset="1380">
-              <folding>
-                <element signature="imports" expanded="false" />
-              </folding>
+            <state line="12" column="13" selection-start="287" selection-end="287" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1380">
+              <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="log4j2.xml" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/log4j2.xml">
+      <file leaf-file-name="UploadAppdfFileServlet.java" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/UploadAppdfFileServlet.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="10" column="13" selection-start="463" selection-end="463" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="360">
+            <state line="17" column="13" selection-start="535" selection-end="535" vertical-scroll-proportion="0.106924646" vertical-offset="0" max-vertical-offset="1035">
               <folding />
             </state>
           </provider>
@@ -332,6 +322,7 @@
       <sortByType />
     </navigator>
     <panes>
+      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -495,7 +486,6 @@
         </subPane>
       </pane>
       <pane id="Scope" />
-      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -713,24 +703,24 @@
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="13" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3264563" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Java Enterprise" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.2985437" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.44113666" sideWeight="0.5" order="9" side_tool="true" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.16626213" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Web" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.18229167" sideWeight="0.5008264" order="3" side_tool="true" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.26666668" sideWeight="0.49917355" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.39303002" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.39303002" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3264563" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.16626213" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Dependency Viewer" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32962587" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
@@ -754,13 +744,6 @@
     <breakpoint-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/GetPurchaseListServlet.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="58" column="85" selection-start="2515" selection-end="2515" vertical-scroll-proportion="0.0" vertical-offset="350" max-vertical-offset="930">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/GetDownloadListServlet.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="59" column="85" selection-start="2450" selection-end="2450" vertical-scroll-proportion="0.0" vertical-offset="392" max-vertical-offset="975">
@@ -798,9 +781,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/api/xmlapi/XmlApplicationItemParser.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="21" column="16" selection-start="685" selection-end="685" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="435">
-          <folding />
-        </state>
+        <state line="21" column="16" selection-start="685" selection-end="685" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="435" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/model/services/amazon/AmazonDataService.java">
@@ -812,9 +793,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/api/responsewriter/descriptors/BaseListHeaderDescriptor.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="5" column="13" selection-start="118" selection-end="118" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="330">
-          <folding />
-        </state>
+        <state line="5" column="13" selection-start="118" selection-end="118" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="330" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/model/services/amazon/AmazonOptions.java">
@@ -946,16 +925,12 @@
     </entry>
     <entry file="jar://$PROJECT_DIR$/web/WEB-INF/lib/commons-logging-1.1.1.jar!/org/apache/commons/logging/impl/SimpleLog.class">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="6" column="13" selection-start="174" selection-end="174" vertical-scroll-proportion="14.12" vertical-offset="428" max-vertical-offset="1335">
-          <folding />
-        </state>
+        <state line="6" column="13" selection-start="174" selection-end="174" vertical-scroll-proportion="14.12" vertical-offset="428" max-vertical-offset="1335" />
       </provider>
     </entry>
     <entry file="jar://$PROJECT_DIR$/web/WEB-INF/lib/commons-logging-1.1.1.jar!/org/apache/commons/logging/impl/Log4JLogger.class">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="53" column="0" selection-start="2033" selection-end="2033" vertical-scroll-proportion="0.79749477" vertical-offset="398" max-vertical-offset="900">
-          <folding />
-        </state>
+        <state line="53" column="0" selection-start="2033" selection-end="2033" vertical-scroll-proportion="0.79749477" vertical-offset="398" max-vertical-offset="900" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/model/services/amazon/AmazonStorageService.java">
@@ -967,30 +942,22 @@
     </entry>
     <entry file="jar://$PROJECT_DIR$/web/WEB-INF/lib/httpcore-4.2.jar!/org/apache/http/util/ExceptionUtils.class">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="18" column="1" selection-start="560" selection-end="561" vertical-scroll-proportion="-10.2" vertical-offset="0" max-vertical-offset="345">
-          <folding />
-        </state>
+        <state line="18" column="1" selection-start="560" selection-end="561" vertical-scroll-proportion="-10.2" vertical-offset="0" max-vertical-offset="345" />
       </provider>
     </entry>
     <entry file="jar://$PROJECT_DIR$/web/WEB-INF/lib/joda-time-2.3.jar!/org/joda/time/chrono/AssembledChronology.class">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="6" column="22" selection-start="172" selection-end="172" vertical-scroll-proportion="0.16094421" vertical-offset="0" max-vertical-offset="2805">
-          <folding />
-        </state>
+        <state line="6" column="22" selection-start="172" selection-end="172" vertical-scroll-proportion="0.16094421" vertical-offset="0" max-vertical-offset="2805" />
       </provider>
     </entry>
     <entry file="jar://$PROJECT_DIR$/web/WEB-INF/lib/log4j-api-2.0-rc1.jar!/org/apache/logging/log4j/ThreadContext.class">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="6" column="19" selection-start="173" selection-end="173" vertical-scroll-proportion="-0.97077245" vertical-offset="540" max-vertical-offset="1230">
-          <folding />
-        </state>
+        <state line="6" column="19" selection-start="173" selection-end="173" vertical-scroll-proportion="-0.97077245" vertical-offset="540" max-vertical-offset="1230" />
       </provider>
     </entry>
     <entry file="jar://$PROJECT_DIR$/web/WEB-INF/lib/log4j-api-2.0-rc1.jar!/org/apache/logging/log4j/Marker.class">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="6" column="17" selection-start="171" selection-end="171" vertical-scroll-proportion="0.1565762" vertical-offset="0" max-vertical-offset="479">
-          <folding />
-        </state>
+        <state line="6" column="17" selection-start="171" selection-end="171" vertical-scroll-proportion="0.1565762" vertical-offset="0" max-vertical-offset="479" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/api/responsewriter/descriptors/ApplicationDescriptor.java">
@@ -1056,15 +1023,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/XmlFileFilter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="12" column="13" selection-start="287" selection-end="287" vertical-scroll-proportion="0.0" vertical-offset="795" max-vertical-offset="1380">
-          <folding>
-            <element signature="imports" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/log4j2.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state line="10" column="13" selection-start="463" selection-end="463" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="360">
@@ -1082,9 +1040,7 @@
     <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/model/DownloadObjectRequestHandler.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="10" column="28" selection-start="261" selection-end="261" vertical-scroll-proportion="0.0" vertical-offset="90" max-vertical-offset="615">
-          <folding>
-            <element signature="imports" expanded="false" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1105,18 +1061,14 @@
     <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/model/GetDownloadsRequestHandler.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="31" column="0" selection-start="1165" selection-end="1165" vertical-scroll-proportion="0.0" vertical-offset="38" max-vertical-offset="435">
-          <folding>
-            <element signature="imports" expanded="false" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/model/GetApplicationsRequestHandler.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="23" column="47" selection-start="910" selection-end="910" vertical-scroll-proportion="0.0" vertical-offset="53" max-vertical-offset="420">
-          <folding>
-            <element signature="imports" expanded="false" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1129,10 +1081,22 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/model/services/mysql/SqlDataService.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="361" column="26" selection-start="16394" selection-end="16394" vertical-scroll-proportion="-2.8632326" vertical-offset="6667" max-vertical-offset="7230">
-          <folding>
-            <element signature="e#8929#8952#0" expanded="true" />
-          </folding>
+        <state line="361" column="26" selection-start="16357" selection-end="16357" vertical-scroll-proportion="0.0" vertical-offset="6291" max-vertical-offset="7260">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/XmlFileFilter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="12" column="13" selection-start="287" selection-end="287" vertical-scroll-proportion="0.0" vertical-offset="795" max-vertical-offset="1380">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/UploadAppdfFileServlet.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="17" column="13" selection-start="535" selection-end="535" vertical-scroll-proportion="0.106924646" vertical-offset="0" max-vertical-offset="1035">
+          <folding />
         </state>
       </provider>
     </entry>
