@@ -178,7 +178,7 @@ public class SqlDataService implements DataService {
         } catch (SQLException e) {
             throw new DataException(e);
         } finally {
-            try { if (stmt != null) rset.close(); } catch(Exception e) { }
+            try { if (rset != null) rset.close(); } catch(Exception e) { }
             try { if (stmt != null) stmt.close(); } catch(Exception e) { }
             try { if (conn != null) conn.close(); } catch(Exception e) { }
         }
@@ -205,7 +205,7 @@ public class SqlDataService implements DataService {
         } catch (SQLException e) {
             throw new DataException(e);
         } finally {
-            try { if (stmt != null) rset.close(); } catch(Exception e) { }
+            try { if (rset != null) rset.close(); } catch(Exception e) { }
             try { if (stmt != null) stmt.close(); } catch(Exception e) { }
             try { if (conn != null) conn.close(); } catch(Exception e) { }
         }
@@ -234,7 +234,7 @@ public class SqlDataService implements DataService {
             e.printStackTrace();
             throw new DataException(e);
         } finally {
-            try { if (stmt != null) rset.close(); } catch(Exception e) { }
+            try { if (rset != null) rset.close(); } catch(Exception e) { }
             try { if (stmt != null) stmt.close(); } catch(Exception e) { }
             try { if (conn != null) conn.close(); } catch(Exception e) { }
         }
@@ -260,7 +260,7 @@ public class SqlDataService implements DataService {
             e.printStackTrace();
             throw new DataException(e);
         } finally {
-            try { if (stmt != null) rset.close(); } catch(Exception e) { }
+            try { if (rset != null) rset.close(); } catch(Exception e) { }
             try { if (stmt != null) stmt.close(); } catch(Exception e) { }
             try { if (conn != null) conn.close(); } catch(Exception e) { }
         }
@@ -293,7 +293,7 @@ public class SqlDataService implements DataService {
         } catch (SQLException e) {
             throw new DataException(e);
         } finally {
-            try { if (stmt != null) rset.close(); } catch(Exception e) { }
+            try { if (rset != null) rset.close(); } catch(Exception e) { }
             try { if (stmt != null) stmt.close(); } catch(Exception e) { }
             try { if (conn != null) conn.close(); } catch(Exception e) { }
         }
@@ -326,7 +326,7 @@ public class SqlDataService implements DataService {
         } catch (SQLException e) {
             throw new DataException(e);
         } finally {
-            try { if (stmt != null) rset.close(); } catch(Exception e) { }
+            try { if (rset != null) rset.close(); } catch(Exception e) { }
             try { if (stmt != null) stmt.close(); } catch(Exception e) { }
             try { if (conn != null) conn.close(); } catch(Exception e) { }
         }
@@ -359,7 +359,7 @@ public class SqlDataService implements DataService {
         } catch (SQLException e) {
             throw new DataException(e);
         } finally {
-            try { if (stmt != null) rset.close(); } catch(Exception e) { }
+            try { if (rset != null) rset.close(); } catch(Exception e) { }
             try { if (stmt != null) stmt.close(); } catch(Exception e) { }
             try { if (conn != null) conn.close(); } catch(Exception e) { }
         }
