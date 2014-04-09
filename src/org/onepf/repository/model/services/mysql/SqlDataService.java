@@ -13,6 +13,7 @@ import org.onepf.repository.api.responsewriter.descriptors.ApplicationDescriptor
 import org.onepf.repository.api.responsewriter.descriptors.DownloadDescriptor;
 import org.onepf.repository.api.responsewriter.descriptors.PurchaseDescriptor;
 import org.onepf.repository.api.responsewriter.descriptors.ReviewDescriptor;
+import org.onepf.repository.appstorelooter.LastStatisticsUpdateDescriptor;
 import org.onepf.repository.appstorelooter.LastUpdateDescriptor;
 import org.onepf.repository.model.auth.AppstoreDescriptor;
 import org.onepf.repository.model.services.DataException;
@@ -268,6 +269,32 @@ public class SqlDataService implements DataService {
         }
     }
 
+
+    @Override
+    public List<LastStatisticsUpdateDescriptor> getLastStatisticsUpdate(String appstoreId, String feedType) throws DataException{
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ResultSet rset = null;
+        try {
+            conn = dbDataSource.getConnection();
+            String selection = SqlLastStatisticsUpdateEntity.FIELD_APPSTORE_ID + "=? AND " + SqlLastStatisticsUpdateEntity.FIELD_FEED_TYPE + "=?";
+            String[] selectionArgs = new String[] {appstoreId, feedType};
+            stmt = query(conn, SqlLastStatisticsUpdateEntity.TABLE_NAME, selection, selectionArgs, null, DEFAULT_RESULT_LIMIT);
+            rset = stmt.executeQuery();
+            List<LastStatisticsUpdateDescriptor> updates = new ArrayList<LastStatisticsUpdateDescriptor>();
+            while (rset.next()) {
+                updates.add(SqlLastStatisticsUpdateEntity.getDescriptor(rset));
+            }
+            return updates;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new DataException(e);
+        } finally {
+            try { if (rset != null) rset.close(); } catch(Exception e) { }
+            try { if (stmt != null) stmt.close(); } catch(Exception e) { }
+            try { if (conn != null) conn.close(); } catch(Exception e) { }
+        }
+    }
     @Override
     public ArrayList<DownloadDescriptor> getDownloads(String packageName, long currPageHash) throws DataException {
         Connection conn = null;

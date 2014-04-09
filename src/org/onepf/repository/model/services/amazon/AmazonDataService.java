@@ -9,6 +9,7 @@ import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.amazonaws.services.dynamodbv2.model.PutItemRequest;
 import com.amazonaws.services.dynamodbv2.model.QueryRequest;
 import com.amazonaws.services.dynamodbv2.model.QueryResult;
+import org.onepf.repository.appstorelooter.LastStatisticsUpdateDescriptor;
 import org.onepf.repository.appstorelooter.LastUpdateDescriptor;
 import org.onepf.repository.model.auth.AppstoreDescriptor;
 import org.onepf.repository.model.services.DataException;
@@ -120,6 +121,11 @@ public class AmazonDataService implements DataService {
 
     @Override
     public List<LastUpdateDescriptor> getLastUpdate(String appstoreId) throws DataException {
+        return null;
+    }
+
+    @Override
+    public List<LastStatisticsUpdateDescriptor> getLastStatisticsUpdate(String appstoreId, String feedType) throws DataException {
         return null;
     }
 

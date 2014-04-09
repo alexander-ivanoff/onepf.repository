@@ -16,7 +16,17 @@ CREATE TABLE `onepf_repository_4`.`appstoreupdates` (
   `lastUpdateHash` varchar(32) NOT NULL,
   `lastUpdateDateTime` datetime NOT NULL,
   `lastUpdateOffset` varchar(255) DEFAULT NULL,
-  PRIMARY KEY `appstoreId` (`appstoreId`),
+  PRIMARY KEY (`appstoreId`),
+  FOREIGN KEY (`appstoreId`) REFERENCES `onepf_repository_4`.`appstores` (`appstoreId`)
+);
+
+CREATE TABLE `onepf_repository_4`.`statistics_updates` (
+  `appstoreId` varchar(255) NOT NULL,
+  `feedType` varchar(255) NOT NULL,
+  `lastUpdateCount` int(11) NOT NULL,
+  `lastUpdateDateTime` datetime NOT NULL,
+  `lastUpdateOffset` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`appstoreId`),
   FOREIGN KEY (`appstoreId`) REFERENCES `onepf_repository_4`.`appstores` (`appstoreId`)
 );
 

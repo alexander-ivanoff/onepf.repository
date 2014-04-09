@@ -1,5 +1,6 @@
 package org.onepf.repository.model.services;
 
+import org.onepf.repository.appstorelooter.LastStatisticsUpdateDescriptor;
 import org.onepf.repository.appstorelooter.LastUpdateDescriptor;
 import org.onepf.repository.model.auth.AppstoreDescriptor;
 import org.onepf.repository.api.responsewriter.descriptors.ApplicationDescriptor;
@@ -38,6 +39,7 @@ public interface DataService {
      * @throws DataException
      */
     List<LastUpdateDescriptor> getLastUpdate(String appstoreId) throws DataException;
+    List<LastStatisticsUpdateDescriptor> getLastStatisticsUpdate(String appstoreId, String feedType) throws DataException;
 
     List<ApplicationDescriptor> getApplicationByHash(String packageName, String hash) throws DataException;
 
