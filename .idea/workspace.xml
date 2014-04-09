@@ -116,38 +116,53 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="AppstoreRequester.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/appstorelooter/AppstoreRequester.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="56" column="45" selection-start="2105" selection-end="2105" vertical-scroll-proportion="0.0" vertical-offset="420" max-vertical-offset="885">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="AppContextListener.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/AppContextListener.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="17" column="23" selection-start="480" selection-end="480" vertical-scroll-proportion="0.0" vertical-offset="73" max-vertical-offset="555">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="GetPurchasesRequestHandler.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/model/GetPurchasesRequestHandler.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="27" column="85" selection-start="1049" selection-end="1126" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="465">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ApplicationsToUpdateLoader.java" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="ApplicationsToUpdateLoader.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/appstorelooter/ApplicationsToUpdateLoader.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="68" column="43" selection-start="2295" selection-end="2295" vertical-scroll-proportion="0.2389937" vertical-offset="583" max-vertical-offset="1500">
+            <state line="70" column="42" selection-start="2400" selection-end="2400" vertical-scroll-proportion="0.0" vertical-offset="778" max-vertical-offset="1500">
               <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="BaseRequestHandler.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/model/BaseRequestHandler.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="11" column="22" selection-start="292" selection-end="292" vertical-scroll-proportion="0.0" vertical-offset="23" max-vertical-offset="390">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="DownloadObjectRequestHandler.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/model/DownloadObjectRequestHandler.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="10" column="28" selection-start="261" selection-end="261" vertical-scroll-proportion="0.0" vertical-offset="90" max-vertical-offset="615">
+              <folding>
+                <element signature="imports" expanded="false" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="GetApplicationsRequestHandler.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/model/GetApplicationsRequestHandler.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="23" column="47" selection-start="910" selection-end="910" vertical-scroll-proportion="0.0" vertical-offset="53" max-vertical-offset="420">
+              <folding>
+                <element signature="imports" expanded="false" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="GetDownloadsRequestHandler.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/model/GetDownloadsRequestHandler.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="31" column="0" selection-start="1165" selection-end="1165" vertical-scroll-proportion="0.0" vertical-offset="38" max-vertical-offset="435">
+              <folding>
+                <element signature="imports" expanded="false" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -164,8 +179,19 @@
       <file leaf-file-name="web.xml" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/web/WEB-INF/web.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="93" column="17" selection-start="3203" selection-end="3203" vertical-scroll-proportion="0.0" vertical-offset="1371" max-vertical-offset="1995">
+            <state line="124" column="0" selection-start="4528" selection-end="4528" vertical-scroll-proportion="0.0" vertical-offset="1566" max-vertical-offset="1995">
               <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="SqlDataService.java" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/model/services/mysql/SqlDataService.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="361" column="26" selection-start="16394" selection-end="16394" vertical-scroll-proportion="-2.8632326" vertical-offset="6667" max-vertical-offset="7230">
+              <folding>
+                <element signature="e#8929#8952#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -174,26 +200,8 @@
         <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/XmlFileFilter.java">
           <provider selected="true" editor-type-id="text-editor">
             <state line="12" column="13" selection-start="287" selection-end="287" vertical-scroll-proportion="0.0" vertical-offset="795" max-vertical-offset="1380">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="AppstoreAuthenticator.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/model/auth/AppstoreAuthenticator.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="19" column="4" selection-start="594" selection-end="684" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="975">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="SqlDataService.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/model/services/mysql/SqlDataService.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="451" column="54" selection-start="20465" selection-end="20465" vertical-scroll-proportion="0.0" vertical-offset="6876" max-vertical-offset="7230">
               <folding>
-                <element signature="e#8929#8952#0" expanded="true" />
+                <element signature="imports" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -264,11 +272,11 @@
         <option value="$PROJECT_DIR$/src/org/onepf/repository/model/GetReviewsRequestHandler.java" />
         <option value="$PROJECT_DIR$/src/org/onepf/repository/model/UploadAppdfRequestHandler.java" />
         <option value="$PROJECT_DIR$/src/org/onepf/repository/model/auth/AppstoreAuthenticator.java" />
-        <option value="$PROJECT_DIR$/src/org/onepf/repository/model/services/mysql/SqlDataService.java" />
         <option value="$PROJECT_DIR$/src/org/onepf/repository/log4j2.xml" />
         <option value="$PROJECT_DIR$/src/log4j2.xml" />
         <option value="$PROJECT_DIR$/web/WEB-INF/web.xml" />
         <option value="$PROJECT_DIR$/src/org/onepf/repository/appstorelooter/ApplicationsToUpdateLoader.java" />
+        <option value="$PROJECT_DIR$/src/org/onepf/repository/model/services/mysql/SqlDataService.java" />
       </list>
     </option>
   </component>
@@ -289,9 +297,9 @@
   </component>
   <component name="ProjectFrameBounds">
     <option name="x" value="-254" />
-    <option name="y" value="-1058" />
-    <option name="width" value="1698" />
-    <option name="height" value="893" />
+    <option name="y" value="-1080" />
+    <option name="width" value="1920" />
+    <option name="height" value="1080" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="false">
     <OptionsSetting value="true" id="Add" />
@@ -428,6 +436,62 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="onepf.repository" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="onepf.repository" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="repository" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="model" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="services" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="onepf.repository" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="onepf.repository" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="repository" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="model" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="services" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="mysql" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
         </subPane>
       </pane>
       <pane id="Scope" />
@@ -462,7 +526,7 @@
     <property name="GenerateAntBuildDialog.inclineRuntiemClasspath" value="false" />
     <property name="GenerateAntBuildDialog.generateIdeaHomeProperty" value="false" />
     <property name="GenerateAntBuildDialog.outputFileNameProperty" value="openrepository" />
-    <property name="FullScreen" value="false" />
+    <property name="FullScreen" value="true" />
     <property name="Repository.Attach.JavaDocs" value="false" />
     <property name="Repository.Attach.Sources" value="false" />
     <property name="Downloaded.Files.Path" value="$PROJECT_DIR$/web/WEB-INF/lib" />
@@ -644,7 +708,7 @@
     <myIsUseDefaultProxy>false</myIsUseDefaultProxy>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-254" y="-1058" width="1698" height="893" extended-state="0" />
+    <frame x="-254" y="-1080" width="1920" height="1080" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="13" side_tool="false" content_ui="tabs" />
@@ -656,14 +720,14 @@
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.44113666" sideWeight="0.5" order="9" side_tool="true" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.16626213" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.16626213" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Web" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.18229167" sideWeight="0.5008264" order="3" side_tool="true" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.30153123" sideWeight="0.49917355" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.49271846" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.26666668" sideWeight="0.49917355" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.39303002" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -690,13 +754,6 @@
     <breakpoint-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/GetReviewListServlet.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="18" column="13" selection-start="659" selection-end="659" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="975">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/GetPurchaseListServlet.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="58" column="85" selection-start="2515" selection-end="2515" vertical-scroll-proportion="0.0" vertical-offset="350" max-vertical-offset="930">
@@ -780,15 +837,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state line="62" column="62" selection-start="2766" selection-end="2766" vertical-scroll-proportion="0.0" vertical-offset="172" max-vertical-offset="1110">
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/model/DownloadObjectRequestHandler.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="10" column="28" selection-start="261" selection-end="261" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="615">
-          <folding>
-            <element signature="imports" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -964,20 +1012,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/model/GetApplicationsRequestHandler.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="25" column="87" selection-start="1010" selection-end="1089" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="420">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/model/GetDownloadsRequestHandler.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="27" column="85" selection-start="1128" selection-end="1128" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="435">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/model/UploadAppdfRequestHandler.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="82" column="83" selection-start="3454" selection-end="3454" vertical-scroll-proportion="0.0" vertical-offset="1609" max-vertical-offset="2100">
@@ -1002,15 +1036,8 @@
     <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/model/auth/AppstoreAuthenticator.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="19" column="4" selection-start="594" selection-end="684" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="975">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/model/services/mysql/SqlDataService.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="451" column="54" selection-start="20465" selection-end="20465" vertical-scroll-proportion="0.0" vertical-offset="6876" max-vertical-offset="7230">
           <folding>
-            <element signature="e#8929#8952#0" expanded="true" />
+            <element signature="imports" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1029,17 +1056,12 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/web/WEB-INF/web.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="93" column="17" selection-start="3203" selection-end="3203" vertical-scroll-proportion="0.0" vertical-offset="1371" max-vertical-offset="1995">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/XmlFileFilter.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="12" column="13" selection-start="287" selection-end="287" vertical-scroll-proportion="0.0" vertical-offset="795" max-vertical-offset="1380">
-          <folding />
+          <folding>
+            <element signature="imports" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -1047,6 +1069,22 @@
       <provider selected="true" editor-type-id="text-editor">
         <state line="10" column="13" selection-start="463" selection-end="463" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="360">
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/model/BaseRequestHandler.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="11" column="22" selection-start="292" selection-end="292" vertical-scroll-proportion="0.0" vertical-offset="23" max-vertical-offset="390">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/model/DownloadObjectRequestHandler.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="10" column="28" selection-start="261" selection-end="261" vertical-scroll-proportion="0.0" vertical-offset="90" max-vertical-offset="615">
+          <folding>
+            <element signature="imports" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -1059,8 +1097,42 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/appstorelooter/ApplicationsToUpdateLoader.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="68" column="43" selection-start="2295" selection-end="2295" vertical-scroll-proportion="0.2389937" vertical-offset="583" max-vertical-offset="1500">
+        <state line="70" column="42" selection-start="2400" selection-end="2400" vertical-scroll-proportion="0.0" vertical-offset="778" max-vertical-offset="1500">
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/model/GetDownloadsRequestHandler.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="31" column="0" selection-start="1165" selection-end="1165" vertical-scroll-proportion="0.0" vertical-offset="38" max-vertical-offset="435">
+          <folding>
+            <element signature="imports" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/model/GetApplicationsRequestHandler.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="23" column="47" selection-start="910" selection-end="910" vertical-scroll-proportion="0.0" vertical-offset="53" max-vertical-offset="420">
+          <folding>
+            <element signature="imports" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web/WEB-INF/web.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="124" column="0" selection-start="4528" selection-end="4528" vertical-scroll-proportion="0.0" vertical-offset="1566" max-vertical-offset="1995">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/onepf/repository/model/services/mysql/SqlDataService.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="361" column="26" selection-start="16394" selection-end="16394" vertical-scroll-proportion="-2.8632326" vertical-offset="6667" max-vertical-offset="7230">
+          <folding>
+            <element signature="e#8929#8952#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
