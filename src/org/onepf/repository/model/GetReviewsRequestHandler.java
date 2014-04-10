@@ -11,7 +11,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by ivanoff on 12.03.14.
+ *
+ * Provide get reviews request to underlying DataService
+ *
+* @author Alexander Ivanoff on 12.03.14.
  */
 public class GetReviewsRequestHandler extends BaseRequestHandler {
 
@@ -22,6 +25,14 @@ public class GetReviewsRequestHandler extends BaseRequestHandler {
         super(dataService, storageService);
     }
 
+    /**
+     * return list of reviews for given packageName and page
+     *
+     * @param packageName - name of the package to get review
+     * @param pageHash - hash of the page to return
+     * @return List of ReviewDescriptors
+     * @throws DataException
+     */
     public List<ReviewDescriptor> getReviews(String packageName, int pageHash) throws DataException {
         long time = System.currentTimeMillis();
         ArrayList<ReviewDescriptor> reviews = dataService.getReviews(packageName, pageHash);

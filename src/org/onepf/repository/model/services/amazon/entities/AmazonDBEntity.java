@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by ivanoff on 18.03.14.
+* @author Alexander Ivanoff on 18.03.14.
  */
 public class AmazonDBEntity {
 

@@ -1,7 +1,9 @@
 package org.onepf.repository.api.uploader;
 
 /**
- * Created by ivanoff on 28.03.14.
+ * This class calculates MD5 checksum from file
+ *
+ * @author Alexander Ivanoff on 28.03.14.
  */
 import java.io.*;
 import java.security.MessageDigest;

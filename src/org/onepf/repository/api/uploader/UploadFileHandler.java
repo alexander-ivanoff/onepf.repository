@@ -9,7 +9,9 @@ import java.io.File;
 import java.util.*;
 
 /**
- * Created by ivanoff on 11.03.14.
+ * This class handle multipart upload request.
+ *
+ * @author Alexander Ivanoff on 11.03.14.
  */
 public class UploadFileHandler {
 

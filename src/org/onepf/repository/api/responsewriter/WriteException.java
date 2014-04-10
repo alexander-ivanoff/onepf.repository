@@ -1,7 +1,9 @@
 package org.onepf.repository.api.responsewriter;
 
 /**
- * Created by ivanoff on 19.03.14.
+ * This exeption can be thrown in process of response creation
+ *
+ * @author Alexander Ivanoff
  */
 public class WriteException extends Exception {
 

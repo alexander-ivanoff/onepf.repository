@@ -1,7 +1,10 @@
 package org.onepf.repository;
 
 /**
- * Created by ivanoff on 01.04.14.
+ *
+ * Mapping of available requests. Helps to construct urls to query appstores.
+ *
+* @author Alexander Ivanoff on 01.04.14.
  */
 public enum ApiMapping {
 
@@ -16,10 +19,14 @@ public enum ApiMapping {
 
     private final String methodPath;
 
-    ApiMapping(String methodPath) {
+    private ApiMapping(String methodPath) {
         this.methodPath = methodPath;
     }
 
+    /**
+     * @param serverUrl root url to appstore's openaep API realization
+     * @return full url to exact API method
+     */
     public String getMethodUrl(String serverUrl) {
         return serverUrl + methodPath;
     }

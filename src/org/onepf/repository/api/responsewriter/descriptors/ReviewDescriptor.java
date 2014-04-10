@@ -1,12 +1,13 @@
 package org.onepf.repository.api.responsewriter.descriptors;
 
-        import org.onepf.repository.api.responsewriter.ResponseWriter;
+import org.onepf.repository.api.responsewriter.ResponseWriter;
         import org.onepf.repository.api.responsewriter.Writable;
         import org.onepf.repository.api.responsewriter.WriteException;
 
-
 /**
- * Created by ivanoff on 31.03.14.
+ * This class contains review description
+ *
+ * @author Alexander Ivanoff
  */
 public class ReviewDescriptor extends AbstractDescriptor implements Writable {
     public String packageName;

@@ -7,7 +7,12 @@ import java.sql.SQLException;
 import java.util.Map;
 
 /**
- * Created by ivanoff on 18.03.14.
+ * Review entity for MySQL.
+ *
+ * Create ReviewDescriptor from ResultSet.
+ *
+ * @see org.onepf.repository.api.responsewriter.descriptors.ReviewDescriptor
+ * @author Alexander Ivanoff
  */
 public class SqlReviewEntity extends SqlDBEntity {
 

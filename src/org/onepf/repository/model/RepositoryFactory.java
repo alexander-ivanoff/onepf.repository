@@ -5,7 +5,10 @@ import org.onepf.repository.model.services.DataService;
 import org.onepf.repository.model.services.StorageService;
 
 /**
- * Created by ivanoff on 12.03.14.
+ *
+ * Factory to create Handlers with given DataService and StorageService
+ *
+* @author Alexander Ivanoff on 12.03.14.
  */
 public class RepositoryFactory {
 

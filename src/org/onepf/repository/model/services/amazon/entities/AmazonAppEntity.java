@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by ivanoff on 18.03.14.
+* @author Alexander Ivanoff on 18.03.14.
  */
 public class AmazonAppEntity extends AmazonDBEntity {
 

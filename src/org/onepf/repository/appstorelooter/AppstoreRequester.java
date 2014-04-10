@@ -17,7 +17,10 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Created by ivanoff on 04.04.14.
+ * This class schedule GetAppListRequest for all known appstores.
+ *
+ * @see GetAppListRequest
+ * @author Alexander Ivanov
  */
 public class AppstoreRequester {
 
@@ -40,6 +43,9 @@ public class AppstoreRequester {
         uploadDir = new File(context.getRealPath("/uploads/"));
     }
 
+    /**
+     * Schedule GetAppListRequest
+     */
     public void  start() {
         httpClient = new DefaultHttpClient();
         scheduler = Executors.newSingleThreadScheduledExecutor();
@@ -60,6 +66,9 @@ public class AppstoreRequester {
         }
     }
 
+    /**
+     * shutdown all scheduled GetAppListRequest and httpClient
+     */
     public void stop() {
         if (scheduler != null) { scheduler.shutdownNow(); }
         if (httpClient != null) { httpClient.getConnectionManager().shutdown(); }

@@ -16,7 +16,9 @@ import org.onepf.repository.model.services.StorageService;
 import java.io.InputStream;
 
 /**
- * Created by ivanoff on 25.03.14.
+ * Implementation of StorageService and StorageObject with AmazonS3 Storage.
+ *
+ * @author Alexander Ivanoff
  */
 public class AmazonStorageService implements StorageService {
 

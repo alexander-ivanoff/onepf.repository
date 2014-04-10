@@ -3,6 +3,10 @@
 
 out/**
 
+# ignoring idea project directory
+
+.idea
+
 # ignoring mac files
 
 .DS_Store

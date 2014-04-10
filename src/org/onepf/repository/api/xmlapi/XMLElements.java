@@ -1,7 +1,9 @@
 package org.onepf.repository.api.xmlapi;
 
 /**
- * Created by ivanoff on 02.04.14.
+ * Support class contains element and field names for different requests
+ *
+ * @author Alexander Ivanoff on 02.04.14.
  */
 public interface XMLElements {
 

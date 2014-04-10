@@ -7,7 +7,14 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
 /**
- * Created by ivanoff on 02.04.14.
+ * This class launch appstore requester before the web application start
+ * and stop it after application destroy.
+ *
+ * Starts polling appstores to get appdfs, reviews, downloads, purchases.
+ * if that functionality is switched ON in web.xml ('pollStores' parameter set to 'true').
+ *
+ * @see AppstoreRequester
+ * @author Alexander Ivanov
  */
 public class AppContextListener implements ServletContextListener {
 

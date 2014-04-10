@@ -11,7 +11,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by ivanoff on 12.03.14.
+ *
+ * Provide get downloads request to underlying DataService
+ *
+* @author Alexander Ivanoff on 12.03.14.
  */
 public class GetDownloadsRequestHandler extends BaseRequestHandler {
 
@@ -22,6 +25,14 @@ public class GetDownloadsRequestHandler extends BaseRequestHandler {
         super(dataService, storageService);
     }
 
+    /**
+     * return list of downloads for given packageName and page
+     *
+     * @param packageName - name of the package
+     * @param pageHash - hash of the page to return
+     * @return List of DownloadDescriptors
+     * @throws DataException
+     */
     public List<DownloadDescriptor> getDownloads(String packageName, long pageHash) throws DataException{
         long time = System.currentTimeMillis();
         ArrayList<DownloadDescriptor> descriptors = dataService.getDownloads(packageName, pageHash);

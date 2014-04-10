@@ -5,9 +5,11 @@ import org.onepf.repository.api.responsewriter.WritableHeader;
 import org.onepf.repository.api.responsewriter.WriteException;
 
 /**
- * Created by ivanoff on 03.04.14.
+ * This class contains description of header of a review list
+ *
+ * @author Alexander Ivanoff
  */
-public class ReviewsListHeaderDescriptor extends  BaseListHeaderDescriptor implements WritableHeader {
+public class ReviewsListHeaderDescriptor extends BaseListHeaderDescriptor implements WritableHeader {
 
     public ReviewsListHeaderDescriptor(String version, String offset) {
         super(version, offset);

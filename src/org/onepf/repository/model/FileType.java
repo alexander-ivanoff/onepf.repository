@@ -1,7 +1,10 @@
 package org.onepf.repository.model;
 
 /**
- * Created by ivanoff on 19.03.14.
+ *
+ * Helper class to wrap file types we work with.
+ *
+* @author Alexander Ivanoff on 19.03.14.
  */
 public enum FileType {
 
@@ -10,17 +13,24 @@ public enum FileType {
     DESCRIPTION("xml");
 
 
-    private final String extention;
+    private final String extension;
 
-    FileType(String extention) {
-        this.extention = extention;
+    private FileType(String extension) {
+        this.extension = extension;
     }
 
-    public String extention() {
-        return  extention;
+    /**
+     * @return extension of this file type
+     */
+    public String extension() {
+        return extension;
     }
 
-    public String addExtention(String name) {
-        return name + '.' + extention;
+    /**
+     * @param name - name of the file
+     * @return name of a file with extension
+     */
+    public String addExtension(String name) {
+        return name + '.' + extension;
     }
 }

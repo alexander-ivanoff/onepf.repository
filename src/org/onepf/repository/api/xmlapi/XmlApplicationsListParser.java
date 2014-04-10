@@ -6,10 +6,12 @@ import org.onepf.repository.api.responsewriter.descriptors.ApplicationListHeader
 import java.util.Collection;
 
 /**
- * Created by ivanoff on 02.04.14.
+ *
+ * XmlListParser realization to parse list of applications
+ *
+ * @author Alexander Ivanoff on 02.04.14.
  */
 public class XmlApplicationsListParser extends  XmlListParser<ApplicationDescriptor, ApplicationListHeaderDescriptor> {
-
 
     public XmlApplicationsListParser(Collection<ApplicationDescriptor> items) {
         super(items, new XmlApplicationItemParser(), new XmlApplicationHeaderParser());

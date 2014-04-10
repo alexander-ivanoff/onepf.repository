@@ -28,8 +28,12 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by ivanoff on 25.03.14.
+ * Amazon DynamoDB database wrapper.
+ * DON'T USE IT!!! Not working now!!!
+ *
+ * @author Alexander Ivanoff
  */
+@Deprecated
 public class AmazonDataService implements DataService {
 
 

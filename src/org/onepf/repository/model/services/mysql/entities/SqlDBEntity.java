@@ -5,7 +5,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by ivanoff on 18.03.14.
+ * Base entity for MySQL.
+ *
+ * Realize base method to store different values (Strings, Integers, etc) to Entity.
+ *
+ * @author Alexander Ivanoff
  */
 public class SqlDBEntity {
 

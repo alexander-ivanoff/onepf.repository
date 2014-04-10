@@ -18,7 +18,9 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Collection;
 
 /**
- * Created by ivanoff on 02.04.14.
+ * Realization of ParserFactory for xml api.
+ *
+ * @author Alexander Ivanoff
  */
 public class XmlParserFactory extends ParserFactory<XmlListParser> {
 

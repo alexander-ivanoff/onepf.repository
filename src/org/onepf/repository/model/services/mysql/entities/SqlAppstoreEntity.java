@@ -6,7 +6,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
- * Created by ivanoff on 18.03.14.
+ * Appstore entity for MySQL.
+ *
+ * Create AppstoreDescriptor from ResultSet.
+ *
+ * @see org.onepf.repository.model.auth.AppstoreDescriptor
+ * @author Alexander Ivanoff
  */
 public class SqlAppstoreEntity extends SqlDBEntity {
 

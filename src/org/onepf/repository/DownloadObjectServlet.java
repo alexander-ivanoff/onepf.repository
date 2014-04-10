@@ -17,7 +17,10 @@ import java.io.OutputStream;
 import java.util.logging.Logger;
 
 /**
- * Created by ivanoff on 11.03.14.
+ *
+ *  This Servlet returns object for give package name (description or appdf).
+ *
+* @author Alexander Ivanoff on 11.03.14.
  */
 public class DownloadObjectServlet extends BaseServlet {
 
@@ -66,7 +69,7 @@ public class DownloadObjectServlet extends BaseServlet {
                 mimeType = "application/xml";
             } else {
                 mimeType = "application/octet-stream";
-                response.setHeader("Content-Disposition", "attachment; filename=\"" + fileType.addExtention(packageName) + "\"");
+                response.setHeader("Content-Disposition", "attachment; filename=\"" + fileType.addExtension(packageName) + "\"");
             }
             response.setContentLength((int) objectToDownload.size());
             response.setContentType(mimeType);

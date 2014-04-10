@@ -5,7 +5,9 @@ import org.onepf.repository.api.responsewriter.Writable;
 import org.onepf.repository.api.responsewriter.WriteException;
 
 /**
- * Created by ivanoff on 12.03.14.
+ * This class contains purchase description
+ *
+ * @author Alexander Ivanoff
  */
 public class PurchaseDescriptor extends AbstractDescriptor implements Writable {
     public String packageName;

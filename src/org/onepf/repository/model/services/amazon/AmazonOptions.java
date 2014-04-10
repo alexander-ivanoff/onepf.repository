@@ -7,7 +7,9 @@ import org.onepf.repository.model.services.StorageService;
 import org.onepf.repository.model.services.StorageServiceOptions;
 
 /**
- * Created by ivanoff on 25.03.14.
+ * Implementation of StorageServiceOptions and DataServiceOptions for AmazonDataService and AmazonStorageService
+ *
+ * @author Alexander Ivanoff on 25.03.14.
  */
 public class AmazonOptions implements DataServiceOptions, StorageServiceOptions {
 
