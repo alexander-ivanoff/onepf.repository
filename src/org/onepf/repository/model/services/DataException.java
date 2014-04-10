@@ -1,7 +1,11 @@
 package org.onepf.repository.model.services;
 
 /**
- * Created by ivanoff on 25.03.14.
+ *
+ * This exception can be thrown by DataService.
+ *
+ * @see org.onepf.repository.model.services.DataService
+ * @author Alexander Ivanoff
  */
 public class DataException extends Exception {
 

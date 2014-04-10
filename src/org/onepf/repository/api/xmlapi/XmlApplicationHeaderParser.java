@@ -5,7 +5,9 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 
 /**
- * Created by ivanoff on 02.04.14.
+ * XmlItemParser realization to parse list of applications header
+ *
+ * @author Alexander Ivanoff on 02.04.14.
  */
 public class XmlApplicationHeaderParser extends XmlItemParser<ApplicationListHeaderDescriptor> implements XMLElements.ApplicationListHeader{
 

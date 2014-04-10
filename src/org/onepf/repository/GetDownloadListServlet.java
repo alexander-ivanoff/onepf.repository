@@ -14,7 +14,10 @@ import java.io.IOException;
 import java.util.List;
 
 /**
- * Created by ivanoff on 11.03.14.
+ *
+ *  This Servlet returns list of downloads for all packages provided by requesting appstore.
+ *
+* @author Alexander Ivanoff on 11.03.14.
  */
 public class GetDownloadListServlet extends BaseServlet {
 

@@ -25,17 +25,27 @@ import java.security.NoSuchAlgorithmException;
 import java.util.*;
 
 /**
- * Created by ivanoff on 03.04.14.
+ * This class loads appdf files from remote appstore by their ApplicationDescriptors and store it
+ * to repository.
+ *
+ * @author Alexander Ivanoff
  */
 public class ApplicationsLoader {
 
     private final Logger alarmCauseLogger = LogManager.getLogger("AlarmCauseLogger");
 
+    /**
+     * This class describes request parameters
+     */
     public static class Request {
 
         private AppstoreDescriptor appstore;
         private Set<ApplicationDescriptor> application;
 
+        /**
+         * @param appstore - AppstoreDescriptor to get appdf files from
+         * @param applications - set of ApplicationDescriptor to get from remote appstore
+         */
         public Request(AppstoreDescriptor appstore, Set<ApplicationDescriptor> applications) {
             this.appstore = appstore;
             this.application = applications;
@@ -58,14 +68,20 @@ public class ApplicationsLoader {
         uploadDir.mkdirs();
     }
 
+    /**
+     * main method to load appdfs with options provided in request
+     *
+     * @param request
+     * @throws IOException
+     */
     public void loadApplications(final Request request) throws IOException {
 
         final AppstoreDescriptor appstore = request.appstore;
         final Set<ApplicationDescriptor> applications = request.application;
 
-        Map<ApplicationDescriptor, String> failedAppsWithReason = loadApplications(appstore, applications);
-        // trying one more time:
-        failedAppsWithReason = loadApplications(appstore, failedAppsWithReason.keySet());
+        Map<ApplicationDescriptor, String> failedAppsWithReason = loadApplicationsInt(appstore, applications);
+        // trying one more time for failed packages:
+        failedAppsWithReason = loadApplicationsInt(appstore, failedAppsWithReason.keySet());
         // if second try failed, log to alarm file
         if (failedAppsWithReason.size() > 0) {
             for (ApplicationDescriptor failedToLoadApp : failedAppsWithReason.keySet()) {
@@ -75,13 +91,14 @@ public class ApplicationsLoader {
     }
 
     /**
+     * Internal method to load appdf files from appstore
      *
-     * @param appstore
-     * @param apps
+     * @param appstore - AppstoreDescriptor to get appdf files from
+     * @param apps - set of ApplicationDescriptor to get from remote appstore
      * @return Map of ApplicationDescriptor and String represented reason why it was failed
      * @throws IOException
      */
-    private Map<ApplicationDescriptor, String> loadApplications(final AppstoreDescriptor appstore, final Set<ApplicationDescriptor> apps) throws IOException {
+    private Map<ApplicationDescriptor, String> loadApplicationsInt(final AppstoreDescriptor appstore, final Set<ApplicationDescriptor> apps) throws IOException {
         Map<ApplicationDescriptor, String> failedAppsWithReason = new HashMap<ApplicationDescriptor, String>();
         String url;
         for (ApplicationDescriptor appToLoad : apps) {
@@ -99,6 +116,7 @@ public class ApplicationsLoader {
                     if (result == HttpStatus.SC_OK) {
                         File  file = storeToUploadDir(response.getEntity().getContent(), appToLoad.packageName);
                         appdfHandler.processFile(file, "No contact", appstore);
+                        file.delete();
                     } else {
                         failedAppsWithReason.put(appToLoad, response.getStatusLine().toString());
                     }
@@ -117,8 +135,16 @@ public class ApplicationsLoader {
         return failedAppsWithReason;
     }
 
+    /**
+     * Store appdf file from input stream to temporary directory
+     *
+     * @param is
+     * @param packageName
+     * @return stored file object
+     * @throws IOException
+     */
     private File storeToUploadDir(InputStream is, String packageName) throws IOException {
-        File uploadedFile = new File(uploadDir,  FileType.APPDF.addExtention(random.nextInt() + "_" + packageName));
+        File uploadedFile = new File(uploadDir,  FileType.APPDF.addExtension(random.nextInt() + "_" + packageName));
         ReadableByteChannel rbc = Channels.newChannel(is);
         FileOutputStream fos = new FileOutputStream(uploadedFile);
         fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);

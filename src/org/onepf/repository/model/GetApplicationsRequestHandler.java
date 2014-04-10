@@ -10,7 +10,8 @@ import org.onepf.repository.api.responsewriter.descriptors.ApplicationDescriptor
 import java.util.List;
 
 /**
- * Created by ivanoff on 12.03.14.
+ *  Provide get applications request to underlying DataService
+* @author Alexander Ivanoff on 12.03.14.
  */
 public class GetApplicationsRequestHandler extends BaseRequestHandler {
 
@@ -20,6 +21,13 @@ public class GetApplicationsRequestHandler extends BaseRequestHandler {
         super(dataService, storageService);
     }
 
+    /**
+     * return list of applications for given page
+     *
+     * @param pageHash - hash of the page to return
+     * @return List of ApplicationDescriptors
+     * @throws DataException
+     */
     public List<ApplicationDescriptor> getApplications(int pageHash) throws DataException {
         long time = System.currentTimeMillis();
         List<ApplicationDescriptor> apps = dataService.getApplicationsLog(null, pageHash);

@@ -28,7 +28,11 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
 /**
- * Created by ivanoff on 12.03.14.
+ *
+ * Handle appdf file uploaded to server in UploadAppdfFileServlet. Parse appdf file, check it,
+ * provide data to underlying Data and Storage Services.
+ *
+* @author Alexander Ivanoff on 12.03.14.
  */
 public class UploadAppdfRequestHandler extends BaseRequestHandler {
 
@@ -44,7 +48,18 @@ public class UploadAppdfRequestHandler extends BaseRequestHandler {
         super(dataService, storageService);
     }
 
-
+    /**
+     *
+     * Main method to process appdf file, store it to StorageService and put information about it to DataService
+     *
+     * @param file link to uploaded appdf file in local filesystem
+     * @param developersContact some information to contact with developer (email). Not used now.
+     * @param appstoreDescriptor Descriptor of the appstore uploaded appdf file
+     * @throws IOException
+     * @throws StorageException
+     * @throws DataException
+     * @throws NoSuchAlgorithmException
+     */
     public void processFile(File file, String developersContact, AppstoreDescriptor appstoreDescriptor) throws IOException, StorageException, DataException, NoSuchAlgorithmException {
         long time = System.currentTimeMillis();
         AppdfFileParser parser = new AppdfFileParser(file);
@@ -83,7 +98,16 @@ public class UploadAppdfRequestHandler extends BaseRequestHandler {
         logger.debug("Store Appdf time: {} ", (System.currentTimeMillis() - time));
     }
 
-
+    /**
+     * Save appdf file in StorageService.
+     *
+     * @param appdfKey - key in StorageService.
+     * @param appdfFile - link to uploaded appdf file in local filesystem.
+     * @return MD5 calculated hash of stored appdf file.
+     * @throws IOException
+     * @throws StorageException
+     * @throws NoSuchAlgorithmException
+     */
     private String sendAppDFFile(String appdfKey, File appdfFile) throws IOException, StorageException, NoSuchAlgorithmException {
         String hash = null;
         InputStream zis = null;
@@ -102,7 +126,15 @@ public class UploadAppdfRequestHandler extends BaseRequestHandler {
 
     }
 
-
+    /**
+     * Save description file in StorageService
+     *
+     * @param descrKey - key in StorageService
+     * @param zipFile - zip archive contains description.xml file
+     * @return true, if description was found in zipFile and stored to StorageService. false - otherwise.
+     * @throws IOException
+     * @throws StorageException
+     */
     private boolean sendDescription(String descrKey, ZipFile zipFile) throws IOException, StorageException {
 
         Enumeration<? extends ZipEntry> entries = zipFile.entries();
@@ -112,15 +144,23 @@ public class UploadAppdfRequestHandler extends BaseRequestHandler {
             String name = elem.getName();
 
             if (name.equals(APPDF_DESCRIPTION_FILE_NAME)) {
-                extractFile(descrKey, FileType.DESCRIPTION, zipFile, elem);
+                extractFile(descrKey, zipFile, elem);
                 return true;
             }
         }
         return false;
     }
 
-
-    private void extractFile(String objectKey, FileType fileType, ZipFile zipFile, ZipEntry zipEntry) throws StorageException, IOException {
+    /**
+     * Extract file described by zipEntry from zipFile and store it in StorageService;
+     *
+     * @param objectKey - key in StorageService
+     * @param zipFile - zip archive to extract described in zipEntry file from.
+     * @param zipEntry - description of zip archived file to extract
+     * @throws StorageException
+     * @throws IOException
+     */
+    private void extractFile(String objectKey, ZipFile zipFile, ZipEntry zipEntry) throws StorageException, IOException {
         InputStream zis = null;
         try {
             zis = zipFile.getInputStream(zipEntry);
@@ -132,6 +172,13 @@ public class UploadAppdfRequestHandler extends BaseRequestHandler {
         }
     }
 
+    /**
+     * search free index to append as part of key in StorageService
+     *
+     * @param appLog - ApplicationDescriptors of packages already stored in DataService with links to StorageService keys
+     * @param packageName - name of the package
+     * @return free index to generate object keys
+     */
     private static int getFreeIndex(List<ApplicationDescriptor> appLog, String packageName) {
         int index = appLog.size();
         String objectKey = generateObjectKey(packageName, FileType.APPDF, index);
@@ -151,8 +198,16 @@ public class UploadAppdfRequestHandler extends BaseRequestHandler {
         return index;
     }
 
+    /**
+     *
+     * Generate key to StorageService by packageNmae, fileType and index
+     * @param packageName - name of the package
+     * @param fileType - type of the file (appdf or xml description)
+     * @param index - calculated index
+     * @return generated key value
+     */
     private static String generateObjectKey(String packageName, FileType fileType, int index) {
-        return  packageName + '/' + fileType.addExtention(packageName + "_" + index);
+        return  packageName + '/' + fileType.addExtension(packageName + "_" + index);
 
     }
 

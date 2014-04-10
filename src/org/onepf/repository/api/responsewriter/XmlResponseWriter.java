@@ -10,11 +10,14 @@ import java.io.Writer;
 import java.util.List;
 
 /**
- * Created by ivanoff on 12.03.14.
+ * ResponseWriter realization to create responses in xml format.
+ *
+ * @author Alexander Ivanoff
  */
 public class XmlResponseWriter extends ResponseWriter {
 
     XMLStreamWriter out = null;
+
 
     @Override
     public void write(Writer writer, WritableHeader header, List<? extends Writable> items) throws WriteException {
@@ -42,7 +45,6 @@ public class XmlResponseWriter extends ResponseWriter {
         }
 
     }
-
 
     @Override
     public void write(ApplicationDescriptor app) throws WriteException{
@@ -119,6 +121,14 @@ public class XmlResponseWriter extends ResponseWriter {
         }
     }
 
+    /**
+     * writes element with characters, like <elementName>elementValue</elementName>
+     *
+     * @param out - xml writer to write into
+     * @param elementName - name of the element
+     * @param elementValue - characters used as element body
+     * @throws XMLStreamException
+     */
     private static void writeElement(XMLStreamWriter out, String elementName, String elementValue) throws XMLStreamException {
         out.writeStartElement(elementName);
         out.writeCharacters(elementValue);
@@ -165,7 +175,13 @@ public class XmlResponseWriter extends ResponseWriter {
         writeClosingInt(descriptor);
     }
 
-
+    /**
+     * Internal method to write generic list opening elements, similair for all xml responses
+     *
+     * @param name - name of the opening element
+     * @param baseListHeaderDescriptor - base header descriptor. contains protocol version & offset to the next page
+     * @throws WriteException
+     */
     private void writeOpeningInt(String name, BaseListHeaderDescriptor baseListHeaderDescriptor) throws WriteException {
         try {
             out.writeStartElement(name);
@@ -180,7 +196,12 @@ public class XmlResponseWriter extends ResponseWriter {
         }
     }
 
-
+    /**
+     * Internal method to write generic elements closing a list, similair for all xml responses.
+     *
+     * @param baseListHeaderDescriptor
+     * @throws WriteException
+     */
     private void writeClosingInt(BaseListHeaderDescriptor baseListHeaderDescriptor) throws WriteException {
         try {
             out.writeEndElement();

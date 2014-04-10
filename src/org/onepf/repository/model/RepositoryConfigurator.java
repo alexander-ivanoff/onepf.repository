@@ -12,7 +12,7 @@ import org.onepf.repository.model.services.mysql.SqlOptions;
 import javax.servlet.ServletContext;
 
 /**
- * This class generate repositoryFactory with specified data and storage services.
+ *This class generate repositoryFactory with specified data and storage services based on parameters provided in web.xml.
  *
  * @see RepositoryFactory
  * @author Alexander Ivanov
@@ -37,6 +37,12 @@ public class RepositoryConfigurator {
     private static volatile StorageService storageService;
 
 
+    /**
+     * Initialize and return RepositoryFactory.
+     *
+     * @param context - servlet context
+     * @return RepositoryFactory with linked DataService and StorageService
+     */
     public static synchronized RepositoryFactory getRepositoryFactory(ServletContext context) {
         if (repositoryFactory == null) {
             DataServiceOptions dsOptions = null;
@@ -69,6 +75,12 @@ public class RepositoryConfigurator {
         return repositoryFactory;
     }
 
+    /**
+     * Initialize and return AppstoreAuthenticator (also initialize RepositoryFactory).
+     *
+     * @param context - servlet context
+     * @return AppstoreAuthenticator
+     */
     public static synchronized AppstoreAuthenticator getAppstoreAuthenticator(ServletContext context){
         if (appstoreAuthenticator == null) {
             appstoreAuthenticator = getRepositoryFactory(context).createAuthenticator();

@@ -11,7 +11,9 @@ import java.io.File;
 import java.util.List;
 
 /**
- * Created by ivanoff on 01.04.14.
+ * This class updates appdf files from single remote appstore and store it to the repostitory.
+ *
+ * @author Alexander Ivanoff on 01.04.14.
  */
 public class GetAppListRequest implements Runnable {
 

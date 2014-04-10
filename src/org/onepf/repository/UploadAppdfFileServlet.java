@@ -13,7 +13,10 @@ import java.io.IOException;
 import java.util.Map;
 
 /**
- * Created by ivanoff on 11.03.14.
+ *
+ * This Servlet handle upload of Appdf file to the server.
+ *
+* @author Alexander Ivanoff on 11.03.14.
  */
 public class UploadAppdfFileServlet extends BaseServlet {
 

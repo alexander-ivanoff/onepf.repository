@@ -1,7 +1,7 @@
 package org.onepf.repository.api;
 
 /**
- * Created by ivanoff on 28.03.14.
+ * @author Alexander Ivanoff
  */
 public class Pair<T, E> {
 

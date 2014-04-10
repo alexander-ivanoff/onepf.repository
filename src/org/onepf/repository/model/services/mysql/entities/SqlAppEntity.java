@@ -7,7 +7,12 @@ import java.sql.SQLException;
 import java.util.Map;
 
 /**
- * Created by ivanoff on 18.03.14.
+ * Application entity for MySQL.
+ *
+ * Create ApplicationDescriptor from ResultSet.
+ *
+ * @see org.onepf.repository.api.responsewriter.descriptors.ApplicationDescriptor
+ * @author Alexander Ivanoff
  */
 public class SqlAppEntity extends SqlDBEntity {
 
