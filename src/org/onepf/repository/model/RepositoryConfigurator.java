@@ -10,6 +10,8 @@ import org.onepf.repository.model.services.filesystem.FilesystemOptions;
 import org.onepf.repository.model.services.mysql.SqlOptions;
 
 import javax.servlet.ServletContext;
+import java.io.IOException;
+import java.util.Properties;
 
 /**
  *This class generate repositoryFactory with specified data and storage services based on parameters provided in web.xml.
@@ -19,16 +21,14 @@ import javax.servlet.ServletContext;
  */
 public class RepositoryConfigurator {
 
-    private static final String authPropertiesPath = "/WEB-INF/auth/authToken.properties";
+
+    private static final String PARAM_CONFIGURATION_FILE = "configuration";
 
     private static final String PARAM_DATASERVICE = "dataService";
-    private static final String PARAM_DATASERVICE_URL = "dbUrl";
     private static final String PARAM_STORAGESERVICE = "storageService";
 
     private static final String DATASERVICE_MYSQL= "mysql";
 
-    private static final String STORAGESERVICE_FILESYSTEM = "filesystem";
-    private static final String STORAGESERVICE_AMAZONS3 = "amazons3";
 
     private static volatile RepositoryFactory repositoryFactory;
     private static volatile AppstoreAuthenticator appstoreAuthenticator;
@@ -47,25 +47,23 @@ public class RepositoryConfigurator {
         if (repositoryFactory == null) {
             DataServiceOptions dsOptions = null;
             StorageServiceOptions ssOptions = null;
+            String configurationFile = context.getInitParameter(PARAM_CONFIGURATION_FILE);
 
-            if (DATASERVICE_MYSQL.equals(context.getInitParameter(PARAM_DATASERVICE))) {
-                SqlOptions sqlOptions = new SqlOptions();
-                String dsUrl = context.getInitParameter(PARAM_DATASERVICE_URL);
-                if (dsUrl != null) {
-                    sqlOptions.dbUrl = dsUrl;
-                    //init dataservice only if it is mysql and dbUrl is present in web.xml
-                    dsOptions = sqlOptions;
+            if (configurationFile != null) {
+                Properties configProps = new Properties();
+                configurationFile = context.getRealPath(configurationFile);
+                try {
+                    configProps.load(RepositoryConfigurator.class.getClassLoader().getResourceAsStream(configurationFile));
+                } catch (IOException e) {
+                    throw new IllegalArgumentException("Can't load configuration file.");
                 }
-            }
 
-            if (STORAGESERVICE_FILESYSTEM.equals(context.getInitParameter(PARAM_STORAGESERVICE))) {
-                ssOptions = new FilesystemOptions(context);
-            } else if (STORAGESERVICE_AMAZONS3.equals(context.getInitParameter(PARAM_STORAGESERVICE))) {
-                ssOptions = new AmazonOptions();
+                dsOptions = getDataServiceOptions(configProps) ;
+                ssOptions = getStorageServiceOptions(configProps, context);
             }
 
             if (dsOptions == null || ssOptions == null) {
-                throw new IllegalArgumentException("Can't configure services. check your web.xml config.");
+                throw new IllegalArgumentException("Can't configure services. check your configuration file.");
             }
 
             dataService = dsOptions.createDataService();
@@ -88,5 +86,24 @@ public class RepositoryConfigurator {
         return appstoreAuthenticator;
     }
 
+    private static DataServiceOptions getDataServiceOptions(Properties props) {
+        DataServiceOptions options = null;
+        String serviceName = props.getProperty(PARAM_DATASERVICE);
+        if (SqlOptions.SERVICE_NAME.equals(serviceName)) {
+            return new SqlOptions(props);
+        }
+        return options;
+    }
+
+    private static StorageServiceOptions getStorageServiceOptions(Properties props, ServletContext context) {
+        StorageServiceOptions options = null;
+        String serviceName = props.getProperty(PARAM_STORAGESERVICE);
+        if (FilesystemOptions.SERVICE_NAME.equals(serviceName)) {
+            options = new FilesystemOptions(context);
+        } else {
+            options = new AmazonOptions(context, props);
+        }
+        return options;
+    }
 
 }

@@ -9,7 +9,7 @@ import java.io.InputStream;
  * @see org.onepf.repository.model.services.amazon.AmazonStorageService
  * @author Alexander Ivanoff
  */
-public interface StorageService {
+public interface StorageService extends RepositoryService {
 
     /**
      * Store object to storage service

@@ -1,7 +1,7 @@
 package org.onepf.repository.model.services.amazon;
 
 import com.amazonaws.auth.AWSCredentialsProvider;
-import com.amazonaws.auth.ClasspathPropertiesFileCredentialsProvider;
+import com.amazonaws.auth.PropertiesFileCredentialsProvider;
 import com.amazonaws.regions.Region;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
@@ -50,7 +50,7 @@ public class AmazonStorageService implements StorageService {
         this.options = options;
 
         // load amazon credentials and region
-        AWSCredentialsProvider awsCredentialsProvider = new ClasspathPropertiesFileCredentialsProvider(this.options.credentialsFile);
+        AWSCredentialsProvider awsCredentialsProvider = new PropertiesFileCredentialsProvider(this.options.credentialsFile);
         Region region = Region.getRegion(this.options.region);
 
         // init amazon s3 service

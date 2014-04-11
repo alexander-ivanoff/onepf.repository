@@ -2,6 +2,7 @@ package org.onepf.repository.appstorelooter;
 
 import org.apache.http.client.HttpClient;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.impl.conn.PoolingClientConnectionManager;
 import org.onepf.repository.api.ParserFactory;
 import org.onepf.repository.model.RepositoryConfigurator;
 import org.onepf.repository.model.RepositoryFactory;
@@ -25,6 +26,7 @@ import java.util.concurrent.TimeUnit;
 public class AppstoreRequester {
 
     private static int  POLLING_PERIOD = 30; // polling period in seconds
+    private static int  COONNECTIONS_PER_STORE = 5;
 
     private HttpClient httpClient;
     private ScheduledExecutorService scheduler;
@@ -47,8 +49,6 @@ public class AppstoreRequester {
      * Schedule GetAppListRequest
      */
     public void  start() {
-        httpClient = new DefaultHttpClient();
-        scheduler = Executors.newSingleThreadScheduledExecutor();
 
         Map<String, AppstoreDescriptor> appstores = null;
         try {
@@ -57,11 +57,20 @@ public class AppstoreRequester {
             e.printStackTrace();
         }
         if (appstores != null) {
+            // creating multithreaded HttpClient
+            PoolingClientConnectionManager cm = new PoolingClientConnectionManager();
+            cm.setMaxTotal(appstores.size() * COONNECTIONS_PER_STORE);
+            cm.setDefaultMaxPerRoute(COONNECTIONS_PER_STORE);
+            httpClient = new DefaultHttpClient(cm);
+            // schedule GeatAppListRequests
+            scheduler = Executors.newScheduledThreadPool(appstores.size());
             for (AppstoreDescriptor appstore : appstores.values()) {
-                if (appstore.appstoreId.equals("onepf.repository")) //TEST PURPOSES ONLY
+                if (appstore.appstoreId.equals("onepf.repository")) { //TEST PURPOSES ONLY
+                    cm.setDefaultMaxPerRoute(COONNECTIONS_PER_STORE);
                     scheduler.scheduleAtFixedRate(
                             new GetAppListRequest(parserFactory, repositoryFactory, httpClient, appstore, uploadDir ),
                             POLLING_PERIOD, POLLING_PERIOD, TimeUnit.SECONDS);
+                }
             }
         }
     }
