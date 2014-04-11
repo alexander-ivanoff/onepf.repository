@@ -10,6 +10,7 @@ import org.onepf.repository.model.services.filesystem.FilesystemOptions;
 import org.onepf.repository.model.services.mysql.SqlOptions;
 
 import javax.servlet.ServletContext;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
 
@@ -53,7 +54,7 @@ public class RepositoryConfigurator {
                 Properties configProps = new Properties();
                 configurationFile = context.getRealPath(configurationFile);
                 try {
-                    configProps.load(RepositoryConfigurator.class.getClassLoader().getResourceAsStream(configurationFile));
+                    configProps.load(new FileInputStream(configurationFile));
                 } catch (IOException e) {
                     throw new IllegalArgumentException("Can't load configuration file.");
                 }
@@ -90,7 +91,7 @@ public class RepositoryConfigurator {
         DataServiceOptions options = null;
         String serviceName = props.getProperty(PARAM_DATASERVICE);
         if (SqlOptions.SERVICE_NAME.equals(serviceName)) {
-            return new SqlOptions(props);
+            options = new SqlOptions(props);
         }
         return options;
     }

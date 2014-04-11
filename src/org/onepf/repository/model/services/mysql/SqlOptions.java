@@ -21,7 +21,7 @@ public class SqlOptions implements DataServiceOptions {
     private static final String PROPERTY_DBPASSWORD= "dbPassword";
 
     // sql connection options
-    public String driverClassName = null;
+    public String driverClassName = "com.mysql.jdbc.Driver";
     public String dbUser = null;
     public String dbPassword = null;
     public String dbUrl = null; // must be overridden in web.xml

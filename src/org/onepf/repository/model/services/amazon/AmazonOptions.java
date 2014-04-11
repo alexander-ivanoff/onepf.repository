@@ -29,7 +29,7 @@ public class AmazonOptions implements StorageServiceOptions {
         credentialsFile = props.getProperty(PROPERTY_CREDENTIALS_FILE_PATH);
         credentialsFile = context.getRealPath(credentialsFile);
         bucket = props.getProperty(PROPERTY_BUCKET);
-        region = Regions.fromName(props.getProperty(props.getProperty(PROPERTY_REGION)));
+        region = Regions.fromName(props.getProperty(PROPERTY_REGION));
         if (credentialsFile == null || bucket == null || region == null) {
             throw new IllegalArgumentException("configuration file is not completed");
         }
