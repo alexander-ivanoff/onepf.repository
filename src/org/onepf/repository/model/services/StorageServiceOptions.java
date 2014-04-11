@@ -8,7 +8,7 @@ package org.onepf.repository.model.services;
 public interface StorageServiceOptions {
 
     /**
-     * Create Right Options object. Must be overriden in childs.
+     * Create storage service with given options.
      *
      * @return created storage service
      *
