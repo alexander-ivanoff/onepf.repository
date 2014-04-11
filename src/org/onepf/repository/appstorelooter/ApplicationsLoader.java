@@ -4,6 +4,7 @@ import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.protocol.HttpContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.onepf.repository.ApiMapping;
@@ -54,14 +55,17 @@ public class ApplicationsLoader {
     private File uploadDir;
 
     private HttpClient httpClient;
+    private final HttpContext httpContext;
+
     private RepositoryFactory factory;
 
     private UploadAppdfRequestHandler appdfHandler;
 
     private Random random = new Random();
 
-    public ApplicationsLoader(RepositoryFactory factory, HttpClient httpClient, File uploadDir) {
+    public ApplicationsLoader(RepositoryFactory factory, HttpClient httpClient, HttpContext context, File uploadDir) {
         this.httpClient = httpClient;
+        this.httpContext = context;
         this.factory = factory;
         appdfHandler = factory.createAppDFFileHandler();
         this.uploadDir = uploadDir;
@@ -109,7 +113,7 @@ public class ApplicationsLoader {
                     url = ApiMapping.GET_APPDF.getMethodUrl(appstore.openaepUrl) + "?package=" + appToLoad.packageName;
                     HttpGet httpGet = new HttpGet(url);
                     httpGet.addHeader("authToken", appstore.appstoreAccessToken);
-                    HttpResponse response = httpClient.execute(httpGet);
+                    HttpResponse response = httpClient.execute(httpGet, httpContext);
 
                     int result = response.getStatusLine().getStatusCode();
 

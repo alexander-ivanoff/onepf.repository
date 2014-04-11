@@ -4,6 +4,7 @@ import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.protocol.HttpContext;
 import org.onepf.repository.ApiMapping;
 import org.onepf.repository.api.ListParser;
 import org.onepf.repository.api.ParserFactory;
@@ -73,11 +74,12 @@ public class ApplicationsToUpdateLoader {
 
     private ParserFactory parserFactory;
     private HttpClient httpClient;
+    private final HttpContext httpContext;
 
 
-
-    public ApplicationsToUpdateLoader(final ParserFactory parserFactory, final HttpClient httpClient) {
+    public ApplicationsToUpdateLoader(final ParserFactory parserFactory, final HttpClient httpClient, HttpContext context) {
         this.httpClient = httpClient;
+        this.httpContext = context;
         this.parserFactory = parserFactory;
     }
 
@@ -104,7 +106,7 @@ public class ApplicationsToUpdateLoader {
             HttpGet httpGet = new HttpGet(url);
             httpGet.addHeader("authToken", appstore.appstoreAccessToken);
 
-            HttpResponse httpResponse = httpClient.execute(httpGet);
+            HttpResponse httpResponse = httpClient.execute(httpGet, httpContext);
 
             int result = httpResponse.getStatusLine().getStatusCode();
 

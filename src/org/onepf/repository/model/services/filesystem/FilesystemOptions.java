@@ -13,6 +13,8 @@ import javax.servlet.ServletContext;
  */
 public class FilesystemOptions implements StorageServiceOptions {
 
+    public static final String SERVICE_NAME= "filesystem";
+
     // TODO maybe move all setting to separate .properties file
     public String targetDir = "/packages/";
     public String targetPath; //
