@@ -23,7 +23,6 @@ public class XmlApplicationItemParser extends XmlItemParser<ApplicationDescripto
         if (ELEMENT_NAME.equals(qName)) {
             descriptor = new ApplicationDescriptor();
             descriptor.packageName = attributes.getValue(FIELD_PACKAGE);
-            descriptor.lastUpdated = attributes.getValue(FIELD_LAST_UPDATED);
             descriptor.appdfHash = attributes.getValue(FIELD_HASH);
         }
     }
