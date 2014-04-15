@@ -5,7 +5,10 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 
 /**
- * Created by ivanoff on 02.04.14.
+ *
+ * XmlItemParser realization to parse applications object
+ *
+ * @author Alexander Ivanoff on 02.04.14.
  */
 public class XmlApplicationItemParser extends XmlItemParser<ApplicationDescriptor> implements  XMLElements.Application{
 
@@ -20,7 +23,6 @@ public class XmlApplicationItemParser extends XmlItemParser<ApplicationDescripto
         if (ELEMENT_NAME.equals(qName)) {
             descriptor = new ApplicationDescriptor();
             descriptor.packageName = attributes.getValue(FIELD_PACKAGE);
-            descriptor.lastUpdated = attributes.getValue(FIELD_LAST_UPDATED);
             descriptor.appdfHash = attributes.getValue(FIELD_HASH);
         }
     }

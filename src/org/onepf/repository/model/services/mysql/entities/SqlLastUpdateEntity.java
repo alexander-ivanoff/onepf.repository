@@ -8,10 +8,11 @@ import java.util.Map;
 
 /**
  * Last update entity for MySQL.
+ *
  * Create LastUpdateDescriptor from ResultSet.
  *
  * @see LastUpdateDescriptor
- * @author Alexander Ivanov
+ * @author Alexander Ivanoff
  */
 public class SqlLastUpdateEntity extends SqlDBEntity {
 

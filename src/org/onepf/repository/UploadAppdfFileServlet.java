@@ -13,7 +13,10 @@ import java.io.IOException;
 import java.util.Map;
 
 /**
- * Created by ivanoff on 11.03.14.
+ *
+ * This Servlet handle upload of Appdf file to the server.
+ *
+* @author Alexander Ivanoff on 11.03.14.
  */
 public class UploadAppdfFileServlet extends BaseServlet {
 
@@ -45,7 +48,7 @@ public class UploadAppdfFileServlet extends BaseServlet {
             AppstoreDescriptor appstore = getAuthenticator().getAuthorizedAppstore(formFields);
             if (appstore != null) {
                 for (File file : appdfFileUploder.getUploadedFiles()) {
-                    appdfHandler.processFile(file, formFields.get(DEVELOPERS_CONTACT), appstore);
+                    appdfHandler.processFile(file, null, appstore);
                 }
             } else {
                 response.sendError(HttpServletResponse.SC_UNAUTHORIZED);

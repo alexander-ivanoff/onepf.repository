@@ -1,7 +1,9 @@
 package org.onepf.repository.api.xmlapi;
 
 /**
- * Created by ivanoff on 02.04.14.
+ * Support class contains element and field names for different requests
+ *
+ * @author Alexander Ivanoff on 02.04.14.
  */
 public interface XMLElements {
 
@@ -9,8 +11,7 @@ public interface XMLElements {
         public static final String ELEMENT_NAME = "application";
 
         public static final String FIELD_PACKAGE = "package";
-        public static final String FIELD_LAST_UPDATED = "last-updated";
-        public static final String FIELD_HASH = "md5-hash";
+        public static final String FIELD_HASH = "hash";
     }
 
     public static interface BaseHeader {

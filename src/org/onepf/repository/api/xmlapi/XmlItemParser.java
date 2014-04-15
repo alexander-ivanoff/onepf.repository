@@ -5,7 +5,9 @@ import org.onepf.repository.api.responsewriter.descriptors.AbstractDescriptor;
 import org.xml.sax.helpers.DefaultHandler;
 
 /**
- * Created by ivanoff on 02.04.14.
+ * realization of ItemParser for xml api.
+ *
+ * @author Alexander Ivanoff on 02.04.14.
  */
 public abstract class XmlItemParser<E extends AbstractDescriptor> extends DefaultHandler implements ItemParser<E>{
 

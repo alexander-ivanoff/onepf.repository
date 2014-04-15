@@ -4,6 +4,7 @@ import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.protocol.HttpContext;
 import org.onepf.repository.ApiMapping;
 import org.onepf.repository.api.ListParser;
 import org.onepf.repository.api.ParserFactory;
@@ -18,17 +19,26 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * Created by ivanoff on 03.04.14.
+ * This class loads set of ApplicationDesription to update from remote appstore.
+ *
+ * @author Alexander Ivanoff
  */
 public class ApplicationsToUpdateLoader {
 
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
+    /**
+     * This class describes request parameters
+     */
     public static class Request {
 
         private AppstoreDescriptor appstore;
         private LastUpdateDescriptor prevUpdate;
 
+        /**
+         * @param appstore - AppstoreDescriptor to get appdf files from
+         * @param prevUpdate - object with information about previous update or 'null' if there is first update.
+         */
         public Request(AppstoreDescriptor appstore, LastUpdateDescriptor prevUpdate) {
             if (appstore == null) {
                 throw new NullPointerException("appstore can't be null");
@@ -41,6 +51,13 @@ public class ApplicationsToUpdateLoader {
         }
     }
 
+    /**
+     * This class describes response parameters
+     *
+     * <b>appsToUpdate</b> - set of ApplicationDescriptor to update
+     * <b>lastUpdate</b> - object with information about this update
+     *
+     */
     public static class Response {
 
         private Set<ApplicationDescriptor> appsToUpdate;
@@ -57,14 +74,23 @@ public class ApplicationsToUpdateLoader {
 
     private ParserFactory parserFactory;
     private HttpClient httpClient;
+    private final HttpContext httpContext;
 
 
-
-    public ApplicationsToUpdateLoader(final ParserFactory parserFactory, final HttpClient httpClient) {
+    public ApplicationsToUpdateLoader(final ParserFactory parserFactory, final HttpClient httpClient, HttpContext context) {
         this.httpClient = httpClient;
+        this.httpContext = context;
         this.parserFactory = parserFactory;
     }
 
+    /**
+     * main method to load set of ApplicationDescriptor by options provided in request
+     *
+     * @param request
+     * @return response object with set of ApplicationDescriptor and object with information about this update
+     * @throws IOException
+     * @throws ParserFactory.ParseException
+     */
     public Response getUpdates(final Request request) throws IOException, ParserFactory.ParseException {
         Response response = new Response();
         final AppstoreDescriptor appstore = request.appstore;
@@ -80,7 +106,7 @@ public class ApplicationsToUpdateLoader {
             HttpGet httpGet = new HttpGet(url);
             httpGet.addHeader("authToken", appstore.appstoreAccessToken);
 
-            HttpResponse httpResponse = httpClient.execute(httpGet);
+            HttpResponse httpResponse = httpClient.execute(httpGet, httpContext);
 
             int result = httpResponse.getStatusLine().getStatusCode();
 
@@ -102,7 +128,7 @@ public class ApplicationsToUpdateLoader {
             iterations++;
         } while (url != null && (prevUpdate == null || !url.equals(prevUpdate.prevOffset)));
         if (iterations == 1 && prevUpdate != null && prevUpdate.lastResponseHash.equals(hash)) {
-            //do nothind - return empty response
+            //do nothing - return empty response
         } else {
             response.lastUpdate = lastUpdate;
             response.appsToUpdate = appsToUpdate;

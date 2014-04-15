@@ -1,6 +1,8 @@
 package org.onepf.repository.appstorelooter;
 
 import org.apache.http.client.HttpClient;
+import org.apache.http.protocol.BasicHttpContext;
+import org.apache.http.protocol.HttpContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.onepf.repository.api.ParserFactory;
@@ -11,7 +13,9 @@ import java.io.File;
 import java.util.List;
 
 /**
- * Created by ivanoff on 01.04.14.
+ * This class updates appdf files from single remote appstore and store it to the repostitory.
+ *
+ * @author Alexander Ivanoff on 01.04.14.
  */
 public class GetAppListRequest implements Runnable {
 
@@ -21,11 +25,13 @@ public class GetAppListRequest implements Runnable {
     private AppstoreDescriptor appstore;
 
     private HttpClient httpClient;
+
     private RepositoryFactory repositoryFactory;
     private ParserFactory parserFactory;
     private File uploadDir;
 
     private ApplicationsToUpdateLoader applicationsToUpdateLoader;
+    private ApplicationsLoader appsLoader;
 
     public GetAppListRequest(
             ParserFactory parserFactory,
@@ -38,7 +44,9 @@ public class GetAppListRequest implements Runnable {
         this.repositoryFactory = repositoryFactory;
         this.parserFactory = parserFactory;
         this.uploadDir = uploadDir;
-        applicationsToUpdateLoader = new ApplicationsToUpdateLoader(parserFactory, httpClient);
+        HttpContext httpContext = new BasicHttpContext();
+        applicationsToUpdateLoader = new ApplicationsToUpdateLoader(parserFactory, httpClient, httpContext);
+        appsLoader = new ApplicationsLoader(repositoryFactory, httpClient, httpContext, uploadDir);
     }
 
     @Override
@@ -52,7 +60,6 @@ public class GetAppListRequest implements Runnable {
                 logger.info("Update is not needed. Everything is up to date!");
             } else {
                 logger.info("Updating: {}", appsToUpdateResponse.getLastUpdate().lastResponseHash);
-                ApplicationsLoader appsLoader = new ApplicationsLoader(repositoryFactory, httpClient, uploadDir);
                 appsLoader.loadApplications(new ApplicationsLoader.Request(appstore, appsToUpdateResponse.getAppsToUpdate()));
                 // if everything was ok, store last Update
                 repositoryFactory.getDataService().saveLastUpdate(appsToUpdateResponse.getLastUpdate());

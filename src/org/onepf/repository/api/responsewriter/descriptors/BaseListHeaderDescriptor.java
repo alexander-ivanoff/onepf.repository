@@ -1,7 +1,7 @@
 package org.onepf.repository.api.responsewriter.descriptors;
 
 /**
- * Created by ivanoff on 02.04.14.
+* @author Alexander Ivanoff on 02.04.14.
  */
 public class BaseListHeaderDescriptor extends AbstractDescriptor {
 

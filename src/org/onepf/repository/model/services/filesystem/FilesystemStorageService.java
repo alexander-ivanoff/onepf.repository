@@ -8,7 +8,10 @@ import org.onepf.repository.model.services.StorageService;
 import java.io.*;
 
 /**
- * Created by ivanoff on 26.03.14.
+ *
+ * Implementation of StorageService and StorageObject with local file system.
+ *
+ * @author Alexander Ivanoff
  */
 public class FilesystemStorageService implements StorageService {
 

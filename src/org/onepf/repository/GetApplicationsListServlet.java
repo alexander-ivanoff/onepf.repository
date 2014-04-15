@@ -14,7 +14,10 @@ import java.io.IOException;
 import java.util.List;
 
 /**
- * Created by ivanoff on 11.03.14.
+ *
+ * This Servlet returns list of all packages stored in repository.
+ *
+* @author Alexander Ivanoff on 11.03.14.
  */
 public class GetApplicationsListServlet extends BaseServlet {
 

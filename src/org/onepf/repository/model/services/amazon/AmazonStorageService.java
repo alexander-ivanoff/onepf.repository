@@ -1,7 +1,7 @@
 package org.onepf.repository.model.services.amazon;
 
 import com.amazonaws.auth.AWSCredentialsProvider;
-import com.amazonaws.auth.ClasspathPropertiesFileCredentialsProvider;
+import com.amazonaws.auth.PropertiesFileCredentialsProvider;
 import com.amazonaws.regions.Region;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
@@ -16,7 +16,9 @@ import org.onepf.repository.model.services.StorageService;
 import java.io.InputStream;
 
 /**
- * Created by ivanoff on 25.03.14.
+ * Implementation of StorageService and StorageObject with AmazonS3 Storage.
+ *
+ * @author Alexander Ivanoff
  */
 public class AmazonStorageService implements StorageService {
 
@@ -48,7 +50,7 @@ public class AmazonStorageService implements StorageService {
         this.options = options;
 
         // load amazon credentials and region
-        AWSCredentialsProvider awsCredentialsProvider = new ClasspathPropertiesFileCredentialsProvider(this.options.credentialsFile);
+        AWSCredentialsProvider awsCredentialsProvider = new PropertiesFileCredentialsProvider(this.options.credentialsFile);
         Region region = Region.getRegion(this.options.region);
 
         // init amazon s3 service

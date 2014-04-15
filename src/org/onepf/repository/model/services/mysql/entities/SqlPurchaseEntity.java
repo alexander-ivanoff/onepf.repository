@@ -7,7 +7,12 @@ import java.sql.SQLException;
 import java.util.Map;
 
 /**
- * Created by ivanoff on 18.03.14.
+ * Purchase entity for MySQL.
+ *
+ * Create PurchaseDescriptor from ResultSet.
+ *
+ * @see org.onepf.repository.api.responsewriter.descriptors.PurchaseDescriptor
+ * @author Alexander Ivanoff
  */
 public class SqlPurchaseEntity extends SqlDBEntity {
 

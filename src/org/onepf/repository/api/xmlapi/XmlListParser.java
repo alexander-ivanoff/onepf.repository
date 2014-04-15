@@ -9,7 +9,10 @@ import org.xml.sax.helpers.DefaultHandler;
 import java.util.Collection;
 
 /**
- * Created by ivanoff on 01.04.14.
+ *
+ * realization of ListParser for xml api.
+ *
+ * @author Alexander Ivanoff on 01.04.14.
  */
 public class XmlListParser<T extends AbstractDescriptor, K extends  AbstractDescriptor> extends DefaultHandler implements ListParser<T, K>{
 

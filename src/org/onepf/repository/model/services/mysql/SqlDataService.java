@@ -36,8 +36,8 @@ public class SqlDataService implements DataService {
 
     // TODO refactoring: move method in different requests (Maybe Entities), here should be only generic requests
 
-    private static final int PAGE_LIMIT_APPLICATIONS = 3;
-    private static final int PAGE_LIMIT_OTHER = 3;
+    private static final int PAGE_LIMIT_APPLICATIONS = 50;
+    private static final int PAGE_LIMIT_OTHER = 50;
 
     private static final int DEFAULT_RESULT_LIMIT = 1000;
 
@@ -181,7 +181,7 @@ public class SqlDataService implements DataService {
         } catch (SQLException e) {
             throw new DataException(e);
         } finally {
-            try { if (stmt != null) rset.close(); } catch(Exception e) { }
+            try { if (rset != null) rset.close(); } catch(Exception e) { }
             try { if (stmt != null) stmt.close(); } catch(Exception e) { }
             try { if (conn != null) conn.close(); } catch(Exception e) { }
         }
@@ -208,7 +208,7 @@ public class SqlDataService implements DataService {
         } catch (SQLException e) {
             throw new DataException(e);
         } finally {
-            try { if (stmt != null) rset.close(); } catch(Exception e) { }
+            try { if (rset != null) rset.close(); } catch(Exception e) { }
             try { if (stmt != null) stmt.close(); } catch(Exception e) { }
             try { if (conn != null) conn.close(); } catch(Exception e) { }
         }
@@ -237,7 +237,7 @@ public class SqlDataService implements DataService {
             e.printStackTrace();
             throw new DataException(e);
         } finally {
-            try { if (stmt != null) rset.close(); } catch(Exception e) { }
+            try { if (rset != null) rset.close(); } catch(Exception e) { }
             try { if (stmt != null) stmt.close(); } catch(Exception e) { }
             try { if (conn != null) conn.close(); } catch(Exception e) { }
         }
@@ -263,7 +263,7 @@ public class SqlDataService implements DataService {
             e.printStackTrace();
             throw new DataException(e);
         } finally {
-            try { if (stmt != null) rset.close(); } catch(Exception e) { }
+            try { if (rset != null) rset.close(); } catch(Exception e) { }
             try { if (stmt != null) stmt.close(); } catch(Exception e) { }
             try { if (conn != null) conn.close(); } catch(Exception e) { }
         }
@@ -322,7 +322,7 @@ public class SqlDataService implements DataService {
         } catch (SQLException e) {
             throw new DataException(e);
         } finally {
-            try { if (stmt != null) rset.close(); } catch(Exception e) { }
+            try { if (rset != null) rset.close(); } catch(Exception e) { }
             try { if (stmt != null) stmt.close(); } catch(Exception e) { }
             try { if (conn != null) conn.close(); } catch(Exception e) { }
         }
@@ -355,7 +355,7 @@ public class SqlDataService implements DataService {
         } catch (SQLException e) {
             throw new DataException(e);
         } finally {
-            try { if (stmt != null) rset.close(); } catch(Exception e) { }
+            try { if (rset != null) rset.close(); } catch(Exception e) { }
             try { if (stmt != null) stmt.close(); } catch(Exception e) { }
             try { if (conn != null) conn.close(); } catch(Exception e) { }
         }
@@ -388,20 +388,22 @@ public class SqlDataService implements DataService {
         } catch (SQLException e) {
             throw new DataException(e);
         } finally {
-            try { if (stmt != null) rset.close(); } catch(Exception e) { }
+            try { if (rset != null) rset.close(); } catch(Exception e) { }
             try { if (stmt != null) stmt.close(); } catch(Exception e) { }
             try { if (conn != null) conn.close(); } catch(Exception e) { }
         }
     }
 
-
-    // SELECT count(currPageHash), currPageHash, prevPageHash INTO @cunt, @chash, @phash FROM onepf_repository.applications WHERE  currPageHash = (SELECT currPageHash FROM applications ORDER BY id DESC LIMIT 1);
-    // INSERT INTO applications (appstoreId, currPageHash, prevPageHash, appdfLink, descrLink) VALUES ('com.appstore.test1', IF (@cunt>=3, @chash+1, @chash), IF (@cunt>=3, @chash, @phash), 'aa', 'bb');
-
+    /**
+     * insert new record to table with paging (add page hashes to insert)
+     */
     private static PreparedStatement insertWithHashes(Connection connection, String tableName, SqlDBEntity dbEntity, int limit) throws SQLException {
         return insertWithHashes(connection, tableName, null,  dbEntity, limit);
     }
 
+    /**
+     * insert new record to table with paging (add page hashes to insert)
+     */
     private static PreparedStatement insertWithHashes(Connection connection, String tableName, String packageName, SqlDBEntity dbEntity, int limit) throws SQLException {
 
         Pair<Integer, Integer> pageHashes = getPageHashes(connection, tableName, packageName, limit);
@@ -435,7 +437,9 @@ public class SqlDataService implements DataService {
 
     }
 
-
+    /**
+     * insert or replace record to table without paging
+     */
     private static PreparedStatement insert(Connection connection, String tableName, SqlDBEntity dbEntity) throws SQLException {
 
         StringBuilder columnsBuilder = new StringBuilder().append("(");
@@ -463,6 +467,9 @@ public class SqlDataService implements DataService {
 
     }
 
+    /**
+     * @return statement for SELECT query
+     */
     private static PreparedStatement query(Connection connection,  String tableName, String selection, String[] selectionArgs, String order, int limit) throws SQLException {
 
         StringBuilder requestBuilder = new StringBuilder().append("SELECT * FROM ").append(tableName);
@@ -493,11 +500,14 @@ public class SqlDataService implements DataService {
     }
 
 
-    /*
-    **
-    * returns pair <currPageHash, prevPageHash>, packagename is used in downloads, purchases, reviews
-    **
-    */
+    /**
+     * @param connection
+     * @param tableName
+     * @param packageName is used in downloads, purchases, reviews
+     * @param limit number of the records per one page
+     * @return pair <currPageHash, prevPageHash>
+     * @throws SQLException
+     */
     private static Pair<Integer, Integer> getPageHashes(Connection connection,  String tableName, String packageName,  int limit) throws SQLException {
 
         String selection = "SELECT count(currPageHash) as cunt, currPageHash as chash, prevPageHash as phash FROM " + tableName + " WHERE currPageHash = (SELECT currPageHash FROM " + tableName;

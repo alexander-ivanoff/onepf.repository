@@ -2,6 +2,7 @@ package org.onepf.repository.appstorelooter;
 
 import org.apache.http.client.HttpClient;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.impl.conn.PoolingClientConnectionManager;
 import org.onepf.repository.api.ParserFactory;
 import org.onepf.repository.model.RepositoryConfigurator;
 import org.onepf.repository.model.RepositoryFactory;
@@ -17,7 +18,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 /**
- * This class schedule GetAppListRequest.
+ * This class schedule GetAppListRequest for all known appstores.
  *
  * @see GetAppListRequest
  * @author Alexander Ivanov
@@ -25,6 +26,7 @@ import java.util.concurrent.TimeUnit;
 public class AppstoreRequester {
 
     private static int  POLLING_PERIOD = 30; // polling period in seconds
+    private static int CONNECTIONS_PER_STORE = 5;
 
     private HttpClient httpClient;
     private ScheduledExecutorService scheduler;
@@ -43,9 +45,10 @@ public class AppstoreRequester {
         uploadDir = new File(context.getRealPath("/uploads/"));
     }
 
+    /**
+     * Schedule GetAppListRequest
+     */
     public void  start() {
-        httpClient = new DefaultHttpClient();
-        scheduler = Executors.newSingleThreadScheduledExecutor();
 
         Map<String, AppstoreDescriptor> appstores = null;
         try {
@@ -54,15 +57,27 @@ public class AppstoreRequester {
             e.printStackTrace();
         }
         if (appstores != null) {
+            // creating multithreaded HttpClient
+            PoolingClientConnectionManager cm = new PoolingClientConnectionManager();
+            cm.setMaxTotal(appstores.size() * CONNECTIONS_PER_STORE);
+            cm.setDefaultMaxPerRoute(CONNECTIONS_PER_STORE);
+            httpClient = new DefaultHttpClient(cm);
+            // schedule GetAppListRequests
+            scheduler = Executors.newScheduledThreadPool(appstores.size());
             for (AppstoreDescriptor appstore : appstores.values()) {
-                if (appstore.appstoreId.equals("onepf.repository")) //TEST PURPOSES ONLY
+                if (appstore.appstoreId.equals("onepf.repository")) { //TEST PURPOSES ONLY
+                    cm.setDefaultMaxPerRoute(CONNECTIONS_PER_STORE);
                     scheduler.scheduleAtFixedRate(
                             new GetAppListRequest(parserFactory, repositoryFactory, httpClient, appstore, uploadDir ),
                             POLLING_PERIOD, POLLING_PERIOD, TimeUnit.SECONDS);
+                }
             }
         }
     }
 
+    /**
+     * shutdown all scheduled GetAppListRequest and httpClient
+     */
     public void stop() {
         if (scheduler != null) { scheduler.shutdownNow(); }
         if (httpClient != null) { httpClient.getConnectionManager().shutdown(); }

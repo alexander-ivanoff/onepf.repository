@@ -13,16 +13,17 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Database wrapper.
+ * Abstraction of service to handle different data.
+ * Actually Database wrapper.
  *
  * @see org.onepf.repository.model.services.mysql.SqlDataService
  * @see org.onepf.repository.model.services.amazon.AmazonDataService
- * @author Alexander Ivanov
+ * @author Alexander Ivanoff
  */
 public interface DataService {
 
 
-    // TODO refactoring: move method in different requests (Maybe Entities), here should be only generic requests
+    // TODO refactoring: move method in different req    uests (Maybe Entities), here should be only generic requests
 
     void store(ApplicationDescriptor applicationDescriptor) throws DataException;
 
@@ -37,10 +38,22 @@ public interface DataService {
      * @param appstoreId
      * @return List of LastUpdateDescriptor for specified appstore ID
      * @throws DataException
+     *
+     * @see org.onepf.repository.appstorelooter.LastUpdateDescriptor
+     * @see org.onepf.repository.model.services.DataException
      */
     List<LastUpdateDescriptor> getLastUpdate(String appstoreId) throws DataException;
     List<LastStatisticsUpdateDescriptor> getLastStatisticsUpdate(String appstoreId, String feedType) throws DataException;
 
+    /**
+     * @param packageName
+     * @param hash - MD5 calculated hash of appdf file
+     * @return List of ApplicationDescriptor with specified package name and MD5 hash
+     * @throws DataException
+     *
+     * @see org.onepf.repository.api.responsewriter.descriptors.ApplicationDescriptor
+     * @see org.onepf.repository.model.services.DataException
+     */
     List<ApplicationDescriptor> getApplicationByHash(String packageName, String hash) throws DataException;
 
     ArrayList<DownloadDescriptor> getDownloads(String packageName, long updateTime) throws DataException;

@@ -11,7 +11,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by ivanoff on 12.03.14.
+ *
+ * Provide get purchases request to underlying DataService
+ *
+* @author Alexander Ivanoff on 12.03.14.
  */
 public class GetPurchasesRequestHandler extends BaseRequestHandler {
 
@@ -22,6 +25,14 @@ public class GetPurchasesRequestHandler extends BaseRequestHandler {
         super(dataService, storageService);
     }
 
+    /**
+     * return list of purchases for given packageName and page
+     *
+     * @param packageName - name of the package
+     * @param pageHash - hash of the page to return
+     * @return List of PurchaseDescriptor
+     * @throws DataException
+     */
     public List<PurchaseDescriptor> getPurchases(String packageName, int pageHash) throws DataException {
         long time = System.currentTimeMillis();
         ArrayList<PurchaseDescriptor> purchases = dataService.getPurchases(packageName, pageHash);

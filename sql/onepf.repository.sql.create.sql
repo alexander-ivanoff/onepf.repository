@@ -1,7 +1,7 @@
 
-CREATE DATABASE `onepf_repository_4`;
+CREATE DATABASE `onepf_repository`;
 
-CREATE TABLE `onepf_repository_4`.`appstores` (
+CREATE TABLE `onepf_repository`.`appstores` (
   `appstoreId` varchar(255) NOT NULL,
   `description` varchar(255) DEFAULT NULL,
   `openaepUrl` varchar(255) NOT NULL,
@@ -16,8 +16,7 @@ CREATE TABLE `onepf_repository_4`.`appstoreupdates` (
   `lastUpdateHash` varchar(32) NOT NULL,
   `lastUpdateDateTime` datetime NOT NULL,
   `lastUpdateOffset` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`appstoreId`),
-  FOREIGN KEY (`appstoreId`) REFERENCES `onepf_repository_4`.`appstores` (`appstoreId`)
+  FOREIGN KEY (`appstoreId`) REFERENCES `onepf_repository`.`appstores` (`appstoreId`)
 );
 
 CREATE TABLE `onepf_repository_4`.`statistics_updates` (
@@ -26,8 +25,7 @@ CREATE TABLE `onepf_repository_4`.`statistics_updates` (
   `lastUpdateCount` int(11) NOT NULL,
   `lastUpdateDateTime` datetime NOT NULL,
   `lastUpdateOffset` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`appstoreId`),
-  FOREIGN KEY (`appstoreId`) REFERENCES `onepf_repository_4`.`appstores` (`appstoreId`)
+  FOREIGN KEY (`appstoreId`) REFERENCES `onepf_repository`.`appstores` (`appstoreId`)
 );
 
 CREATE TABLE `onepf_repository_4`.`applications` (
@@ -46,7 +44,7 @@ CREATE TABLE `onepf_repository_4`.`applications` (
   `hash` varchar(32) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `appstoreId` (`appstoreId`),
-  FOREIGN KEY (`appstoreId`) REFERENCES `onepf_repository_4`.`appstores` (`appstoreId`)
+  FOREIGN KEY (`appstoreId`) REFERENCES `onepf_repository`.`appstores` (`appstoreId`)
 );
 
 CREATE TABLE `onepf_repository_4`.`downloads` (
@@ -65,7 +63,7 @@ CREATE TABLE `onepf_repository_4`.`downloads` (
   PRIMARY KEY (`id`)
 );
 
-CREATE TABLE `onepf_repository_4`.`purchases` (
+CREATE TABLE `onepf_repository`.`purchases` (
   `id` varchar(255) NOT NULL,
   `package` varchar(255) NOT NULL,
   `opDate` datetime DEFAULT NULL,
@@ -84,7 +82,7 @@ CREATE TABLE `onepf_repository_4`.`purchases` (
   PRIMARY KEY (`id`)
 );
 
-CREATE TABLE `onepf_repository_4`.`reviews` (
+CREATE TABLE `onepf_repository`.`reviews` (
   `id` varchar(255) NOT NULL,
   `package` varchar(255) NOT NULL,
   `version` varchar(255) DEFAULT NULL,
@@ -104,7 +102,7 @@ CREATE TABLE `onepf_repository_4`.`reviews` (
 );
 
 /* Create test appstore*/
-INSERT INTO `onepf_repository_4`.`appstores`
+INSERT INTO `onepf_repository`.`appstores`
 (`appstoreId`,
 `description`,
 `openaepUrl`,
@@ -120,7 +118,7 @@ VALUES
 "1234567890");
 
 /* Create test appstore*/
-INSERT INTO `onepf_repository_4`.`appstores`
+INSERT INTO `onepf_repository`.`appstores`
 (`appstoreId`,
 `description`,
 `openaepUrl`,

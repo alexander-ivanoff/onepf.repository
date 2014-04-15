@@ -8,7 +8,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by ivanoff on 28.03.14.
+ *
+ * This filter is emulate xml files access. it catches the url contains filenames like 'applist_9.xml'
+ * and forward these requests to the right servlet.
+ *
+* @author Alexander Ivanoff on 28.03.14.
  */
 public class XmlFileFilter implements Filter {
 

@@ -12,7 +12,10 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- * Created by ivanoff on 14.03.14.
+ *
+ * Base Class for all Servlets. Handle authorization process.
+ *
+* @author Alexander Ivanoff on 14.03.14.
  */
 public abstract class BaseServlet extends HttpServlet {
 

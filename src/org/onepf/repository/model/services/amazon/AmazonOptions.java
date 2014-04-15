@@ -1,31 +1,38 @@
 package org.onepf.repository.model.services.amazon;
 
 import com.amazonaws.regions.Regions;
-import org.onepf.repository.model.services.DataService;
-import org.onepf.repository.model.services.DataServiceOptions;
 import org.onepf.repository.model.services.StorageService;
 import org.onepf.repository.model.services.StorageServiceOptions;
 
+import javax.servlet.ServletContext;
+import java.util.Properties;
+
 /**
- * Created by ivanoff on 25.03.14.
+ * Implementation of StorageServiceOptions for AmazonStorageService
+ *
+ * @author Alexander Ivanoff on 25.03.14.
  */
-public class AmazonOptions implements DataServiceOptions, StorageServiceOptions {
+public class AmazonOptions implements StorageServiceOptions {
 
-    // TODO maybe move all setting to separate .properties file
-    public String appstoreTable = "appstores";
-    public String packageTable = "packages";
-    public String purchaseTable = "purchases";
-    public String downloadTable = "downloads";
+    public static final String SERVICE_NAME= "amazon";
 
-    public String bucket = "onepf.repository";
+    private static final String PROPERTY_CREDENTIALS_FILE_PATH= "amazon_credentials";
+    private static final String PROPERTY_REGION= "amazon_region";
+    private static final String PROPERTY_BUCKET= "amazon_bucket";
 
-    public String credentialsFile = "/org/onepf/repository/model/services/amazon/AwsCredentials.properties";
+    public String bucket = null;
+    public String credentialsFile = null;
+    public Regions region = null;
 
-    public Regions region = Regions.US_WEST_2;
 
-    @Override
-    public DataService createDataService() {
-        return new AmazonDataService(this);
+    public AmazonOptions(ServletContext context, Properties props) {
+        credentialsFile = props.getProperty(PROPERTY_CREDENTIALS_FILE_PATH);
+        credentialsFile = context.getRealPath(credentialsFile);
+        bucket = props.getProperty(PROPERTY_BUCKET);
+        region = Regions.fromName(props.getProperty(PROPERTY_REGION));
+        if (credentialsFile == null || bucket == null || region == null) {
+            throw new IllegalArgumentException("configuration file is not completed");
+        }
     }
 
     @Override

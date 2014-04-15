@@ -5,11 +5,21 @@ import org.onepf.repository.api.responsewriter.descriptors.AbstractDescriptor;
 import java.util.Collection;
 
 /**
- * Created by ivanoff on 01.04.14.
+ *
+ * Interface to parse list of objects into collection and some generic data into header object
+ *
+ * @author Alexander Ivanoff on 01.04.14.
  */
 public interface ListParser<T extends AbstractDescriptor, K extends  AbstractDescriptor> {
 
+    /**
+     * @return collection of parsed objects
+     */
     public Collection<T> getItems();
+
+    /**
+     * @return some generic information about list stored in one header object
+     */
     public K getHeader();
 
 

@@ -5,7 +5,9 @@ import org.onepf.repository.api.responsewriter.WritableHeader;
 import org.onepf.repository.api.responsewriter.WriteException;
 
 /**
- * Created by ivanoff on 03.04.14.
+ * This class contains description of header of a download list
+ *
+ * @author Alexander Ivanoff
  */
 public class DownloadsListHeaderDescriptor extends  BaseListHeaderDescriptor implements WritableHeader {
 
