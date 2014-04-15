@@ -51,7 +51,6 @@ public class XmlResponseWriter extends ResponseWriter {
         try {
             out.writeEmptyElement(XMLElements.Application.ELEMENT_NAME);
             out.writeAttribute(XMLElements.Application.FIELD_PACKAGE, app.packageName);
-            out.writeAttribute(XMLElements.Application.FIELD_LAST_UPDATED, app.lastUpdated);
             out.writeAttribute(XMLElements.Application.FIELD_HASH, app.appdfHash);
         } catch (XMLStreamException e) {
             throw new WriteException(e);
@@ -61,7 +60,7 @@ public class XmlResponseWriter extends ResponseWriter {
     @Override
     public void write(PurchaseDescriptor purchase) throws WriteException {
         try {
-            out.writeStartElement("purchase");
+            out.writeStartElement("purchase");  //Move all strings to XMLElements
             writeElement(out, "id", purchase.id);
             writeElement(out, "package", purchase.packageName );
             writeElement(out, "datetime", String.valueOf(purchase.dateTime));
@@ -84,7 +83,7 @@ public class XmlResponseWriter extends ResponseWriter {
     @Override
     public void write(DownloadDescriptor download) throws WriteException {
         try {
-            out.writeStartElement("download");
+            out.writeStartElement("download");  //Move all strings to XMLElements
             writeElement(out, "package", download.packageName );
             writeElement(out, "datetime", String.valueOf(download.dateTime));
             writeElement(out, "version", download.version);
@@ -103,7 +102,7 @@ public class XmlResponseWriter extends ResponseWriter {
     @Override
     public void write(ReviewDescriptor review) throws WriteException {
         try {
-            out.writeStartElement("download");
+            out.writeStartElement("download"); //Move all strings to XMLElements
             writeElement(out, "package", review.packageName );
             writeElement(out, "version", review.version);
             writeElement(out, "build", String.valueOf(review.build));

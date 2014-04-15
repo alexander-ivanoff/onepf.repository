@@ -107,9 +107,23 @@ public class ApplicationsLoader {
         String url;
         for (ApplicationDescriptor appToLoad : apps) {
             try {
-                // check if there are appdf file with the same hash, it is here means appdf is up to date
-                List<ApplicationDescriptor> uptodateApp = factory.getDataService().getApplicationByHash(appToLoad.packageName, appToLoad.appdfHash);
-                if (uptodateApp.size() == 0) {
+                boolean needUpdate = true;
+                List<ApplicationDescriptor> appLog = factory.getDataService().getApplicationsLog(appToLoad.packageName, -1);
+                if (appLog.size() > 0) {
+                    // check that uploading store is home store
+                    if (!appLog.get(0).appstoreId.equals(appstore.appstoreId)) {
+                        throw new DataException(String.format("Store '%s' is not home store for package '%s'",
+                                appstore.appstoreId, appToLoad.packageName));
+                    }
+                    for (ApplicationDescriptor app : appLog) {
+                        // check if there is appdf file with the same hash, if it is here means appdf is up to date
+                        if (app.appdfHash.equals(appToLoad.appdfHash)) {
+                            needUpdate = false;
+                            break;
+                        }
+                    }
+                }
+                if (needUpdate) {
                     url = ApiMapping.GET_APPDF.getMethodUrl(appstore.openaepUrl) + "?package=" + appToLoad.packageName;
                     HttpGet httpGet = new HttpGet(url);
                     httpGet.addHeader("authToken", appstore.appstoreAccessToken);
@@ -119,7 +133,7 @@ public class ApplicationsLoader {
 
                     if (result == HttpStatus.SC_OK) {
                         File  file = storeToUploadDir(response.getEntity().getContent(), appToLoad.packageName);
-                        appdfHandler.processFile(file, "No contact", appstore);
+                        appdfHandler.processFile(file, appLog, appstore);
                         file.delete();
                     } else {
                         failedAppsWithReason.put(appToLoad, response.getStatusLine().toString());

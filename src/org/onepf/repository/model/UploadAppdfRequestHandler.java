@@ -53,14 +53,14 @@ public class UploadAppdfRequestHandler extends BaseRequestHandler {
      * Main method to process appdf file, store it to StorageService and put information about it to DataService
      *
      * @param file link to uploaded appdf file in local filesystem
-     * @param developersContact some information to contact with developer (email). Not used now.
+     * @param appLog list of applications already loaded on server
      * @param appstoreDescriptor Descriptor of the appstore uploaded appdf file
      * @throws IOException
      * @throws StorageException
      * @throws DataException
      * @throws NoSuchAlgorithmException
      */
-    public void processFile(File file, String developersContact, AppstoreDescriptor appstoreDescriptor) throws IOException, StorageException, DataException, NoSuchAlgorithmException {
+    public void processFile(File file, List<ApplicationDescriptor> appLog, AppstoreDescriptor appstoreDescriptor) throws IOException, StorageException, DataException, NoSuchAlgorithmException {
         long time = System.currentTimeMillis();
         AppdfFileParser parser = new AppdfFileParser(file);
         ParseResult parseResult = parser.parse();
@@ -73,8 +73,9 @@ public class UploadAppdfRequestHandler extends BaseRequestHandler {
         if (packageName == null) {
             throw new IOException("Bad AppDF file!");
         }
-
-        List<ApplicationDescriptor> appLog = dataService.getApplicationsLog(packageName, -1);
+        if (appLog == null) {
+            appLog = dataService.getApplicationsLog(packageName, -1);
+        }
         int freeIndex = getFreeIndex(appLog, packageName);
 
         String appdfKey = generateObjectKey(packageName, FileType.APPDF, freeIndex);
@@ -88,7 +89,7 @@ public class UploadAppdfRequestHandler extends BaseRequestHandler {
         ApplicationDescriptor appDescriptor = new ApplicationDescriptor();
         appDescriptor.packageName = packageName;
         appDescriptor.lastUpdated = dateFormat.format(new Date(System.currentTimeMillis()));
-        appDescriptor.developerContact = developersContact;
+        appDescriptor.developerContact = "";
         appDescriptor.appdfLink = appdfKey;
         appDescriptor.descriptionLink = descrKey;
         appDescriptor.appdfHash = appdfHash;

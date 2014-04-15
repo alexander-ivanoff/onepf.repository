@@ -26,7 +26,7 @@ import java.util.concurrent.TimeUnit;
 public class AppstoreRequester {
 
     private static int  POLLING_PERIOD = 30; // polling period in seconds
-    private static int  COONNECTIONS_PER_STORE = 5;
+    private static int CONNECTIONS_PER_STORE = 5;
 
     private HttpClient httpClient;
     private ScheduledExecutorService scheduler;
@@ -59,14 +59,14 @@ public class AppstoreRequester {
         if (appstores != null) {
             // creating multithreaded HttpClient
             PoolingClientConnectionManager cm = new PoolingClientConnectionManager();
-            cm.setMaxTotal(appstores.size() * COONNECTIONS_PER_STORE);
-            cm.setDefaultMaxPerRoute(COONNECTIONS_PER_STORE);
+            cm.setMaxTotal(appstores.size() * CONNECTIONS_PER_STORE);
+            cm.setDefaultMaxPerRoute(CONNECTIONS_PER_STORE);
             httpClient = new DefaultHttpClient(cm);
-            // schedule GeatAppListRequests
+            // schedule GetAppListRequests
             scheduler = Executors.newScheduledThreadPool(appstores.size());
             for (AppstoreDescriptor appstore : appstores.values()) {
                 if (appstore.appstoreId.equals("onepf.repository")) { //TEST PURPOSES ONLY
-                    cm.setDefaultMaxPerRoute(COONNECTIONS_PER_STORE);
+                    cm.setDefaultMaxPerRoute(CONNECTIONS_PER_STORE);
                     scheduler.scheduleAtFixedRate(
                             new GetAppListRequest(parserFactory, repositoryFactory, httpClient, appstore, uploadDir ),
                             POLLING_PERIOD, POLLING_PERIOD, TimeUnit.SECONDS);

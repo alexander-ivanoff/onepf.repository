@@ -35,8 +35,8 @@ public class SqlDataService implements DataService {
 
     // TODO refactoring: move method in different requests (Maybe Entities), here should be only generic requests
 
-    private static final int PAGE_LIMIT_APPLICATIONS = 3;
-    private static final int PAGE_LIMIT_OTHER = 3;
+    private static final int PAGE_LIMIT_APPLICATIONS = 50;
+    private static final int PAGE_LIMIT_OTHER = 50;
 
     private static final int DEFAULT_RESULT_LIMIT = 1000;
 
