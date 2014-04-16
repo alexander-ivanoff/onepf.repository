@@ -23,23 +23,20 @@ CREATE TABLE `onepf_repository`.`applications` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `package` varchar(255) NOT NULL,
   `appstoreId` varchar(255) DEFAULT NULL,
-  `devContact` varchar(255) DEFAULT NULL,
-  `lastUpdate` datetime DEFAULT NULL,
+  `datetime` datetime DEFAULT NULL,
   `version` varchar(255) DEFAULT NULL,
-  `build` int(11) DEFAULT NULL,
+  `versionCode` int(11) DEFAULT NULL,
   `appdfLink` text,
   `descrLink` text,
-  `appdfMD5Hash` text,
+  `hash` varchar(32) DEFAULT NULL,
   `currPageHash` int(11) DEFAULT NULL,
   `prevPageHash` int(11) DEFAULT NULL,
-  `hash` varchar(32) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `appstoreId` (`appstoreId`),
   FOREIGN KEY (`appstoreId`) REFERENCES `onepf_repository`.`appstores` (`appstoreId`)
 );
 
 CREATE TABLE `onepf_repository`.`downloads` (
-  `id` varchar(255) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `package` varchar(255) NOT NULL,
   `distributorStoreId` varchar(255) DEFAULT NULL,
   `homeStoreId` varchar(45) DEFAULT NULL,
@@ -53,10 +50,11 @@ CREATE TABLE `onepf_repository`.`downloads` (
   `currPageHash` int(11) DEFAULT NULL,
   `prevPageHash` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-);
+) ;
 
 CREATE TABLE `onepf_repository`.`purchases` (
-  `id` varchar(255) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `purchaseId` varchar(255) DEFAULT NULL,
   `package` varchar(255) NOT NULL,
   `distributorStoreId` varchar(255) DEFAULT NULL,
   `homeStoreId` varchar(255) DEFAULT NULL,
@@ -78,7 +76,7 @@ CREATE TABLE `onepf_repository`.`purchases` (
 
 
 CREATE TABLE `onepf_repository`.`reviews` (
-  `id` varchar(255) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `package` varchar(255) NOT NULL,
   `distributorStoreId` varchar(255) DEFAULT NULL,
   `homeStoreId` varchar(255) DEFAULT NULL,
