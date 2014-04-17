@@ -28,14 +28,13 @@ public class GetDownloadsRequestHandler extends BaseRequestHandler {
     /**
      * return list of downloads for given packageName and page
      *
-     * @param packageName - name of the package
      * @param pageHash - hash of the page to return
      * @return List of DownloadDescriptors
      * @throws DataException
      */
-    public List<DownloadEntity> getDownloads(String packageName, long pageHash) throws DataException{
+    public List<DownloadEntity> getDownloads(String homeStoreId, long pageHash) throws DataException{
         long time = System.currentTimeMillis();
-        ArrayList<DownloadEntity> descriptors = dataService.getDownloads(packageName, pageHash);
+        ArrayList<DownloadEntity> descriptors = dataService.getDownloads(homeStoreId, pageHash);
         logger.debug("List downloads time: {}", (System.currentTimeMillis() - time));
         return descriptors;
     }

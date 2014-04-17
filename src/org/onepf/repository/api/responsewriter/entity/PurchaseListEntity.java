@@ -45,6 +45,8 @@ public class PurchaseListEntity {
     protected List<PurchaseEntity> purchase;
     @XmlAttribute(name = "version")
     protected String version;
+    @XmlAttribute(name = "offset")
+    protected String offset;
 
     /**
      * Gets the value of the purchase property.
@@ -99,4 +101,11 @@ public class PurchaseListEntity {
         this.version = value;
     }
 
+    public String getOffset() {
+        return offset;
+    }
+
+    public void setOffset(String offset) {
+        this.offset = offset;
+    }
 }

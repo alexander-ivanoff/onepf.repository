@@ -18,7 +18,6 @@ import java.util.Map;
  *
  * @author Alexander Ivanoff
  * @see org.onepf.repository.model.services.mysql.SqlDataService
- * @see org.onepf.repository.model.services.amazon.AmazonDataService
  */
 public interface DataService {
 
@@ -48,7 +47,6 @@ public interface DataService {
     LastStatisticsUpdateDescriptor getLastStatisticsUpdate(String appstoreId, String feedType) throws DataException;
 
     /**
-     * @param packageName
      * @param hash        - MD5 calculated hash of appdf file
      * @return List of ApplicationDescriptor with specified package name and MD5 hash
      * @throws DataException
@@ -57,9 +55,9 @@ public interface DataService {
      */
     List<ApplicationEntity> getApplicationByHash(String packageName, String hash) throws DataException;
 
-    ArrayList<DownloadEntity> getDownloads(String packageName, long updateTime) throws DataException;
+    ArrayList<DownloadEntity> getDownloads(String homeStoreId, long page) throws DataException;
 
-    ArrayList<PurchaseEntity> getPurchases(String packageName, long updateTime) throws DataException;
+    ArrayList<PurchaseEntity> getPurchases(String homeStoreId, long page) throws DataException;
 
-    ArrayList<ReviewEntity> getReviews(String packageName, int pageHash) throws DataException;
+    ArrayList<ReviewEntity> getReviews(String homeStoreId, long page) throws DataException;
 }

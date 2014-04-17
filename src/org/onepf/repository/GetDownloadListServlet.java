@@ -15,17 +15,16 @@ import java.util.List;
 
 /**
  *
- *  This Servlet returns list of downloads for all packages provided by requesting appstore.
+ *  This Servlet returns handler of downloads for all packages provided by requesting appstore.
  *
 * @author Alexander Ivanoff on 11.03.14.
  */
 public class GetDownloadListServlet extends BaseServlet {
 
-    private static final String PARAMETER_PACKAGE = "package";
     private static final String PARAMETER_PAGE = "page";
 
     public final static String FILE_PREFIX = "downloads";
-    private final static String FILE_TEMPLATE = FILE_PREFIX + "_%s_%d.xml";
+    private final static String FILE_TEMPLATE = FILE_PREFIX + "_%d.xml";
 
     private static final ResponseWriterV2 responseWriter = initResponseWriter();
 
@@ -39,12 +38,12 @@ public class GetDownloadListServlet extends BaseServlet {
         return responseWriter;
     }
 
-    private GetDownloadsRequestHandler list;
+    private GetDownloadsRequestHandler handler;
 
     @Override
     public void init() throws ServletException {
         super.init();
-        list = getRepositoryFactory().createDownloadsHandler();
+        handler = getRepositoryFactory().createDownloadsHandler();
     }
 
     protected void post(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -52,17 +51,10 @@ public class GetDownloadListServlet extends BaseServlet {
 
     protected void get(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        String packageName = request.getParameter(PARAMETER_PACKAGE);
-        if (packageName == null) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "No package defined");
-            return;
-        }
-
-
         try {
             String page = request.getParameter(PARAMETER_PAGE);
-            List<DownloadEntity> downloads = list.getDownloads(packageName, page != null? Integer.valueOf(page) : -1);
-            String offset = getOffset(request, downloads, packageName);
+            List<DownloadEntity> downloads = handler.getDownloads(getAppstore(request).appstoreId, page != null? Integer.valueOf(page) : -1);
+            String offset = getOffset(request, downloads);
             responseWriter.write(response.getOutputStream(), buildListEntity("1", offset, downloads));
         } catch (WriteException e) {
             e.printStackTrace();
@@ -73,12 +65,12 @@ public class GetDownloadListServlet extends BaseServlet {
         }
     }
 
-    private static String getOffset(HttpServletRequest request, List<DownloadEntity> downloads, String packageName) {
+    private static String getOffset(HttpServletRequest request, List<DownloadEntity> downloads) {
         String offset = null;
         if (downloads.size() > 0 ) {
             DownloadEntity lastDownload = downloads.get(0);
             if (lastDownload.getCurrPageHash() != lastDownload.getPrevPageHash()) {
-                offset = String.format(FILE_TEMPLATE, packageName, lastDownload.getPrevPageHash());
+                offset = String.format(FILE_TEMPLATE, lastDownload.getPrevPageHash());
             }
         }
         return offset;
