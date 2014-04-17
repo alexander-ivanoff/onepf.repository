@@ -1,7 +1,5 @@
 package org.onepf.repository.api.responsewriter.descriptors;
 
-import org.onepf.repository.api.responsewriter.ResponseWriter;
-import org.onepf.repository.api.responsewriter.WritableHeader;
 import org.onepf.repository.api.responsewriter.WriteException;
 
 /**

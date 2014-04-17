@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="purchases" type="purchasesType"/>
+  <xs:complexType name="purchasesType">
+    <xs:sequence>
+      <xs:element type="purchaseType" name="purchase" maxOccurs="unbounded" minOccurs="0"/>
+    </xs:sequence>
+    <xs:attribute type="xs:string" name="version"/>
+  </xs:complexType>
+  <xs:complexType name="purchaseType">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute type="xs:string" name="id" use="optional"/>
+        <xs:attribute type="xs:string" name="package" use="optional"/>
+        <xs:attribute type="xs:string" name="appstoreId" use="optional"/>
+        <xs:attribute type="xs:string" name="version" use="optional"/>
+        <xs:attribute type="xs:int" name="versionCode" use="optional"/>
+        <xs:attribute type="xs:string" name="datetime" use="optional"/>
+        <xs:attribute type="xs:string" name="device-model" use="optional"/>
+        <xs:attribute type="xs:string" name="device-name" use="optional"/>
+        <xs:attribute type="xs:string" name="country" use="optional"/>
+        <xs:attribute type="xs:string" name="user-price" use="optional"/>
+        <xs:attribute type="xs:string" name="user-currency" use="optional"/>
+        <xs:attribute type="xs:string" name="inner-price" use="optional"/>
+        <xs:attribute type="xs:string" name="inner-currency" use="optional"/>
+        <xs:attribute type="xs:string" name="signature" use="optional"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+</xs:schema>

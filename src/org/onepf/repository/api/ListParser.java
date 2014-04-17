@@ -10,7 +10,7 @@ import java.util.Collection;
  *
  * @author Alexander Ivanoff on 01.04.14.
  */
-public interface ListParser<T extends AbstractDescriptor, K extends  AbstractDescriptor> {
+public interface ListParser<T extends Object, K extends Object> {
 
     /**
      * @return collection of parsed objects

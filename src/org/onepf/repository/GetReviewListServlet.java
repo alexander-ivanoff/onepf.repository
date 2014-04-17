@@ -1,11 +1,9 @@
 package org.onepf.repository;
 
+import org.onepf.repository.api.responsewriter.entity.ReviewEntity;
 import org.onepf.repository.model.GetReviewsRequestHandler;
 import org.onepf.repository.model.services.DataException;
-import org.onepf.repository.api.responsewriter.ResponseWriter;
 import org.onepf.repository.api.responsewriter.WriteException;
-import org.onepf.repository.api.responsewriter.XmlResponseWriter;
-import org.onepf.repository.api.responsewriter.descriptors.ReviewDescriptor;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -48,15 +46,15 @@ public class GetReviewListServlet extends BaseServlet {
 
         try {
             String page = request.getParameter(PARAMETER_PAGE);
-            List<ReviewDescriptor> reviews = handler.getReviews(packageName, page != null ? Integer.valueOf(page) : -1);
+            List<ReviewEntity> reviews = handler.getReviews(packageName, page != null ? Integer.valueOf(page) : -1);
             ResponseWriter responseWriter = new XmlResponseWriter();
             String prevOffset = null;
             String lastUpdate = null;
             if (reviews.size() > 0 ) {
-                ReviewDescriptor lastReview = reviews.get(0);
-                lastUpdate = lastReview.lastUpdate;
-                if (lastReview.currPageHash != lastReview.prevPageHash) {
-                    prevOffset = String.format(FILE_TEMPLATE, packageName, lastReview.prevPageHash);
+                ReviewEntity lastReview = reviews.get(0);
+//                lastUpdate = lastReview.lastUpdate;
+                if (lastReview.getCurrPageHash() != lastReview.getPrevPageHash()) {
+                    prevOffset = String.format(FILE_TEMPLATE, packageName, lastReview.getPrevPageHash());
                 }
 
             }

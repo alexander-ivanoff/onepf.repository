@@ -11,7 +11,7 @@ CREATE TABLE `onepf_repository`.`appstores` (
   PRIMARY KEY (`appstoreId`)
 );
 
-CREATE TABLE `onepf_repository_4`.`appstoreupdates` (
+CREATE TABLE `onepf_repository`.`appstoreupdates` (
   `appstoreId` varchar(255) NOT NULL,
   `lastUpdateHash` varchar(32) NOT NULL,
   `lastUpdateDateTime` datetime NOT NULL,
@@ -19,7 +19,7 @@ CREATE TABLE `onepf_repository_4`.`appstoreupdates` (
   FOREIGN KEY (`appstoreId`) REFERENCES `onepf_repository`.`appstores` (`appstoreId`)
 );
 
-CREATE TABLE `onepf_repository_4`.`statistics_updates` (
+CREATE TABLE `onepf_repository`.`statistics_updates` (
   `appstoreId` varchar(255) NOT NULL,
   `feedType` varchar(255) NOT NULL,
   `lastUpdateCount` int(11) NOT NULL,
@@ -28,78 +28,84 @@ CREATE TABLE `onepf_repository_4`.`statistics_updates` (
   FOREIGN KEY (`appstoreId`) REFERENCES `onepf_repository`.`appstores` (`appstoreId`)
 );
 
-CREATE TABLE `onepf_repository_4`.`applications` (
+CREATE TABLE `onepf_repository`.`applications` (
+>>>>>>> 925a1161d1e3f765e185743e3fcfb5e4ad19eae0
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `package` varchar(255) NOT NULL,
   `appstoreId` varchar(255) DEFAULT NULL,
-  `devContact` varchar(255) DEFAULT NULL,
-  `lastUpdate` datetime DEFAULT NULL,
+  `datetime` datetime DEFAULT NULL,
   `version` varchar(255) DEFAULT NULL,
-  `build` int(11) DEFAULT NULL,
+  `versionCode` int(11) DEFAULT NULL,
   `appdfLink` text,
   `descrLink` text,
-  `appdfMD5Hash` text,
+  `hash` varchar(32) DEFAULT NULL,
   `currPageHash` int(11) DEFAULT NULL,
   `prevPageHash` int(11) DEFAULT NULL,
-  `hash` varchar(32) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `appstoreId` (`appstoreId`),
   FOREIGN KEY (`appstoreId`) REFERENCES `onepf_repository`.`appstores` (`appstoreId`)
 );
 
-CREATE TABLE `onepf_repository_4`.`downloads` (
-  `id` varchar(255) NOT NULL,
+CREATE TABLE `onepf_repository`.`downloads` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `package` varchar(255) NOT NULL,
-  `opDate` datetime DEFAULT NULL,
+  `distributorStoreId` varchar(255) DEFAULT NULL,
+  `homeStoreId` varchar(45) DEFAULT NULL,
   `version` varchar(255) DEFAULT NULL,
-  `build` int(11) DEFAULT NULL,
-  `lastUpdate` datetime DEFAULT NULL,
-  `country` varchar(2) DEFAULT NULL,
+  `versionCode` int(11) DEFAULT NULL,
+  `datetime` datetime DEFAULT NULL,
   `deviceModel` varchar(255) DEFAULT NULL,
   `deviceName` varchar(255) DEFAULT NULL,
+  `country` varchar(2) DEFAULT NULL,
   `isUpdate` tinyint(1) DEFAULT NULL,
   `currPageHash` int(11) DEFAULT NULL,
   `prevPageHash` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-);
+) ;
 
 CREATE TABLE `onepf_repository`.`purchases` (
-  `id` varchar(255) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `purchaseId` varchar(255) DEFAULT NULL,
   `package` varchar(255) NOT NULL,
-  `opDate` datetime DEFAULT NULL,
+  `distributorStoreId` varchar(255) DEFAULT NULL,
+  `homeStoreId` varchar(255) DEFAULT NULL,
   `version` varchar(255) DEFAULT NULL,
-  `build` int(11) DEFAULT NULL,
-  `lastUpdate` datetime DEFAULT NULL,
-  `country` varchar(2) DEFAULT NULL,
+  `versionCode` int(11) DEFAULT NULL,
+  `datetime` datetime DEFAULT NULL,
   `deviceModel` varchar(255) DEFAULT NULL,
   `deviceName` varchar(255) DEFAULT NULL,
+  `country` varchar(2) DEFAULT NULL,
   `innerCurrency` varchar(3) DEFAULT NULL,
   `innerPrice` varchar(20) DEFAULT NULL,
   `userCurrency` varchar(3) DEFAULT NULL,
   `userPrice` varchar(20) DEFAULT NULL,
+  `signature` varchar(255) DEFAULT NULL,
   `currPageHash` int(11) DEFAULT NULL,
   `prevPageHash` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
 );
 
+
 CREATE TABLE `onepf_repository`.`reviews` (
-  `id` varchar(255) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `package` varchar(255) NOT NULL,
+  `distributorStoreId` varchar(255) DEFAULT NULL,
+  `homeStoreId` varchar(255) DEFAULT NULL,
   `version` varchar(255) DEFAULT NULL,
-  `build` int(11) DEFAULT NULL,
-  `lastUpdate` datetime DEFAULT NULL,
-  `country` varchar(2) DEFAULT NULL,
+  `versionCode` int(11) DEFAULT NULL,
+  `rating` decimal(4,2) DEFAULT NULL,
+  `datetime` datetime DEFAULT NULL,
   `deviceModel` varchar(255) DEFAULT NULL,
   `deviceName` varchar(255) DEFAULT NULL,
-  `stars` tinyint(1) DEFAULT NULL,
+  `country` varchar(2) DEFAULT NULL,
   `userName` varchar(255) DEFAULT NULL,
-  `userUrl` varchar(255) DEFAULT NULL,
   `title` varchar(255) DEFAULT NULL,
   `textBody` text,
+  `reviewUrl` varchar(255) DEFAULT NULL,
   `currPageHash` int(11) DEFAULT NULL,
   `prevPageHash` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
 );
+
 
 /* Create test appstore*/
 INSERT INTO `onepf_repository`.`appstores`

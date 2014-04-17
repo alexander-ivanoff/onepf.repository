@@ -1,6 +1,7 @@
 package org.onepf.repository.api;
 
 import org.onepf.repository.api.responsewriter.descriptors.AbstractDescriptor;
+import org.onepf.repository.api.responsewriter.entity.BaseEntity;
 
 /**
  *
@@ -8,7 +9,7 @@ import org.onepf.repository.api.responsewriter.descriptors.AbstractDescriptor;
  *
  * @author Alexander Ivanoff on 01.04.14.
  */
-public interface ItemParser<E extends AbstractDescriptor>{
+public interface ItemParser<E extends BaseEntity>{
 
     /**
      * @return parsed object

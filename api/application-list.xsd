@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="application-list" type="application-listType"/>
+  <xs:complexType name="applicationType">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute type="xs:string" name="package" use="required"/>
+        <xs:attribute type="xs:string" name="hash" use="required"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+  <xs:complexType name="application-listType">
+    <xs:sequence>
+      <xs:element type="applicationType" name="application" maxOccurs="unbounded" minOccurs="0"/>
+    </xs:sequence>
+    <xs:attribute type="xs:string" name="version" use="required"/>
+    <xs:attribute type="xs:string" name="offset" use="optional"/>
+  </xs:complexType>
+</xs:schema>

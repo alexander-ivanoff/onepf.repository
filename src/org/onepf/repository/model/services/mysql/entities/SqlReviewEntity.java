@@ -1,13 +1,14 @@
 package org.onepf.repository.model.services.mysql.entities;
 
-import org.onepf.repository.api.responsewriter.descriptors.ReviewDescriptor;
+
+import org.onepf.repository.api.responsewriter.entity.ReviewEntity;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Map;
 
 /**
- * Review entity for MySQL.
+ * ReviewEntity entity for MySQL.
  *
  * Create ReviewDescriptor from ResultSet.
  *
@@ -81,22 +82,22 @@ public class SqlReviewEntity extends SqlDBEntity {
     }
 
 
-    public static ReviewDescriptor getDescriptor(ResultSet item) throws SQLException {
-        ReviewDescriptor descriptor = new ReviewDescriptor();
-        descriptor.packageName = item.getString(FIELD_PACKAGE_NAME);
-        descriptor.lastUpdate = item.getString(FIELD_LAST_UPDATE);
-        descriptor.build = item.getInt(FIELD_BUILD);
-        descriptor.version = item.getString(FIELD_VERSION);
-        descriptor.country = item.getString(FIELD_COUNTRY);
-        descriptor.deviceModel = item.getString(FIELD_DEVICE_MODEL);
-        descriptor.deviceName= item.getString(FIELD_DEVICE_NAME);
-        descriptor.stars = item.getInt(FIELD_STARS);
-        descriptor.userName = item.getString(FIELD_USER_NAME);
-        descriptor.userUrl = item.getString(FIELD_USER_URL);
-        descriptor.title = item.getString(FIELD_TITLE);
-        descriptor.body = item.getString(FIELD_TEXT_BODY);
-        descriptor.currPageHash = item.getInt(FIELD_CURR_PAGE_HASH);
-        descriptor.prevPageHash = item.getInt(FIELD_PREV_PAGE_HASH);
+    public static ReviewEntity getDescriptor(ResultSet item) throws SQLException {
+        ReviewEntity descriptor = new ReviewEntity();
+        descriptor.setPackageName(item.getString(FIELD_PACKAGE_NAME));
+//        descriptor.lastUpdate = item.getString(FIELD_LAST_UPDATE);
+        descriptor.setVersionCode(item.getInt(FIELD_BUILD));
+        descriptor.setVersion(item.getString(FIELD_VERSION));
+        descriptor.setCountry(item.getString(FIELD_COUNTRY));
+        descriptor.setDeviceModel(item.getString(FIELD_DEVICE_MODEL));
+        descriptor.setDeviceName(item.getString(FIELD_DEVICE_NAME));
+        descriptor.setRating(item.getInt(FIELD_STARS));
+        descriptor.setUserName(item.getString(FIELD_USER_NAME));
+        descriptor.setUserUrl(item.getString(FIELD_USER_URL));
+        descriptor.setTitle(item.getString(FIELD_TITLE));
+        descriptor.setBody(item.getString(FIELD_TEXT_BODY));
+        descriptor.setCurrPageHash(item.getInt(FIELD_CURR_PAGE_HASH));
+        descriptor.setPrevPageHash(item.getInt(FIELD_PREV_PAGE_HASH));
         return  descriptor;
     }
 
