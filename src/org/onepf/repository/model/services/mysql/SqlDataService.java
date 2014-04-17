@@ -8,11 +8,11 @@ import org.apache.commons.pool.ObjectPool;
 import org.apache.commons.pool.impl.GenericObjectPool;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.boot.registry.StandardServiceRegistry;
+import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
-import org.hibernate.service.ServiceRegistryBuilder;
 import org.onepf.repository.api.Pair;
 import org.onepf.repository.api.responsewriter.entity.*;
 import org.onepf.repository.appstorelooter.LastUpdateDescriptor;
@@ -507,30 +507,14 @@ public class SqlDataService implements DataService {
      * @param packageName is used in downloads, purchases, reviews
      * @param limit       number of the records per one page
      * @return pair <currPageHash, prevPageHash>
-     * @throws SQLException
+     * @throws java.sql.SQLException
      */
     private static Pair<Integer, Integer> getPageHashes(Connection connection, String tableName, String packageName, int limit) throws SQLException {
-        Configuration configuration = new Configuration();
-        configuration.configure("/resources/hibernate.cfg.xml");
-        ServiceRegistryBuilder serviceRegistryBuilder = new ServiceRegistryBuilder().applySettings(configuration
-                .getProperties());
-        SessionFactory sessionFactory = configuration
-                .buildSessionFactory(serviceRegistryBuilder.build());
-        Session session = sessionFactory.openSession();
-//        session.beginTransaction();
-//        session.save(entity);
-//        session.getTransaction().commit();
-//        session.close();
-
-
         String selection = "SELECT count(currPageHash) as cunt, currPageHash as chash, prevPageHash as phash FROM " + tableName + " WHERE currPageHash = (SELECT currPageHash FROM " + tableName;
         if (packageName != null) {
             selection += " WHERE package=?";
         }
         selection += " ORDER BY id DESC LIMIT 1)";
-
-        Query query = session.createQuery(selection);
-        List list = query.list();
 
         PreparedStatement stmt = connection.prepareStatement(selection);
         if (packageName != null) {
@@ -557,10 +541,10 @@ public class SqlDataService implements DataService {
     public static void saveEntity(BaseEntity entity) {
         Configuration configuration = new Configuration();
         configuration.configure("/resources/hibernate.cfg.xml");
-        ServiceRegistryBuilder serviceRegistryBuilder = new ServiceRegistryBuilder().applySettings(configuration
-                .getProperties());
+        StandardServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder().applySettings(
+                configuration.getProperties()).build();
         SessionFactory sessionFactory = configuration
-                .buildSessionFactory(serviceRegistryBuilder.build());
+                .buildSessionFactory(serviceRegistry);
         Session session = sessionFactory.openSession();
         session.beginTransaction();
         session.save(entity);
