@@ -1,6 +1,10 @@
 package org.onepf.repository.api.responsewriter;
 
 import org.onepf.repository.api.responsewriter.descriptors.*;
+import org.onepf.repository.api.responsewriter.entity.ApplicationEntity;
+import org.onepf.repository.api.responsewriter.entity.DownloadEntity;
+import org.onepf.repository.api.responsewriter.entity.PurchaseEntity;
+import org.onepf.repository.api.responsewriter.entity.ReviewEntity;
 
 import java.io.PrintWriter;
 import java.io.Writer;
@@ -23,7 +27,7 @@ public abstract class ResponseWriter {
      * @param items - writable objects to write as xml
      * @throws WriteException
      */
-    public abstract void write(Writer writer, WritableHeader header, List<? extends Writable> items) throws WriteException;
+    public abstract void write(Writer writer, WritableHeader header, List<? extends Object> items) throws WriteException;
 
     /**
      * write applicationDescriptor to response
@@ -31,7 +35,7 @@ public abstract class ResponseWriter {
      * @param applicationDescriptor
      * @throws WriteException
      */
-    public abstract void write(ApplicationDescriptor applicationDescriptor) throws WriteException;
+    public abstract void write(ApplicationEntity applicationDescriptor) throws WriteException;
 
     /**
      * write purchaseDescriptor to response
@@ -39,7 +43,7 @@ public abstract class ResponseWriter {
      * @param purchaseDescriptor
      * @throws WriteException
      */
-    public abstract void write(PurchaseDescriptor purchaseDescriptor) throws  WriteException;
+    public abstract void write(PurchaseEntity purchaseDescriptor) throws  WriteException;
 
     /**
      * write downloadDescriptor to response
@@ -47,7 +51,7 @@ public abstract class ResponseWriter {
      * @param downloadDescriptor
      * @throws WriteException
      */
-    public abstract void write(DownloadDescriptor downloadDescriptor) throws  WriteException;
+    public abstract void write(DownloadEntity downloadDescriptor) throws  WriteException;
 
     /**
      * write reviewDescriptor to response
@@ -55,10 +59,10 @@ public abstract class ResponseWriter {
      * @param reviewDescriptor
      * @throws WriteException
      */
-    public abstract void write(ReviewDescriptor reviewDescriptor) throws WriteException;
+    public abstract void write(ReviewEntity reviewDescriptor) throws WriteException;
 
     /**
-     * write opening elements for Application list
+     * write opening elements for ApplicationEntity list
      *
      * @param descriptor
      * @throws WriteException
@@ -66,7 +70,7 @@ public abstract class ResponseWriter {
     public abstract void writeOpening(ApplicationListHeaderDescriptor descriptor) throws WriteException;
 
     /**
-     * write opening elements for Download list
+     * write opening elements for DownloadEntity list
      *
      * @param descriptor
      * @throws WriteException
@@ -74,7 +78,7 @@ public abstract class ResponseWriter {
     public abstract void writeOpening(DownloadsListHeaderDescriptor descriptor) throws WriteException;
 
     /**
-     * write opening elements for Purchase list
+     * write opening elements for PurchaseEntity list
      *
      * @param descriptor
      * @throws WriteException
@@ -82,7 +86,7 @@ public abstract class ResponseWriter {
     public abstract void writeOpening(PurchasesListHeaderDescriptor descriptor) throws WriteException;
 
     /**
-     * write opening elements for Review list
+     * write opening elements for ReviewEntity list
      *
      * @param descriptor
      * @throws WriteException
@@ -90,7 +94,7 @@ public abstract class ResponseWriter {
     public abstract void writeOpening(ReviewsListHeaderDescriptor descriptor) throws WriteException;
 
     /**
-     * write closing elements for Application list
+     * write closing elements for ApplicationEntity list
      *
      * @param descriptor
      * @throws WriteException
@@ -98,7 +102,7 @@ public abstract class ResponseWriter {
     public abstract void writeClosing(ApplicationListHeaderDescriptor descriptor) throws WriteException;
 
     /**
-     * write closing elements for Download list
+     * write closing elements for DownloadEntity list
      *
      * @param descriptor
      * @throws WriteException
@@ -106,7 +110,7 @@ public abstract class ResponseWriter {
     public abstract void writeClosing(DownloadsListHeaderDescriptor descriptor) throws WriteException;
 
     /**
-     * write closing elements for Purchase list
+     * write closing elements for PurchaseEntity list
      *
      * @param descriptor
      * @throws WriteException
@@ -114,7 +118,7 @@ public abstract class ResponseWriter {
     public abstract void writeClosing(PurchasesListHeaderDescriptor descriptor) throws WriteException;
 
     /**
-     * write closing elements for Review list
+     * write closing elements for ReviewEntity list
      *
      * @param descriptor
      * @throws WriteException
@@ -129,7 +133,7 @@ public abstract class ResponseWriter {
      * @param offset - offset to the next page
      * @throws WriteException
      */
-    public void writeApplications(Writer writer, List<ApplicationDescriptor> applications, String offset) throws WriteException {
+    public void writeApplications(Writer writer, List<ApplicationEntity> applications, String offset) throws WriteException {
         write(writer, new ApplicationListHeaderDescriptor(API_VERSION, offset), applications);
     }
 
@@ -141,7 +145,7 @@ public abstract class ResponseWriter {
      * @param offset - offset to the next page
      * @throws WriteException
      */
-    public void writePurchases(Writer writer, List<PurchaseDescriptor> purchases, String offset) throws WriteException {
+    public void writePurchases(Writer writer, List<PurchaseEntity> purchases, String offset) throws WriteException {
         write(writer, new PurchasesListHeaderDescriptor(API_VERSION, offset), purchases);
     }
 
@@ -153,7 +157,7 @@ public abstract class ResponseWriter {
      * @param offset - offset to the next page
      * @throws WriteException
      */
-    public void writeDownloads(Writer writer, List<DownloadDescriptor> downloads, String offset) throws WriteException {
+    public void writeDownloads(Writer writer, List<DownloadEntity> downloads, String offset) throws WriteException {
         write(writer, new DownloadsListHeaderDescriptor(API_VERSION, offset), downloads);
     }
 
@@ -165,7 +169,7 @@ public abstract class ResponseWriter {
      * @param offset - offset to the next page
      * @throws WriteException
      */
-    public void writeReviews(PrintWriter writer, List<ReviewDescriptor> reviews, String offset) throws WriteException {
+    public void writeReviews(PrintWriter writer, List<ReviewEntity> reviews, String offset) throws WriteException {
         write(writer, new ReviewsListHeaderDescriptor(API_VERSION, offset), reviews);
     }
 

@@ -1,6 +1,10 @@
 package org.onepf.repository.api.responsewriter;
 
 import org.onepf.repository.api.responsewriter.descriptors.*;
+import org.onepf.repository.api.responsewriter.entity.ApplicationEntity;
+import org.onepf.repository.api.responsewriter.entity.DownloadEntity;
+import org.onepf.repository.api.responsewriter.entity.PurchaseEntity;
+import org.onepf.repository.api.responsewriter.entity.ReviewEntity;
 import org.onepf.repository.api.xmlapi.*;
 
 import javax.xml.stream.XMLOutputFactory;
@@ -20,13 +24,13 @@ public class XmlResponseWriter extends ResponseWriter {
 
 
     @Override
-    public void write(Writer writer, WritableHeader header, List<? extends Writable> items) throws WriteException {
+    public void write(Writer writer, WritableHeader header, List<? extends Object> items) throws WriteException {
         try {
             out = XMLOutputFactory.newInstance().createXMLStreamWriter(writer);
             out.writeStartDocument("UTF-8", "1.0");
             header.writeOpening(this);
-            for (Writable writable : items) {
-                writable.write(this);
+            for (Object writable : items) {
+                ((Writable) writable).write(this);
             }
             header.writeClosing(this);
             out.writeEndDocument();
@@ -47,33 +51,33 @@ public class XmlResponseWriter extends ResponseWriter {
     }
 
     @Override
-    public void write(ApplicationDescriptor app) throws WriteException{
+    public void write(ApplicationEntity app) throws WriteException{
         try {
             out.writeEmptyElement(XMLElements.Application.ELEMENT_NAME);
-            out.writeAttribute(XMLElements.Application.FIELD_PACKAGE, app.packageName);
-            out.writeAttribute(XMLElements.Application.FIELD_HASH, app.appdfHash);
+            out.writeAttribute(XMLElements.Application.FIELD_PACKAGE, app.getPackageName());
+            out.writeAttribute(XMLElements.Application.FIELD_HASH, app.getAppdfHash());
         } catch (XMLStreamException e) {
             throw new WriteException(e);
         }
     }
 
     @Override
-    public void write(PurchaseDescriptor purchase) throws WriteException {
+    public void write(PurchaseEntity purchase) throws WriteException {
         try {
             out.writeStartElement("purchase");  //Move all strings to XMLElements
-            writeElement(out, "id", purchase.id);
-            writeElement(out, "package", purchase.packageName );
-            writeElement(out, "datetime", String.valueOf(purchase.dateTime));
-            writeElement(out, "version", purchase.version);
-            writeElement(out, "build", String.valueOf(purchase.build));
-            writeElement(out, "last-updated", String.valueOf(purchase.lastUpdate));
-            writeElement(out, "device-model", purchase.deviceModel);
-            writeElement(out, "device-name", purchase.deviceName);
-            writeElement(out, "country", purchase.country);
-            writeElement(out, "user-price", purchase.userPrice);
-            writeElement(out, "user-currency", purchase.userCurrency);
-            writeElement(out, "inner-price", purchase.innerPrice);
-            writeElement(out, "inner-currency", purchase.innerCurrency);
+//            writeElement(out, "id", purchase.getId());
+            writeElement(out, "package", purchase.getPackageName() );
+            writeElement(out, "datetime", String.valueOf(purchase.getDateTime()));
+            writeElement(out, "version", purchase.getVersion());
+            writeElement(out, "build", String.valueOf(purchase.getBuild()));
+            writeElement(out, "last-updated", String.valueOf(purchase.getLastUpdate()));
+            writeElement(out, "device-model", purchase.getDeviceModel());
+            writeElement(out, "device-name", purchase.getDeviceName());
+            writeElement(out, "country", purchase.getCountry());
+            writeElement(out, "user-price", purchase.getUserPrice());
+            writeElement(out, "user-currency", purchase.getUserCurrency());
+            writeElement(out, "inner-price", purchase.getInnerPrice());
+            writeElement(out, "inner-currency", purchase.getInnerCurrency());
             out.writeEndElement();
         } catch (XMLStreamException e) {
             throw new WriteException(e);
@@ -81,18 +85,18 @@ public class XmlResponseWriter extends ResponseWriter {
     }
 
     @Override
-    public void write(DownloadDescriptor download) throws WriteException {
+    public void write(DownloadEntity download) throws WriteException {
         try {
             out.writeStartElement("download");  //Move all strings to XMLElements
-            writeElement(out, "package", download.packageName );
-            writeElement(out, "datetime", String.valueOf(download.dateTime));
-            writeElement(out, "version", download.version);
-            writeElement(out, "build", String.valueOf(download.build));
-            writeElement(out, "last-updated", String.valueOf(download.lastUpdate));
-            writeElement(out, "device-model", download.deviceModel);
-            writeElement(out, "device-name", download.deviceName);
-            writeElement(out, "country", download.country);
-            writeElement(out, "is-update", download.isUpdate);
+            writeElement(out, "package", download.getPackageName() );
+            writeElement(out, "datetime", String.valueOf(download.getDateTime()));
+            writeElement(out, "version", download.getVersion());
+            writeElement(out, "build", String.valueOf(download.getBuild()));
+            writeElement(out, "last-updated", String.valueOf(download.getLastUpdate()));
+            writeElement(out, "device-model", download.getDeviceModel());
+            writeElement(out, "device-name", download.getDeviceName());
+            writeElement(out, "country", download.getCountry());
+            writeElement(out, "is-update", download.getIsUpdate());
             out.writeEndElement();
         } catch (XMLStreamException e) {
             throw new WriteException(e);
@@ -100,20 +104,20 @@ public class XmlResponseWriter extends ResponseWriter {
     }
 
     @Override
-    public void write(ReviewDescriptor review) throws WriteException {
+    public void write(ReviewEntity review) throws WriteException {
         try {
             out.writeStartElement("download"); //Move all strings to XMLElements
-            writeElement(out, "package", review.packageName );
-            writeElement(out, "version", review.version);
-            writeElement(out, "build", String.valueOf(review.build));
-            writeElement(out, "last-updated", String.valueOf(review.lastUpdate));
-            writeElement(out, "device-model", review.deviceModel);
-            writeElement(out, "device-name", review.deviceName);
-            writeElement(out, "country", review.country);
-            writeElement(out, "stars", String.valueOf(review.stars));
-            writeElement(out, "userName", review.userName);
-            writeElement(out, "title", review.title);
-            writeElement(out, "text", review.body);
+            writeElement(out, "package", review.getPackageName() );
+            writeElement(out, "version", review.getVersion());
+            writeElement(out, "build", String.valueOf(review.getBuild()));
+//            writeElement(out, "last-updated", String.valueOf(revie));
+            writeElement(out, "device-model", review.getDeviceModel());
+            writeElement(out, "device-name", review.getDeviceName());
+            writeElement(out, "country", review.getCountry());
+            writeElement(out, "stars", String.valueOf(review.getRating()));
+            writeElement(out, "userName", review.getUserName());
+            writeElement(out, "title", review.getTitle());
+            writeElement(out, "text", review.getBody());
             out.writeEndElement();
         } catch (XMLStreamException e) {
             throw new WriteException(e);
@@ -136,7 +140,7 @@ public class XmlResponseWriter extends ResponseWriter {
 
     @Override
     public void writeOpening(ApplicationListHeaderDescriptor descriptor) throws WriteException {
-        writeOpeningInt(XMLElements.ApplicationListHeader.ELEMENT_NAME, descriptor);
+//        writeOpeningInt(XMLElements.ApplicationListHeader.ELEMENT_NAME, descriptor);
     }
 
     @Override
@@ -156,7 +160,7 @@ public class XmlResponseWriter extends ResponseWriter {
 
     @Override
     public void writeClosing(ApplicationListHeaderDescriptor descriptor) throws WriteException {
-        writeClosingInt(descriptor);
+//        writeClosingInt(descriptor);
     }
 
     @Override

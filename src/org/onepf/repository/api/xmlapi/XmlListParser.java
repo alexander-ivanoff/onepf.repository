@@ -1,7 +1,7 @@
 package org.onepf.repository.api.xmlapi;
 
 import org.onepf.repository.api.ListParser;
-import org.onepf.repository.api.responsewriter.descriptors.AbstractDescriptor;
+import org.onepf.repository.api.responsewriter.entity.BaseEntity;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
@@ -14,7 +14,7 @@ import java.util.Collection;
  *
  * @author Alexander Ivanoff on 01.04.14.
  */
-public class XmlListParser<T extends AbstractDescriptor, K extends  AbstractDescriptor> extends DefaultHandler implements ListParser<T, K>{
+public class XmlListParser<T extends BaseEntity, K extends  BaseEntity> extends DefaultHandler implements ListParser<T, K>{
 
     Collection<T> items;
     K header;

@@ -1,13 +1,13 @@
 package org.onepf.repository.model.services.mysql.entities;
 
-import org.onepf.repository.api.responsewriter.descriptors.DownloadDescriptor;
+import org.onepf.repository.api.responsewriter.entity.DownloadEntity;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Map;
 
 /**
- * Download entity for MySQL.
+ * DownloadEntity entity for MySQL.
  *
  * Create DownloadDescriptor from ResultSet.
  *
@@ -87,19 +87,19 @@ public class SqlDownloadEntity extends SqlDBEntity {
     }
 
 
-    public static DownloadDescriptor getDescriptor(ResultSet item) throws SQLException {
-        DownloadDescriptor descriptor = new DownloadDescriptor();
-        descriptor.packageName = item.getString(FIELD_PACKAGE_NAME);
-        descriptor.dateTime = item.getString(FIELD_DATE_TIME);
-        descriptor.lastUpdate = item.getString(FIELD_LAST_UPDATE);
-        descriptor.build = item.getInt(FIELD_BUILD);
-        descriptor.version = item.getString(FIELD_VERSION);
-        descriptor.country = item.getString(FIELD_COUNTRY);
-        descriptor.deviceModel = item.getString(FIELD_DEVICE_MODEL);
-        descriptor.deviceName= item.getString(FIELD_DEVICE_NAME);
-        descriptor.isUpdate = item.getString(FIELD_IS_UPDATE);
-        descriptor.currPageHash = item.getInt(FIELD_CURR_PAGE_HASH);
-        descriptor.prevPageHash = item.getInt(FIELD_PREV_PAGE_HASH);
+    public static DownloadEntity getDescriptor(ResultSet item) throws SQLException {
+        DownloadEntity descriptor = new DownloadEntity();
+        descriptor.setPackageName(item.getString(FIELD_PACKAGE_NAME));
+        descriptor.setDateTime(item.getString(FIELD_DATE_TIME));
+        descriptor.setLastUpdate(item.getString(FIELD_LAST_UPDATE));
+        descriptor.setBuild(item.getInt(FIELD_BUILD));
+        descriptor.setVersion(item.getString(FIELD_VERSION));
+        descriptor.setCountry(item.getString(FIELD_COUNTRY));
+        descriptor.setDeviceModel(item.getString(FIELD_DEVICE_MODEL));
+        descriptor.setDeviceName(item.getString(FIELD_DEVICE_NAME));
+        descriptor.setIsUpdate(item.getString(FIELD_IS_UPDATE));
+        descriptor.setCurrPageHash(item.getInt(FIELD_CURR_PAGE_HASH));
+        descriptor.setPrevPageHash(item.getInt(FIELD_PREV_PAGE_HASH));
         return  descriptor;
     }
 

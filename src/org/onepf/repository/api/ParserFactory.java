@@ -1,7 +1,7 @@
 package org.onepf.repository.api;
 
-import org.onepf.repository.api.responsewriter.descriptors.ApplicationDescriptor;
 import org.onepf.repository.api.responsewriter.descriptors.ApplicationListHeaderDescriptor;
+import org.onepf.repository.api.responsewriter.entity.ApplicationEntity;
 import org.onepf.repository.api.xmlapi.*;
 
 import java.io.InputStream;
@@ -49,5 +49,5 @@ public abstract class ParserFactory<T extends ListParser> {
      * @param apps - collection to store parsed ApplicationDescriptors
      * @return ListParser to parse list of ApplicationsDescriptor into collection provided in parameter
      */
-    public abstract ListParser<ApplicationDescriptor, ApplicationListHeaderDescriptor> getApplicationParser(Collection<ApplicationDescriptor> apps);
+    public abstract ListParser<ApplicationEntity, ApplicationListHeaderDescriptor> getApplicationParser(Collection<ApplicationEntity> apps);
 }

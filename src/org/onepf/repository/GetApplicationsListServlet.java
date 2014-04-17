@@ -1,9 +1,9 @@
 package org.onepf.repository;
 
+import org.onepf.repository.api.responsewriter.entity.ApplicationEntity;
 import org.onepf.repository.model.GetApplicationsRequestHandler;
 import org.onepf.repository.model.services.DataException;
 import org.onepf.repository.api.responsewriter.WriteException;
-import org.onepf.repository.api.responsewriter.descriptors.ApplicationDescriptor;
 import org.onepf.repository.api.responsewriter.ResponseWriter;
 import org.onepf.repository.api.responsewriter.XmlResponseWriter;
 
@@ -41,17 +41,17 @@ public class GetApplicationsListServlet extends BaseServlet {
         String page = request.getParameter(PARAMETER_PAGE);
 
         try {
-            List<ApplicationDescriptor> apps = appLister.getApplications(page != null? Integer.valueOf(page) : -1);
+            List<ApplicationEntity> apps = appLister.getApplications(page != null? Integer.valueOf(page) : -1);
             ResponseWriter responseWriter = new XmlResponseWriter();
             String prevOffset = null;
             String lastUpdated = null;
             if (apps.size() > 0 ) {
-                ApplicationDescriptor lastApp = apps.get(0);
-                lastUpdated = lastApp.lastUpdated;
-                if (lastApp.currPageHash != lastApp.prevPageHash) {
+                ApplicationEntity lastApp = apps.get(0);
+                lastUpdated = lastApp.getDatetime();
+                if (lastApp.getCurrPageHash() != lastApp.getPrevPageHash()) {
                     String  url = request.getRequestURL().toString();
                     url = url.substring(0, url.lastIndexOf('/'));
-                    prevOffset = url + '/' + String.format(fileTemplate, apps.get(0).prevPageHash);
+                    prevOffset = url + '/' + String.format(fileTemplate, apps.get(0).getPrevPageHash());
                 }
 
             }

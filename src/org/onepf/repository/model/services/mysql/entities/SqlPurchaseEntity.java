@@ -1,18 +1,19 @@
 package org.onepf.repository.model.services.mysql.entities;
 
-import org.onepf.repository.api.responsewriter.descriptors.PurchaseDescriptor;
+
+import org.onepf.repository.api.responsewriter.entity.PurchaseEntity;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Map;
 
 /**
- * Purchase entity for MySQL.
- *
+ * PurchaseEntity entity for MySQL.
+ * <p/>
  * Create PurchaseDescriptor from ResultSet.
  *
- * @see org.onepf.repository.api.responsewriter.descriptors.PurchaseDescriptor
  * @author Alexander Ivanoff
+ * @see org.onepf.repository.api.responsewriter.descriptors.PurchaseDescriptor
  */
 public class SqlPurchaseEntity extends SqlDBEntity {
 
@@ -83,7 +84,7 @@ public class SqlPurchaseEntity extends SqlDBEntity {
         put(FIELD_DEVICE_MODEL, deviceModel);
         return this;
     }
-    
+
     public SqlPurchaseEntity withVersion(String version) {
         put(FIELD_VERSION, version);
         return this;
@@ -105,24 +106,24 @@ public class SqlPurchaseEntity extends SqlDBEntity {
     }
 
 
-    public static PurchaseDescriptor getDescriptor(ResultSet item) throws SQLException {
-        PurchaseDescriptor descriptor = new PurchaseDescriptor();
-        descriptor.packageName = item.getString(FIELD_PACKAGE_NAME);
-        descriptor.dateTime = item.getString(FIELD_DATE_TIME);
-        descriptor.lastUpdate = item.getString(FIELD_LAST_UPDATE);
-        descriptor.build = item.getInt(FIELD_BUILD);
-        descriptor.version = item.getString(FIELD_VERSION);
-        descriptor.country = item.getString(FIELD_COUNTRY);
-        descriptor.deviceModel = item.getString(FIELD_DEVICE_MODEL);
-        descriptor.deviceName= item.getString(FIELD_DEVICE_NAME);
-        descriptor.innerPrice = item.getString(FIELD_INNER_PRICE);
-        descriptor.innerCurrency = item.getString(FIELD_INNER_CURRENCY);
-        descriptor.userPrice = item.getString(FIELD_USER_PRICE);
-        descriptor.userCurrency = item.getString(FIELD_USER_CURRENCY);
-        descriptor.id = item.getString(FIELD_ID);
-        descriptor.currPageHash = item.getInt(FIELD_CURR_PAGE_HASH);
-        descriptor.prevPageHash = item.getInt(FIELD_PREV_PAGE_HASH);
-        return  descriptor;
+    public static PurchaseEntity getDescriptor(ResultSet item) throws SQLException {
+        PurchaseEntity descriptor = new PurchaseEntity();
+        descriptor.setPackageName(item.getString(FIELD_PACKAGE_NAME));
+        descriptor.setDateTime(item.getString(FIELD_DATE_TIME));
+        descriptor.setLastUpdate(item.getString(FIELD_LAST_UPDATE));
+        descriptor.setBuild(item.getInt(FIELD_BUILD));
+        descriptor.setVersion(item.getString(FIELD_VERSION));
+        descriptor.setCountry(item.getString(FIELD_COUNTRY));
+        descriptor.setDeviceModel(item.getString(FIELD_DEVICE_MODEL));
+        descriptor.setDeviceName(item.getString(FIELD_DEVICE_NAME));
+        descriptor.setInnerPrice(item.getString(FIELD_INNER_PRICE));
+        descriptor.setInnerCurrency(item.getString(FIELD_INNER_CURRENCY));
+        descriptor.setUserPrice(item.getString(FIELD_USER_PRICE));
+        descriptor.setInnerCurrency(item.getString(FIELD_USER_CURRENCY));
+        descriptor.setId(item.getInt(FIELD_ID));
+        descriptor.setCurrPageHash(item.getInt(FIELD_CURR_PAGE_HASH));
+        descriptor.setPrevPageHash(item.getInt(FIELD_PREV_PAGE_HASH));
+        return descriptor;
     }
 
 }

@@ -2,10 +2,10 @@ package org.onepf.repository.model;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.onepf.repository.api.responsewriter.entity.DownloadEntity;
 import org.onepf.repository.model.services.DataException;
 import org.onepf.repository.model.services.DataService;
 import org.onepf.repository.model.services.StorageService;
-import org.onepf.repository.api.responsewriter.descriptors.DownloadDescriptor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,9 +33,9 @@ public class GetDownloadsRequestHandler extends BaseRequestHandler {
      * @return List of DownloadDescriptors
      * @throws DataException
      */
-    public List<DownloadDescriptor> getDownloads(String packageName, long pageHash) throws DataException{
+    public List<DownloadEntity> getDownloads(String packageName, long pageHash) throws DataException{
         long time = System.currentTimeMillis();
-        ArrayList<DownloadDescriptor> descriptors = dataService.getDownloads(packageName, pageHash);
+        ArrayList<DownloadEntity> descriptors = dataService.getDownloads(packageName, pageHash);
         logger.debug("List downloads time: {}", (System.currentTimeMillis() - time));
         return descriptors;
     }

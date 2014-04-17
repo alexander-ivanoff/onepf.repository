@@ -1,7 +1,7 @@
 package org.onepf.repository.api.xmlapi;
 
 import org.onepf.repository.api.ItemParser;
-import org.onepf.repository.api.responsewriter.descriptors.AbstractDescriptor;
+import org.onepf.repository.api.responsewriter.entity.BaseEntity;
 import org.xml.sax.helpers.DefaultHandler;
 
 /**
@@ -9,7 +9,7 @@ import org.xml.sax.helpers.DefaultHandler;
  *
  * @author Alexander Ivanoff on 02.04.14.
  */
-public abstract class XmlItemParser<E extends AbstractDescriptor> extends DefaultHandler implements ItemParser<E>{
+public abstract class XmlItemParser<E extends BaseEntity> extends DefaultHandler implements ItemParser<E>{
 
     protected E descriptor;
 

@@ -1,11 +1,11 @@
 package org.onepf.repository;
 
+import org.onepf.repository.api.responsewriter.entity.PurchaseEntity;
 import org.onepf.repository.model.GetPurchasesRequestHandler;
 import org.onepf.repository.model.services.DataException;
 import org.onepf.repository.api.responsewriter.ResponseWriter;
 import org.onepf.repository.api.responsewriter.WriteException;
 import org.onepf.repository.api.responsewriter.XmlResponseWriter;
-import org.onepf.repository.api.responsewriter.descriptors.PurchaseDescriptor;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -48,14 +48,14 @@ public class GetPurchaseListServlet extends BaseServlet {
 
         try {
             String page = request.getParameter(PARAMETER_PAGE);
-            List<PurchaseDescriptor> purchases = getPurchasesRequestHandler.getPurchases(packageName, page != null? Integer.valueOf(page) : -1);
+            List<PurchaseEntity> purchases = getPurchasesRequestHandler.getPurchases(packageName, page != null? Integer.valueOf(page) : -1);
             String prevOffset = null;
             String lastUpdate = null;
             if (purchases.size() > 0 ) {
-                PurchaseDescriptor lastPurchase = purchases.get(0);
-                lastUpdate = lastPurchase.lastUpdate;
-                if (lastPurchase.currPageHash != lastPurchase.prevPageHash) {
-                    prevOffset = String.format(FILE_TEMPLATE, packageName, lastPurchase.prevPageHash);
+                PurchaseEntity lastPurchase = purchases.get(0);
+                lastUpdate = lastPurchase.getLastUpdate();
+                if (lastPurchase.getCurrPageHash() != lastPurchase.getPrevPageHash()) {
+                    prevOffset = String.format(FILE_TEMPLATE, packageName, lastPurchase.getPrevPageHash());
                 }
             }
             ResponseWriter responseWriter = new XmlResponseWriter();

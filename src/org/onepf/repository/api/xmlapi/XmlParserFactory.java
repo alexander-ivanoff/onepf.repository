@@ -2,8 +2,8 @@ package org.onepf.repository.api.xmlapi;
 
 import org.onepf.repository.api.ListParser;
 import org.onepf.repository.api.ParserFactory;
-import org.onepf.repository.api.responsewriter.descriptors.ApplicationDescriptor;
 import org.onepf.repository.api.responsewriter.descriptors.ApplicationListHeaderDescriptor;
+import org.onepf.repository.api.responsewriter.entity.ApplicationEntity;
 import org.xml.sax.SAXException;
 
 import javax.xml.bind.annotation.adapters.HexBinaryAdapter;
@@ -52,7 +52,7 @@ public class XmlParserFactory extends ParserFactory<XmlListParser> {
     }
 
     @Override
-    public ListParser<ApplicationDescriptor, ApplicationListHeaderDescriptor> getApplicationParser(Collection<ApplicationDescriptor> apps) {
+    public ListParser<ApplicationEntity, ApplicationListHeaderDescriptor> getApplicationParser(Collection<ApplicationEntity> apps) {
         return new XmlApplicationsListParser(apps);
     }
 }
