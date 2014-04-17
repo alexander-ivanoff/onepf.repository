@@ -8,8 +8,8 @@ import org.apache.http.protocol.HttpContext;
 import org.onepf.repository.ApiMapping;
 import org.onepf.repository.api.ListParser;
 import org.onepf.repository.api.ParserFactory;
-import org.onepf.repository.api.responsewriter.descriptors.ApplicationDescriptor;
 import org.onepf.repository.api.responsewriter.descriptors.ApplicationListHeaderDescriptor;
+import org.onepf.repository.api.responsewriter.entity.ApplicationEntity;
 import org.onepf.repository.model.auth.AppstoreDescriptor;
 
 import java.io.IOException;
@@ -60,14 +60,14 @@ public class ApplicationsToUpdateLoader {
      */
     public static class Response {
 
-        private Set<ApplicationDescriptor> appsToUpdate;
+        private Set<ApplicationEntity> appsToUpdate;
         private LastUpdateDescriptor lastUpdate;
 
         public LastUpdateDescriptor getLastUpdate() {
             return lastUpdate;
         }
 
-        public Set<ApplicationDescriptor> getAppsToUpdate() {
+        public Set<ApplicationEntity> getAppsToUpdate() {
             return appsToUpdate;
         }
     }
@@ -96,7 +96,7 @@ public class ApplicationsToUpdateLoader {
         final AppstoreDescriptor appstore = request.appstore;
         final LastUpdateDescriptor prevUpdate = request.prevUpdate;
 
-        Set<ApplicationDescriptor> appsToUpdate = new HashSet<ApplicationDescriptor>();
+        Set<ApplicationEntity> appsToUpdate = new HashSet<ApplicationEntity>();
         String hash = null;
         LastUpdateDescriptor lastUpdate = null;
 
@@ -111,15 +111,15 @@ public class ApplicationsToUpdateLoader {
             int result = httpResponse.getStatusLine().getStatusCode();
 
             if (result == HttpStatus.SC_OK) {
-                ListParser<ApplicationDescriptor, ApplicationListHeaderDescriptor> appParser = parserFactory.getApplicationParser(appsToUpdate);
+                ListParser<ApplicationEntity, ApplicationListHeaderDescriptor> appParser = parserFactory.getApplicationParser(appsToUpdate);
                 hash = parserFactory.parse(appParser, httpResponse.getEntity().getContent());
-                url = appParser.getHeader().offset;
+//                url = appParser.getHeader().offset;
                 if (lastUpdate == null) {
                     lastUpdate = new LastUpdateDescriptor();
                     lastUpdate.appstoreId = appstore.appstoreId;
                     lastUpdate.lastResponseDatetime = dateFormat.format(new Date(System.currentTimeMillis()));
                     lastUpdate.lastResponseHash = hash;
-                    lastUpdate.prevOffset = appParser.getHeader().offset;
+//                    lastUpdate.prevOffset = appParser.getHeader().offset;
                 }
 
             } else {

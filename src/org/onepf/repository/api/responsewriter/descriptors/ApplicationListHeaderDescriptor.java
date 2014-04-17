@@ -1,18 +1,17 @@
 package org.onepf.repository.api.responsewriter.descriptors;
 
-import org.onepf.repository.api.responsewriter.ResponseWriter;
-import org.onepf.repository.api.responsewriter.WritableHeader;
 import org.onepf.repository.api.responsewriter.WriteException;
+import org.onepf.repository.api.responsewriter.entity.BaseEntity;
 
 /**
  * This class contains description of header of a application list
  *
  * @author Alexander Ivanoff
  */
-public class ApplicationListHeaderDescriptor extends  BaseListHeaderDescriptor implements WritableHeader {
+public class ApplicationListHeaderDescriptor extends BaseEntity implements WritableHeader {
 
     public ApplicationListHeaderDescriptor(String version, String offset) {
-        super(version, offset);
+//        super(version, offset);
     }
 
     @Override

@@ -4,6 +4,8 @@ package org.onepf.repository.api.responsewriter.descriptors;
  * Created by ivanoff on 14.04.14.
  */
 
+import org.onepf.repository.api.responsewriter.entity.ApplicationEntity;
+
 /**
  * This class contains application description
  *
@@ -18,8 +20,8 @@ public class ApplicationToLoadDescriptor extends AbstractDescriptor {
 
     @Override
     public boolean equals(Object o) {
-        if (o instanceof ApplicationDescriptor) {
-            return packageName.equals(((ApplicationDescriptor)o).packageName);
+        if (o instanceof ApplicationEntity) {
+            return packageName.equals(((ApplicationEntity)o).getPackageName());
         }
         return false;
     }

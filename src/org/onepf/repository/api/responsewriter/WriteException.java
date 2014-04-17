@@ -7,7 +7,7 @@ package org.onepf.repository.api.responsewriter;
  */
 public class WriteException extends Exception {
 
-    WriteException(Exception originalException) {
+    public WriteException(Exception originalException) {
         super(originalException);
     }
 }

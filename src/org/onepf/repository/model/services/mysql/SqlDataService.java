@@ -8,17 +8,20 @@ import org.apache.commons.pool.ObjectPool;
 import org.apache.commons.pool.impl.GenericObjectPool;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.cfg.Configuration;
+import org.hibernate.service.ServiceRegistryBuilder;
 import org.onepf.repository.api.Pair;
-import org.onepf.repository.api.responsewriter.descriptors.ApplicationDescriptor;
-import org.onepf.repository.api.responsewriter.descriptors.DownloadDescriptor;
-import org.onepf.repository.api.responsewriter.descriptors.PurchaseDescriptor;
-import org.onepf.repository.api.responsewriter.descriptors.ReviewDescriptor;
+import org.onepf.repository.api.responsewriter.entity.*;
 import org.onepf.repository.appstorelooter.LastUpdateDescriptor;
 import org.onepf.repository.model.auth.AppstoreDescriptor;
 import org.onepf.repository.model.services.DataException;
 import org.onepf.repository.model.services.DataService;
 import org.onepf.repository.model.services.mysql.entities.*;
 
+import javax.persistence.Table;
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -63,32 +66,25 @@ public class SqlDataService implements DataService {
         }
         ObjectPool connectionPool = new GenericObjectPool(null, options.maxConnections, GenericObjectPool.WHEN_EXHAUSTED_BLOCK, options.maxWait);
         ConnectionFactory connectionFactory = new DriverManagerConnectionFactory(options.dbUrl, options.dbUser, options.dbPassword);
-        PoolableConnectionFactory poolableConnectionFactory = new PoolableConnectionFactory (connectionFactory,connectionPool,null,null,false,true);
+        PoolableConnectionFactory poolableConnectionFactory = new PoolableConnectionFactory(connectionFactory, connectionPool, null, null, false, true);
         PoolingDataSource dataSource = new PoolingDataSource(connectionPool);
         return dataSource;
     }
 
     @Override
-    public void store(ApplicationDescriptor applicationDescriptor) throws DataException {
+    public void store(ApplicationEntity appEntity) throws DataException {
         Connection conn = null;
-        PreparedStatement stmt = null;
         try {
-            SqlAppEntity appEntity = new SqlAppEntity()
-                    .withPackageName(applicationDescriptor.packageName)
-                    .withLastUpdate(applicationDescriptor.lastUpdated)
-                    .withDevelopersContact(applicationDescriptor.developerContact)
-                    .withAppstore(applicationDescriptor.appstoreId)
-                    .withAppdf(applicationDescriptor.appdfLink)
-                    .withDescription(applicationDescriptor.descriptionLink)
-                    .withHash(applicationDescriptor.appdfHash);
             conn = dbDataSource.getConnection();
-            stmt = insertWithHashes(conn, SqlAppEntity.TABLE_NAME, appEntity, PAGE_LIMIT_APPLICATIONS);
-            stmt.executeUpdate();
+            Table table = appEntity.getClass().getAnnotation(Table.class);
+            insertWithHashes(conn, table.name(), appEntity, PAGE_LIMIT_APPLICATIONS);
         } catch (SQLException e) {
             throw new DataException(e);
         } finally {
-            try { if (stmt != null) stmt.close(); } catch(Exception e) { }
-            try { if (conn != null) conn.close(); } catch(Exception e) { }
+            try {
+                if (conn != null) conn.close();
+            } catch (Exception ignored) {
+            }
         }
     }
 
@@ -109,46 +105,43 @@ public class SqlDataService implements DataService {
         } catch (SQLException e) {
             throw new DataException(e);
         } finally {
-            try { if (stmt != null) stmt.close(); } catch(Exception e) { }
-            try { if (conn != null) conn.close(); } catch(Exception e) { }
+            try {
+                if (stmt != null) stmt.close();
+            } catch (Exception e) {
+            }
+            try {
+                if (conn != null) conn.close();
+            } catch (Exception e) {
+            }
         }
     }
 
     @Override
-    public void addDownload(DownloadDescriptor downloadDescriptor) throws DataException {
+    public void addDownload(DownloadEntity download) throws DataException {
         Connection conn = null;
-        PreparedStatement stmt = null;
         try {
-            SqlDownloadEntity entity = new SqlDownloadEntity()
-                    .withLastUpdate(downloadDescriptor.lastUpdate)
-                    .withBuild(downloadDescriptor.build)
-                    .withPackageName(downloadDescriptor.packageName)
-                    .withCountry(downloadDescriptor.country)
-                    .withDateTime(downloadDescriptor.dateTime)
-                    .withDeviceModel(downloadDescriptor.deviceModel)
-                    .withDeviceName(downloadDescriptor.deviceName)
-                    .withIsUpdate(downloadDescriptor.isUpdate);
-
             conn = dbDataSource.getConnection();
-            stmt = insertWithHashes(conn, SqlDownloadEntity.TABLE_NAME, downloadDescriptor.packageName, entity, PAGE_LIMIT_OTHER);
-            stmt.executeUpdate();
+            Table table = download.getClass().getAnnotation(Table.class);
+            insertWithHashes(conn, table.name(), download.getPackageName(), download, PAGE_LIMIT_OTHER);
         } catch (SQLException e) {
             throw new DataException(e);
         } finally {
-            try { if (stmt != null) stmt.close(); } catch(Exception e) { }
-            try { if (conn != null) conn.close(); } catch(Exception e) { }
+            try {
+                if (conn != null) conn.close();
+            } catch (Exception ignored) {
+            }
         }
 
     }
 
     @Override
-    public List<ApplicationDescriptor> getApplicationsLog() throws DataException{
+    public List<ApplicationEntity> getApplicationsLog() throws DataException {
         return getApplicationsLog(null, -1);
     }
 
 
     @Override
-    public List<ApplicationDescriptor> getApplicationsLog(String packageName, int currPageHash) throws DataException{
+    public List<ApplicationEntity> getApplicationsLog(String packageName, int currPageHash) throws DataException {
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rset = null;
@@ -158,11 +151,11 @@ public class SqlDataService implements DataService {
             conn = dbDataSource.getConnection();
             if (packageName != null) {
                 selection = SqlAppEntity.FIELD_PACKAGE_NAME + "=?";
-                selectionArgs = new String[] {packageName};
+                selectionArgs = new String[]{packageName};
             } else {
                 if (currPageHash >= 0) {
                     selection = SqlAppEntity.FIELD_CURR_PAGE_HASH + "=?";
-                    selectionArgs = new String[] {String.valueOf(currPageHash)};
+                    selectionArgs = new String[]{String.valueOf(currPageHash)};
                 } else {
                     selection = SqlAppEntity.FIELD_CURR_PAGE_HASH + " = (SELECT " + SqlAppEntity.FIELD_CURR_PAGE_HASH +
                             " FROM " + SqlAppEntity.TABLE_NAME + " ORDER BY " + SqlAppEntity.FIELD_ID + " DESC LIMIT 1)";
@@ -172,7 +165,7 @@ public class SqlDataService implements DataService {
             String orderBy = SqlAppEntity.FIELD_ID + " DESC";
             stmt = query(conn, SqlAppEntity.TABLE_NAME, selection, selectionArgs, orderBy, DEFAULT_RESULT_LIMIT);
             rset = stmt.executeQuery();
-            ArrayList<ApplicationDescriptor> apps = new ArrayList<ApplicationDescriptor>();
+            ArrayList<ApplicationEntity> apps = new ArrayList<ApplicationEntity>();
             while (rset.next()) {
                 apps.add(SqlAppEntity.getDescriptor(rset));
             }
@@ -180,26 +173,35 @@ public class SqlDataService implements DataService {
         } catch (SQLException e) {
             throw new DataException(e);
         } finally {
-            try { if (rset != null) rset.close(); } catch(Exception e) { }
-            try { if (stmt != null) stmt.close(); } catch(Exception e) { }
-            try { if (conn != null) conn.close(); } catch(Exception e) { }
+            try {
+                if (rset != null) rset.close();
+            } catch (Exception e) {
+            }
+            try {
+                if (stmt != null) stmt.close();
+            } catch (Exception e) {
+            }
+            try {
+                if (conn != null) conn.close();
+            } catch (Exception e) {
+            }
         }
     }
 
     @Override
-    public List<ApplicationDescriptor> getApplicationByHash(String packageName, String hash) throws DataException{
+    public List<ApplicationEntity> getApplicationByHash(String packageName, String hash) throws DataException {
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rset = null;
         try {
             String selection = SqlAppEntity.FIELD_PACKAGE_NAME + "=? AND " + SqlAppEntity.FIELD_HASH + "=?";
-            String[] selectionArgs = new String[] {packageName, hash};
+            String[] selectionArgs = new String[]{packageName, hash};
             String orderBy = SqlAppEntity.FIELD_ID + " DESC";
             conn = dbDataSource.getConnection();
 
             stmt = query(conn, SqlAppEntity.TABLE_NAME, selection, selectionArgs, orderBy, 1);
             rset = stmt.executeQuery();
-            ArrayList<ApplicationDescriptor> apps = new ArrayList<ApplicationDescriptor>();
+            ArrayList<ApplicationEntity> apps = new ArrayList<ApplicationEntity>();
             while (rset.next()) {
                 apps.add(SqlAppEntity.getDescriptor(rset));
             }
@@ -207,17 +209,24 @@ public class SqlDataService implements DataService {
         } catch (SQLException e) {
             throw new DataException(e);
         } finally {
-            try { if (rset != null) rset.close(); } catch(Exception e) { }
-            try { if (stmt != null) stmt.close(); } catch(Exception e) { }
-            try { if (conn != null) conn.close(); } catch(Exception e) { }
+            try {
+                if (rset != null) rset.close();
+            } catch (Exception e) {
+            }
+            try {
+                if (stmt != null) stmt.close();
+            } catch (Exception e) {
+            }
+            try {
+                if (conn != null) conn.close();
+            } catch (Exception e) {
+            }
         }
     }
 
 
-
-
     @Override
-    public Map<String, AppstoreDescriptor> getAppstores() throws DataException{
+    public Map<String, AppstoreDescriptor> getAppstores() throws DataException {
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rset = null;
@@ -236,21 +245,30 @@ public class SqlDataService implements DataService {
             e.printStackTrace();
             throw new DataException(e);
         } finally {
-            try { if (rset != null) rset.close(); } catch(Exception e) { }
-            try { if (stmt != null) stmt.close(); } catch(Exception e) { }
-            try { if (conn != null) conn.close(); } catch(Exception e) { }
+            try {
+                if (rset != null) rset.close();
+            } catch (Exception e) {
+            }
+            try {
+                if (stmt != null) stmt.close();
+            } catch (Exception e) {
+            }
+            try {
+                if (conn != null) conn.close();
+            } catch (Exception e) {
+            }
         }
     }
 
     @Override
-    public List<LastUpdateDescriptor> getLastUpdate(String appstoreId) throws DataException{
+    public List<LastUpdateDescriptor> getLastUpdate(String appstoreId) throws DataException {
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rset = null;
         try {
             conn = dbDataSource.getConnection();
             String selection = SqlLastUpdateEntity.FIELD_APPSTORE_ID + "=?";
-            String[] selectionArgs = new String[] {appstoreId};
+            String[] selectionArgs = new String[]{appstoreId};
             stmt = query(conn, SqlLastUpdateEntity.TABLE_NAME, selection, selectionArgs, null, DEFAULT_RESULT_LIMIT);
             rset = stmt.executeQuery();
             List<LastUpdateDescriptor> updates = new ArrayList<LastUpdateDescriptor>();
@@ -262,14 +280,23 @@ public class SqlDataService implements DataService {
             e.printStackTrace();
             throw new DataException(e);
         } finally {
-            try { if (rset != null) rset.close(); } catch(Exception e) { }
-            try { if (stmt != null) stmt.close(); } catch(Exception e) { }
-            try { if (conn != null) conn.close(); } catch(Exception e) { }
+            try {
+                if (rset != null) rset.close();
+            } catch (Exception e) {
+            }
+            try {
+                if (stmt != null) stmt.close();
+            } catch (Exception e) {
+            }
+            try {
+                if (conn != null) conn.close();
+            } catch (Exception e) {
+            }
         }
     }
 
     @Override
-    public ArrayList<DownloadDescriptor> getDownloads(String packageName, long currPageHash) throws DataException {
+    public ArrayList<DownloadEntity> getDownloads(String packageName, long currPageHash) throws DataException {
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rset = null;
@@ -278,16 +305,16 @@ public class SqlDataService implements DataService {
             String[] selectionArgs;
             if (currPageHash >= 0) {
                 selection += "currPageHash=?";
-                selectionArgs = new String[] {packageName, String.valueOf(currPageHash)};
+                selectionArgs = new String[]{packageName, String.valueOf(currPageHash)};
             } else {
                 selection += "currPageHash = (SELECT currPageHash FROM downloads WHERE " + SqlDownloadEntity.FIELD_PACKAGE_NAME + "=? ORDER BY id DESC LIMIT 1)";
-                selectionArgs = new String[] {packageName, packageName};
+                selectionArgs = new String[]{packageName, packageName};
             }
             String order = SqlDownloadEntity.FIELD_ID + " DESC";
             conn = dbDataSource.getConnection();
             stmt = query(conn, "downloads", selection, selectionArgs, order, DEFAULT_RESULT_LIMIT);
             rset = stmt.executeQuery();
-            ArrayList<DownloadDescriptor> downloads = new ArrayList<DownloadDescriptor>();
+            ArrayList<DownloadEntity> downloads = new ArrayList<DownloadEntity>();
             while (rset.next()) {
                 downloads.add(SqlDownloadEntity.getDescriptor(rset));
             }
@@ -295,14 +322,23 @@ public class SqlDataService implements DataService {
         } catch (SQLException e) {
             throw new DataException(e);
         } finally {
-            try { if (rset != null) rset.close(); } catch(Exception e) { }
-            try { if (stmt != null) stmt.close(); } catch(Exception e) { }
-            try { if (conn != null) conn.close(); } catch(Exception e) { }
+            try {
+                if (rset != null) rset.close();
+            } catch (Exception e) {
+            }
+            try {
+                if (stmt != null) stmt.close();
+            } catch (Exception e) {
+            }
+            try {
+                if (conn != null) conn.close();
+            } catch (Exception e) {
+            }
         }
     }
 
     @Override
-    public ArrayList<PurchaseDescriptor> getPurchases(String packageName, long currPageHash) throws DataException {
+    public ArrayList<PurchaseEntity> getPurchases(String packageName, long currPageHash) throws DataException {
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rset = null;
@@ -311,16 +347,16 @@ public class SqlDataService implements DataService {
             String[] selectionArgs;
             if (currPageHash >= 0) {
                 selection += "currPageHash=?";
-                selectionArgs = new String[] {packageName, String.valueOf(currPageHash)};
+                selectionArgs = new String[]{packageName, String.valueOf(currPageHash)};
             } else {
                 selection += "currPageHash = (SELECT currPageHash FROM purchases WHERE " + SqlPurchaseEntity.FIELD_PACKAGE_NAME + "=? ORDER BY id DESC LIMIT 1)";
-                selectionArgs = new String[] {packageName, packageName};
+                selectionArgs = new String[]{packageName, packageName};
             }
             String order = SqlDownloadEntity.FIELD_ID + " DESC";
             conn = dbDataSource.getConnection();
             stmt = query(conn, "purchases", selection, selectionArgs, order, DEFAULT_RESULT_LIMIT);
             rset = stmt.executeQuery();
-            ArrayList<PurchaseDescriptor> purchases = new ArrayList<PurchaseDescriptor>();
+            ArrayList<PurchaseEntity> purchases = new ArrayList<PurchaseEntity>();
             while (rset.next()) {
                 purchases.add(SqlPurchaseEntity.getDescriptor(rset));
             }
@@ -328,14 +364,23 @@ public class SqlDataService implements DataService {
         } catch (SQLException e) {
             throw new DataException(e);
         } finally {
-            try { if (rset != null) rset.close(); } catch(Exception e) { }
-            try { if (stmt != null) stmt.close(); } catch(Exception e) { }
-            try { if (conn != null) conn.close(); } catch(Exception e) { }
+            try {
+                if (rset != null) rset.close();
+            } catch (Exception e) {
+            }
+            try {
+                if (stmt != null) stmt.close();
+            } catch (Exception e) {
+            }
+            try {
+                if (conn != null) conn.close();
+            } catch (Exception e) {
+            }
         }
     }
 
     @Override
-    public ArrayList<ReviewDescriptor> getReviews(String packageName, int currPageHash) throws DataException {
+    public ArrayList<ReviewEntity> getReviews(String packageName, int currPageHash) throws DataException {
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rset = null;
@@ -344,16 +389,16 @@ public class SqlDataService implements DataService {
             String[] selectionArgs;
             if (currPageHash >= 0) {
                 selection += "currPageHash=?";
-                selectionArgs = new String[] {packageName, String.valueOf(currPageHash)};
+                selectionArgs = new String[]{packageName, String.valueOf(currPageHash)};
             } else {
                 selection += "currPageHash = (SELECT currPageHash FROM reviews WHERE " + SqlReviewEntity.FIELD_PACKAGE_NAME + "=? ORDER BY id DESC LIMIT 1)";
-                selectionArgs = new String[] {packageName, packageName};
+                selectionArgs = new String[]{packageName, packageName};
             }
             String order = SqlDownloadEntity.FIELD_ID + " DESC";
             conn = dbDataSource.getConnection();
             stmt = query(conn, "reviews", selection, selectionArgs, order, DEFAULT_RESULT_LIMIT);
             rset = stmt.executeQuery();
-            ArrayList<ReviewDescriptor> reviews = new ArrayList<ReviewDescriptor>();
+            ArrayList<ReviewEntity> reviews = new ArrayList<ReviewEntity>();
             while (rset.next()) {
                 reviews.add(SqlReviewEntity.getDescriptor(rset));
             }
@@ -361,53 +406,36 @@ public class SqlDataService implements DataService {
         } catch (SQLException e) {
             throw new DataException(e);
         } finally {
-            try { if (rset != null) rset.close(); } catch(Exception e) { }
-            try { if (stmt != null) stmt.close(); } catch(Exception e) { }
-            try { if (conn != null) conn.close(); } catch(Exception e) { }
+            try {
+                if (rset != null) rset.close();
+            } catch (Exception e) {
+            }
+            try {
+                if (stmt != null) stmt.close();
+            } catch (Exception e) {
+            }
+            try {
+                if (conn != null) conn.close();
+            } catch (Exception e) {
+            }
         }
     }
 
     /**
      * insert new record to table with paging (add page hashes to insert)
      */
-    private static PreparedStatement insertWithHashes(Connection connection, String tableName, SqlDBEntity dbEntity, int limit) throws SQLException {
-        return insertWithHashes(connection, tableName, null,  dbEntity, limit);
+    private static void insertWithHashes(Connection connection, String tableName, BaseEntity entity, int limit) throws SQLException {
+        insertWithHashes(connection, tableName, null, entity, limit);
     }
 
     /**
      * insert new record to table with paging (add page hashes to insert)
      */
-    private static PreparedStatement insertWithHashes(Connection connection, String tableName, String packageName, SqlDBEntity dbEntity, int limit) throws SQLException {
-
+    private static void insertWithHashes(Connection connection, String tableName, String packageName, BaseEntity entity, int limit) throws SQLException {
         Pair<Integer, Integer> pageHashes = getPageHashes(connection, tableName, packageName, limit);
-
-        StringBuilder columnsBuilder = new StringBuilder().append("(");
-        StringBuilder valuesBuilder = new StringBuilder().append("(");
-        Map<String, String> item = dbEntity.getItem();
-        for (String entry : item.keySet()) {
-            columnsBuilder.append(entry).append(',');
-            valuesBuilder.append('?').append(',');
-
-        }
-
-        columnsBuilder.append("currPageHash").append(',');
-        columnsBuilder.append("prevPageHash").append(')');
-        valuesBuilder.append("?").append(',');
-        valuesBuilder.append("?").append(')');
-
-        String request = "INSERT INTO " + tableName + " " + columnsBuilder.toString() + " VALUES " + valuesBuilder.toString() + ";";
-        logger.info("INSERT: {}", request);
-
-        PreparedStatement stmt = connection.prepareStatement(request);
-        Collection<String> values = item.values();
-        int index = 0;
-        for (String value: values) {
-            stmt.setString(++index, value);
-        }
-        stmt.setInt(++index, pageHashes.fst);
-        stmt.setInt(++index, pageHashes.snd);
-            return  stmt;
-
+        entity.setPrevPageHash(pageHashes.fst);
+        entity.setCurrPageHash(pageHashes.snd);
+        saveEntity(entity);
     }
 
     /**
@@ -433,22 +461,22 @@ public class SqlDataService implements DataService {
         PreparedStatement stmt = connection.prepareStatement(request);
         Collection<String> values = item.values();
         int index = 0;
-        for (String value: values) {
+        for (String value : values) {
             stmt.setString(++index, value);
         }
-        return  stmt;
+        return stmt;
 
     }
 
     /**
      * @return statement for SELECT query
      */
-    private static PreparedStatement query(Connection connection,  String tableName, String selection, String[] selectionArgs, String order, int limit) throws SQLException {
+    private static PreparedStatement query(Connection connection, String tableName, String selection, String[] selectionArgs, String order, int limit) throws SQLException {
 
         StringBuilder requestBuilder = new StringBuilder().append("SELECT * FROM ").append(tableName);
         if (selection != null) {
             requestBuilder.append(" WHERE ").append(selection);
-        };
+        }
         if (order != null) {
             requestBuilder.append(" ORDER BY ").append(order);
         }
@@ -461,7 +489,7 @@ public class SqlDataService implements DataService {
             stmt = connection.prepareStatement(request);
             int index = 0;
             if (selectionArgs != null) {
-                for (String value: selectionArgs) {
+                for (String value : selectionArgs) {
                     stmt.setString(++index, value);
                 }
             }
@@ -477,17 +505,33 @@ public class SqlDataService implements DataService {
      * @param connection
      * @param tableName
      * @param packageName is used in downloads, purchases, reviews
-     * @param limit number of the records per one page
+     * @param limit       number of the records per one page
      * @return pair <currPageHash, prevPageHash>
      * @throws SQLException
      */
-    private static Pair<Integer, Integer> getPageHashes(Connection connection,  String tableName, String packageName,  int limit) throws SQLException {
+    private static Pair<Integer, Integer> getPageHashes(Connection connection, String tableName, String packageName, int limit) throws SQLException {
+        Configuration configuration = new Configuration();
+        configuration.configure("/resources/hibernate.cfg.xml");
+        ServiceRegistryBuilder serviceRegistryBuilder = new ServiceRegistryBuilder().applySettings(configuration
+                .getProperties());
+        SessionFactory sessionFactory = configuration
+                .buildSessionFactory(serviceRegistryBuilder.build());
+        Session session = sessionFactory.openSession();
+//        session.beginTransaction();
+//        session.save(entity);
+//        session.getTransaction().commit();
+//        session.close();
+
 
         String selection = "SELECT count(currPageHash) as cunt, currPageHash as chash, prevPageHash as phash FROM " + tableName + " WHERE currPageHash = (SELECT currPageHash FROM " + tableName;
         if (packageName != null) {
             selection += " WHERE package=?";
         }
         selection += " ORDER BY id DESC LIMIT 1)";
+
+        Query query = session.createQuery(selection);
+        List list = query.list();
+
         PreparedStatement stmt = connection.prepareStatement(selection);
         if (packageName != null) {
             stmt.setString(0, packageName);
@@ -506,7 +550,22 @@ public class SqlDataService implements DataService {
         }
         rs.close();
         stmt.close();
-        return  new Pair<Integer, Integer>(chash, phash);
+        return new Pair<Integer, Integer>(chash, phash);
+    }
+
+
+    public static void saveEntity(BaseEntity entity) {
+        Configuration configuration = new Configuration();
+        configuration.configure("/resources/hibernate.cfg.xml");
+        ServiceRegistryBuilder serviceRegistryBuilder = new ServiceRegistryBuilder().applySettings(configuration
+                .getProperties());
+        SessionFactory sessionFactory = configuration
+                .buildSessionFactory(serviceRegistryBuilder.build());
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        session.save(entity);
+        session.getTransaction().commit();
+        session.close();
     }
 
 }

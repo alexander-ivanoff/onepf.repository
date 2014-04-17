@@ -1,7 +1,7 @@
 package org.onepf.repository.api.xmlapi;
 
-import org.onepf.repository.api.responsewriter.descriptors.ApplicationDescriptor;
 import org.onepf.repository.api.responsewriter.descriptors.ApplicationListHeaderDescriptor;
+import org.onepf.repository.api.responsewriter.entity.ApplicationEntity;
 
 import java.util.Collection;
 
@@ -11,9 +11,9 @@ import java.util.Collection;
  *
  * @author Alexander Ivanoff on 02.04.14.
  */
-public class XmlApplicationsListParser extends  XmlListParser<ApplicationDescriptor, ApplicationListHeaderDescriptor> {
+public class XmlApplicationsListParser extends  XmlListParser<ApplicationEntity, ApplicationListHeaderDescriptor> {
 
-    public XmlApplicationsListParser(Collection<ApplicationDescriptor> items) {
+    public XmlApplicationsListParser(Collection<ApplicationEntity> items) {
         super(items, new XmlApplicationItemParser(), new XmlApplicationHeaderParser());
     }
 }
