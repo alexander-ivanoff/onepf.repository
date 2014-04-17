@@ -3,7 +3,6 @@ package org.onepf.repository.appstorelooter;
 import org.apache.http.client.HttpClient;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.conn.PoolingClientConnectionManager;
-import org.onepf.repository.api.ParserFactory;
 import org.onepf.repository.model.RepositoryConfigurator;
 import org.onepf.repository.model.RepositoryFactory;
 import org.onepf.repository.model.auth.AppstoreAuthenticator;
@@ -15,7 +14,6 @@ import java.io.File;
 import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 /**
  * This class schedule GetAppListRequest for all known appstores.
@@ -31,7 +29,7 @@ public class AppstoreRequester {
     private HttpClient httpClient;
     private ScheduledExecutorService scheduler;
 
-    private ParserFactory parserFactory;
+    //private ParserFactory parserFactory;
     private RepositoryFactory repositoryFactory;
     private AppstoreAuthenticator appstoreAuthenticator;
 
@@ -40,7 +38,7 @@ public class AppstoreRequester {
     public AppstoreRequester(ServletContext context) {
         repositoryFactory = RepositoryConfigurator.getRepositoryFactory(context);
         appstoreAuthenticator = RepositoryConfigurator.getAppstoreAuthenticator(context);
-        parserFactory = ParserFactory.getXmlParserFactory();
+        //parserFactory = ParserFactory.getXmlParserFactory();
 
         uploadDir = new File(context.getRealPath("/uploads/"));
     }
@@ -65,12 +63,14 @@ public class AppstoreRequester {
             // schedule GetAppListRequests
             scheduler = Executors.newScheduledThreadPool(appstores.size());
             for (AppstoreDescriptor appstore : appstores.values()) {
+                /*
                 if (appstore.appstoreId.equals("onepf.repository")) { //TEST PURPOSES ONLY
                     cm.setDefaultMaxPerRoute(CONNECTIONS_PER_STORE);
                     scheduler.scheduleAtFixedRate(
                             new GetAppListRequest(parserFactory, repositoryFactory, httpClient, appstore, uploadDir ),
                             POLLING_PERIOD, POLLING_PERIOD, TimeUnit.SECONDS);
                 }
+                */
             }
         }
     }

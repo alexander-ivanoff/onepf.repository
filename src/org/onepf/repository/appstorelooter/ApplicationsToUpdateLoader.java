@@ -6,15 +6,11 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.protocol.HttpContext;
 import org.onepf.repository.ApiMapping;
-import org.onepf.repository.api.ListParser;
-import org.onepf.repository.api.ParserFactory;
-import org.onepf.repository.api.responsewriter.descriptors.ApplicationListHeaderDescriptor;
 import org.onepf.repository.api.responsewriter.entity.ApplicationEntity;
 import org.onepf.repository.model.auth.AppstoreDescriptor;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -72,15 +68,15 @@ public class ApplicationsToUpdateLoader {
         }
     }
 
-    private ParserFactory parserFactory;
+    //private ParserFactory parserFactory;
     private HttpClient httpClient;
     private final HttpContext httpContext;
 
 
-    public ApplicationsToUpdateLoader(final ParserFactory parserFactory, final HttpClient httpClient, HttpContext context) {
+    public ApplicationsToUpdateLoader(/*final ParserFactory parserFactory,*/ final HttpClient httpClient, HttpContext context) {
         this.httpClient = httpClient;
         this.httpContext = context;
-        this.parserFactory = parserFactory;
+        //this.parserFactory = parserFactory;
     }
 
     /**
@@ -89,9 +85,8 @@ public class ApplicationsToUpdateLoader {
      * @param request
      * @return response object with set of ApplicationDescriptor and object with information about this update
      * @throws IOException
-     * @throws ParserFactory.ParseException
      */
-    public Response getUpdates(final Request request) throws IOException, ParserFactory.ParseException {
+    public Response getUpdates(final Request request) throws IOException{
         Response response = new Response();
         final AppstoreDescriptor appstore = request.appstore;
         final LastUpdateDescriptor prevUpdate = request.prevUpdate;
@@ -111,6 +106,7 @@ public class ApplicationsToUpdateLoader {
             int result = httpResponse.getStatusLine().getStatusCode();
 
             if (result == HttpStatus.SC_OK) {
+                /*
                 ListParser<ApplicationEntity, ApplicationListHeaderDescriptor> appParser = parserFactory.getApplicationParser(appsToUpdate);
                 hash = parserFactory.parse(appParser, httpResponse.getEntity().getContent());
 //                url = appParser.getHeader().offset;
@@ -121,7 +117,7 @@ public class ApplicationsToUpdateLoader {
                     lastUpdate.lastResponseHash = hash;
 //                    lastUpdate.prevOffset = appParser.getHeader().offset;
                 }
-
+                */
             } else {
                 throw new IOException("Applist request failed with result: " + httpResponse.getStatusLine());
             }

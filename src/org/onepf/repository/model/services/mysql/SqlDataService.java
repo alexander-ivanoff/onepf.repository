@@ -296,19 +296,19 @@ public class SqlDataService implements DataService {
     }
 
     @Override
-    public ArrayList<DownloadEntity> getDownloads(String packageName, long currPageHash) throws DataException {
+    public ArrayList<DownloadEntity> getDownloads(String homeStoreId, long currPageHash) throws DataException {
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rset = null;
         try {
-            String selection = SqlDownloadEntity.FIELD_PACKAGE_NAME + "=? AND ";
+            String selection = "homeStoreId=? AND ";
             String[] selectionArgs;
             if (currPageHash >= 0) {
                 selection += "currPageHash=?";
-                selectionArgs = new String[]{packageName, String.valueOf(currPageHash)};
+                selectionArgs = new String[]{homeStoreId, String.valueOf(currPageHash)};
             } else {
-                selection += "currPageHash = (SELECT currPageHash FROM downloads WHERE " + SqlDownloadEntity.FIELD_PACKAGE_NAME + "=? ORDER BY id DESC LIMIT 1)";
-                selectionArgs = new String[]{packageName, packageName};
+                selection += "currPageHash = (SELECT currPageHash FROM downloads WHERE homeStoreId=? ORDER BY id DESC LIMIT 1)";
+                selectionArgs = new String[]{homeStoreId, homeStoreId};
             }
             String order = SqlDownloadEntity.FIELD_ID + " DESC";
             conn = dbDataSource.getConnection();
@@ -338,19 +338,19 @@ public class SqlDataService implements DataService {
     }
 
     @Override
-    public ArrayList<PurchaseEntity> getPurchases(String packageName, long currPageHash) throws DataException {
+    public ArrayList<PurchaseEntity> getPurchases(String homeStoreId, long currPageHash) throws DataException {
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rset = null;
         try {
-            String selection = SqlPurchaseEntity.FIELD_PACKAGE_NAME + "=? AND ";
+            String selection = "homeStoreId=? AND ";
             String[] selectionArgs;
             if (currPageHash >= 0) {
                 selection += "currPageHash=?";
-                selectionArgs = new String[]{packageName, String.valueOf(currPageHash)};
+                selectionArgs = new String[]{homeStoreId, String.valueOf(currPageHash)};
             } else {
-                selection += "currPageHash = (SELECT currPageHash FROM purchases WHERE " + SqlPurchaseEntity.FIELD_PACKAGE_NAME + "=? ORDER BY id DESC LIMIT 1)";
-                selectionArgs = new String[]{packageName, packageName};
+                selection += "currPageHash = (SELECT currPageHash FROM downloads WHERE homeStoreId=? ORDER BY id DESC LIMIT 1)";
+                selectionArgs = new String[]{homeStoreId, homeStoreId};
             }
             String order = SqlDownloadEntity.FIELD_ID + " DESC";
             conn = dbDataSource.getConnection();
@@ -380,19 +380,19 @@ public class SqlDataService implements DataService {
     }
 
     @Override
-    public ArrayList<ReviewEntity> getReviews(String packageName, int currPageHash) throws DataException {
+    public ArrayList<ReviewEntity> getReviews(String homeStoreId, long currPageHash) throws DataException {
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rset = null;
         try {
-            String selection = SqlReviewEntity.FIELD_PACKAGE_NAME + "=? AND ";
+            String selection = "homeStoreId=? AND ";
             String[] selectionArgs;
             if (currPageHash >= 0) {
                 selection += "currPageHash=?";
-                selectionArgs = new String[]{packageName, String.valueOf(currPageHash)};
+                selectionArgs = new String[]{homeStoreId, String.valueOf(currPageHash)};
             } else {
-                selection += "currPageHash = (SELECT currPageHash FROM reviews WHERE " + SqlReviewEntity.FIELD_PACKAGE_NAME + "=? ORDER BY id DESC LIMIT 1)";
-                selectionArgs = new String[]{packageName, packageName};
+                selection += "currPageHash = (SELECT currPageHash FROM downloads WHERE homeStoreId=? ORDER BY id DESC LIMIT 1)";
+                selectionArgs = new String[]{homeStoreId, homeStoreId};
             }
             String order = SqlDownloadEntity.FIELD_ID + " DESC";
             conn = dbDataSource.getConnection();

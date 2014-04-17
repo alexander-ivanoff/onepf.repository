@@ -1,6 +1,8 @@
 package org.onepf.repository;
 
-import org.onepf.repository.api.responsewriter.entity.ReviewEntity;
+import org.onepf.repository.api.responsewriter.ResponseWriterV2;
+import org.onepf.repository.api.responsewriter.entity.*;
+import org.onepf.repository.api.xmlapi.XmlResponseWriterV2;
 import org.onepf.repository.model.GetReviewsRequestHandler;
 import org.onepf.repository.model.services.DataException;
 import org.onepf.repository.api.responsewriter.WriteException;
@@ -19,11 +21,22 @@ import java.util.List;
  */
 public class GetReviewListServlet extends BaseServlet {
 
-    private static final String PARAMETER_PACKAGE = "package";
     private static final String PARAMETER_PAGE = "page";
 
     public final static String FILE_PREFIX = "reviews";
-    private final static String FILE_TEMPLATE = FILE_PREFIX + "_%s_%d.xml";
+    private final static String FILE_TEMPLATE = FILE_PREFIX + "_%d.xml";
+
+    private static final ResponseWriterV2 responseWriter = initResponseWriter();
+
+    private static ResponseWriterV2 initResponseWriter() {
+        XmlResponseWriterV2 responseWriter = null;
+        try {
+            responseWriter = new XmlResponseWriterV2(ObjectFactory._Downloads_QNAME, DownloadListEntity.class.getPackage().getName());
+        } catch (WriteException e) {
+            e.printStackTrace();
+        }
+        return responseWriter;
+    }
 
     private GetReviewsRequestHandler handler;
 
@@ -38,27 +51,11 @@ public class GetReviewListServlet extends BaseServlet {
 
     protected void get(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        String packageName = request.getParameter(PARAMETER_PACKAGE);
-        if (packageName == null) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "No package defined");
-            return;
-        }
-
         try {
             String page = request.getParameter(PARAMETER_PAGE);
-            List<ReviewEntity> reviews = handler.getReviews(packageName, page != null ? Integer.valueOf(page) : -1);
-            ResponseWriter responseWriter = new XmlResponseWriter();
-            String prevOffset = null;
-            String lastUpdate = null;
-            if (reviews.size() > 0 ) {
-                ReviewEntity lastReview = reviews.get(0);
-//                lastUpdate = lastReview.lastUpdate;
-                if (lastReview.getCurrPageHash() != lastReview.getPrevPageHash()) {
-                    prevOffset = String.format(FILE_TEMPLATE, packageName, lastReview.getPrevPageHash());
-                }
-
-            }
-            responseWriter.writeReviews(response.getWriter(), reviews, prevOffset);
+            List<ReviewEntity> reviews = handler.getReviews(getAppstore(request).appstoreId, page != null ? Integer.valueOf(page) : -1);
+            String offset = getOffset(request, reviews);
+            responseWriter.write(response.getOutputStream(), buildListEntity("1", offset, reviews));
         } catch (WriteException e) {
             e.printStackTrace();
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
@@ -66,6 +63,25 @@ public class GetReviewListServlet extends BaseServlet {
             e.printStackTrace();
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
+    }
+
+    private static String getOffset(HttpServletRequest request, List<ReviewEntity> reviews) {
+        String offset = null;
+        if (reviews.size() > 0 ) {
+            ReviewEntity lastReview = reviews.get(0);
+            if (lastReview.getCurrPageHash() != lastReview.getPrevPageHash()) {
+                offset = String.format(FILE_TEMPLATE, lastReview.getPrevPageHash());
+            }
+        }
+        return offset;
+    }
+
+    private static ReviewsListEntity buildListEntity(String version, String offset, List<ReviewEntity> reviews) {
+        ReviewsListEntity listEntity = new ReviewsListEntity();
+        listEntity.setVersion(version);
+        listEntity.setOffset(offset);
+        listEntity.getReview().addAll(reviews);
+        return listEntity;
     }
 
 }

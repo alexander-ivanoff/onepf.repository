@@ -28,14 +28,13 @@ public class GetReviewsRequestHandler extends BaseRequestHandler {
     /**
      * return list of reviews for given packageName and page
      *
-     * @param packageName - name of the package to get review
      * @param pageHash - hash of the page to return
      * @return List of ReviewDescriptors
      * @throws DataException
      */
-    public List<ReviewEntity> getReviews(String packageName, int pageHash) throws DataException {
+    public List<ReviewEntity> getReviews(String homeStoreId, int pageHash) throws DataException {
         long time = System.currentTimeMillis();
-        ArrayList<ReviewEntity> reviews = dataService.getReviews(packageName, pageHash);
+        ArrayList<ReviewEntity> reviews = dataService.getReviews(homeStoreId, pageHash);
         logger.debug("List reviews time: {}", (System.currentTimeMillis() - time));
         return reviews;
     }

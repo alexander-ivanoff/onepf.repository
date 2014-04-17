@@ -3,6 +3,7 @@ package org.onepf.repository;
 import org.onepf.repository.model.RepositoryConfigurator;
 import org.onepf.repository.model.RepositoryFactory;
 import org.onepf.repository.model.auth.AppstoreAuthenticator;
+import org.onepf.repository.model.auth.AppstoreDescriptor;
 import org.onepf.repository.model.services.DataException;
 
 import javax.servlet.ServletException;
@@ -60,6 +61,10 @@ public abstract class BaseServlet extends HttpServlet {
         } catch (DataException e) {
             resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
+    }
+
+    protected AppstoreDescriptor getAppstore(HttpServletRequest req) throws DataException{
+        return authenticator.getAuthorizedAppstore(req);
     }
 
     abstract void get(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException;

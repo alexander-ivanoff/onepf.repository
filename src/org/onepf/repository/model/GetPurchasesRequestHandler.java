@@ -28,14 +28,13 @@ public class GetPurchasesRequestHandler extends BaseRequestHandler {
     /**
      * return list of purchases for given packageName and page
      *
-     * @param packageName - name of the package
      * @param pageHash - hash of the page to return
      * @return List of PurchaseDescriptor
      * @throws DataException
      */
-    public List<PurchaseEntity> getPurchases(String packageName, int pageHash) throws DataException {
+    public List<PurchaseEntity> getPurchases(String homeStoreId, int pageHash) throws DataException {
         long time = System.currentTimeMillis();
-        ArrayList<PurchaseEntity> purchases = dataService.getPurchases(packageName, pageHash);
+        ArrayList<PurchaseEntity> purchases = dataService.getPurchases(homeStoreId, pageHash);
         logger.debug("List purchases time: {}", (System.currentTimeMillis() - time));
         return purchases;
     }
