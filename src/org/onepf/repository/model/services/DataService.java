@@ -43,7 +43,7 @@ public interface DataService {
      * @see org.onepf.repository.model.services.DataException
      */
     List<LastUpdateDescriptor> getLastUpdate(String appstoreId) throws DataException;
-    List<LastStatisticsUpdateDescriptor> getLastStatisticsUpdate(String appstoreId, String feedType) throws DataException;
+    LastStatisticsUpdateDescriptor getLastStatisticsUpdate(String appstoreId, String feedType) throws DataException;
 
     /**
      * @param packageName

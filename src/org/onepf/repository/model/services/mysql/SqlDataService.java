@@ -271,7 +271,7 @@ public class SqlDataService implements DataService {
 
 
     @Override
-    public List<LastStatisticsUpdateDescriptor> getLastStatisticsUpdate(String appstoreId, String feedType) throws DataException{
+    public LastStatisticsUpdateDescriptor getLastStatisticsUpdate(String appstoreId, String feedType) throws DataException{
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rset = null;
@@ -281,11 +281,14 @@ public class SqlDataService implements DataService {
             String[] selectionArgs = new String[] {appstoreId, feedType};
             stmt = query(conn, SqlLastStatisticsUpdateEntity.TABLE_NAME, selection, selectionArgs, null, DEFAULT_RESULT_LIMIT);
             rset = stmt.executeQuery();
-            List<LastStatisticsUpdateDescriptor> updates = new ArrayList<LastStatisticsUpdateDescriptor>();
-            while (rset.next()) {
-                updates.add(SqlLastStatisticsUpdateEntity.getDescriptor(rset));
+            LastStatisticsUpdateDescriptor lastUpdate = null;
+            if (rset.next()) {
+                lastUpdate = SqlLastStatisticsUpdateEntity.getDescriptor(rset);
             }
-            return updates;
+            if (rset.next()) {
+                throw new DataException("getLastStatisticsUpdate result set must contain at most one row");
+            }
+            return lastUpdate;
         } catch (SQLException e) {
             e.printStackTrace();
             throw new DataException(e);
