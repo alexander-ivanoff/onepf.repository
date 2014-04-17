@@ -8,12 +8,9 @@
 
 package org.onepf.repository.api.responsewriter.entity;
 
-import org.onepf.repository.api.xmlapi.JaxbElementMaker;
-
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.namespace.QName;
 import java.util.ArrayList;
@@ -23,13 +20,9 @@ import java.util.List;
 @XmlType(name = "application-listType", propOrder = {
     "application"
 })
-public class ApplicationListEntity implements JaxbElementMaker{
+public class ApplicationListEntity extends BaseListEntity{
 
     protected List<ApplicationEntity> application;
-    @XmlAttribute(name = "version", required = true)
-    protected String version;
-    @XmlAttribute(name = "offset")
-    protected String offset;
 
     /**
      * Gets the value of the application property.
@@ -59,55 +52,6 @@ public class ApplicationListEntity implements JaxbElementMaker{
         }
         return this.application;
     }
-
-    /**
-     * Gets the value of the version property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getVersion() {
-        return version;
-    }
-
-    /**
-     * Sets the value of the version property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setVersion(String value) {
-        this.version = value;
-    }
-
-    /**
-     * Gets the value of the offset property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getOffset() {
-        return offset;
-    }
-
-    /**
-     * Sets the value of the offset property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setOffset(String value) {
-        this.offset = value;
-    }
-
 
     @Override
     public JAXBElement<ApplicationListEntity> getAsJaxbElement(QName qname) {

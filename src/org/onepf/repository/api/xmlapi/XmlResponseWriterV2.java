@@ -31,7 +31,7 @@ public class XmlResponseWriterV2<T extends JaxbElementMaker> implements Response
         try {
             context = JAXBContext.newInstance(packageName);
         } catch (JAXBException e) {
-            throw new WriteException(e);
+            context = null;
         }
         this.qName = qName;
     }
