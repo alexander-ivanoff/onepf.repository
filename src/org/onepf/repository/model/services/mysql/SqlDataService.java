@@ -8,6 +8,7 @@ import org.apache.commons.pool.ObjectPool;
 import org.apache.commons.pool.impl.GenericObjectPool;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistry;
@@ -141,51 +142,49 @@ public class SqlDataService implements DataService {
 
 
     @Override
-    public List<ApplicationEntity> getApplicationsLog(String packageName, int currPageHash) throws DataException {
-        Connection conn = null;
-        PreparedStatement stmt = null;
-        ResultSet rset = null;
-        try {
-            String selection = null;
-            String[] selectionArgs = null;
-            conn = dbDataSource.getConnection();
-            if (packageName != null) {
-                selection = SqlAppEntity.FIELD_PACKAGE_NAME + "=?";
-                selectionArgs = new String[]{packageName};
+    public  List<ApplicationEntity> getApplicationsLog(String packageName, int currPageHash) throws DataException {
+        Configuration configuration = new Configuration();
+        configuration.configure("/resources/hibernate.cfg.xml");
+        StandardServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder().applySettings(
+                configuration.getProperties()).build();
+        SessionFactory sessionFactory = configuration
+                .buildSessionFactory(serviceRegistry);
+        Session session = sessionFactory.openSession();
+
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("FROM ApplicationEntity");
+        List<Pair<String, Object>> params = new ArrayList<Pair<String, Object>>();
+        if (packageName != null && packageName.length() > 0) {
+            stringBuilder.append(" WHERE packageName = :packageParam");
+            params.add(new Pair<String, Object>("packageParam", packageName));
+        } else {
+            int pageHash = currPageHash;
+            if (pageHash >= 0) {
+                stringBuilder.append(" WHERE currPageHash = :currPageHashParam");
+                params.add(new Pair<String, Object>("currPageHashParam", currPageHash));
             } else {
-                if (currPageHash >= 0) {
-                    selection = SqlAppEntity.FIELD_CURR_PAGE_HASH + "=?";
-                    selectionArgs = new String[]{String.valueOf(currPageHash)};
+                String hqlSelection = "FROM ApplicationEntity ORDER BY id DESC ";
+                Query query = session.createQuery(hqlSelection);
+                List list = query.list();
+                if (!list.isEmpty()) {
+                    pageHash = ((ApplicationEntity) list.get(0)).getCurrPageHash();
                 } else {
-                    selection = SqlAppEntity.FIELD_CURR_PAGE_HASH + " = (SELECT " + SqlAppEntity.FIELD_CURR_PAGE_HASH +
-                            " FROM " + SqlAppEntity.TABLE_NAME + " ORDER BY " + SqlAppEntity.FIELD_ID + " DESC LIMIT 1)";
-                    selectionArgs = null;
+                    pageHash = 0;
                 }
-            }
-            String orderBy = SqlAppEntity.FIELD_ID + " DESC";
-            stmt = query(conn, SqlAppEntity.TABLE_NAME, selection, selectionArgs, orderBy, DEFAULT_RESULT_LIMIT);
-            rset = stmt.executeQuery();
-            ArrayList<ApplicationEntity> apps = new ArrayList<ApplicationEntity>();
-            while (rset.next()) {
-                apps.add(SqlAppEntity.getDescriptor(rset));
-            }
-            return apps;
-        } catch (SQLException e) {
-            throw new DataException(e);
-        } finally {
-            try {
-                if (rset != null) rset.close();
-            } catch (Exception e) {
-            }
-            try {
-                if (stmt != null) stmt.close();
-            } catch (Exception e) {
-            }
-            try {
-                if (conn != null) conn.close();
-            } catch (Exception e) {
+                params.add(new Pair<String, Object>("currPageHashParam", pageHash));
             }
         }
+
+        Query query = session.createQuery(stringBuilder.toString());
+        if (params.size() > 0) {
+            for (Pair<String, Object> pair : params) {
+                query.setParameter(pair.fst, pair.snd);
+            }
+
+        }
+        List results = query.list();
+        session.close();
+        return results;
     }
 
     @Override
@@ -199,7 +198,34 @@ public class SqlDataService implements DataService {
             String orderBy = SqlAppEntity.FIELD_ID + " DESC";
             conn = dbDataSource.getConnection();
 
-            stmt = query(conn, SqlAppEntity.TABLE_NAME, selection, selectionArgs, orderBy, 1);
+            PreparedStatement result;
+
+            StringBuilder requestBuilder = new StringBuilder().append("SELECT * FROM ").append(SqlAppEntity.TABLE_NAME);
+            if (selection != null) {
+                requestBuilder.append(" WHERE ").append(selection);
+            }
+            if (orderBy != null) {
+                requestBuilder.append(" ORDER BY ").append(orderBy);
+            }
+            requestBuilder.append(" LIMIT " + 1);
+            String request = requestBuilder.toString();
+            logger.info("QUERY: {}", request);
+
+            PreparedStatement stmt1 = null;
+            try {
+                stmt1 = conn.prepareStatement(request);
+                int index = 0;
+                if (selectionArgs != null) {
+                    for (String value : selectionArgs) {
+                        stmt1.setString(++index, value);
+                    }
+                }
+                result = stmt1;
+            } catch (SQLException e) {
+                e.printStackTrace();
+                throw e;
+            }
+            stmt = result;
             rset = stmt.executeQuery();
             ArrayList<ApplicationEntity> apps = new ArrayList<ApplicationEntity>();
             while (rset.next()) {
@@ -232,7 +258,34 @@ public class SqlDataService implements DataService {
         ResultSet rset = null;
         try {
             conn = dbDataSource.getConnection();
-            stmt = query(conn, SqlAppstoreEntity.TABLE_NAME, null, null, null, DEFAULT_RESULT_LIMIT);
+            PreparedStatement result;
+
+            StringBuilder requestBuilder = new StringBuilder().append("SELECT * FROM ").append(SqlAppstoreEntity.TABLE_NAME);
+            if (null != null) {
+                requestBuilder.append(" WHERE ").append((String) null);
+            }
+            if (null != null) {
+                requestBuilder.append(" ORDER BY ").append((String) null);
+            }
+            requestBuilder.append(" LIMIT " + DEFAULT_RESULT_LIMIT);
+            String request = requestBuilder.toString();
+            logger.info("QUERY: {}", request);
+
+            PreparedStatement stmt1 = null;
+            try {
+                stmt1 = conn.prepareStatement(request);
+                int index = 0;
+                if (null != null) {
+                    for (String value : (String[]) null) {
+                        stmt1.setString(++index, value);
+                    }
+                }
+                result = stmt1;
+            } catch (SQLException e) {
+                e.printStackTrace();
+                throw e;
+            }
+            stmt = result;
             rset = stmt.executeQuery();
             Map<String, AppstoreDescriptor> apps = new HashMap<String, AppstoreDescriptor>();
             AppstoreDescriptor appstore = null;
@@ -269,7 +322,34 @@ public class SqlDataService implements DataService {
             conn = dbDataSource.getConnection();
             String selection = SqlLastUpdateEntity.FIELD_APPSTORE_ID + "=?";
             String[] selectionArgs = new String[]{appstoreId};
-            stmt = query(conn, SqlLastUpdateEntity.TABLE_NAME, selection, selectionArgs, null, DEFAULT_RESULT_LIMIT);
+            PreparedStatement result;
+
+            StringBuilder requestBuilder = new StringBuilder().append("SELECT * FROM ").append(SqlLastUpdateEntity.TABLE_NAME);
+            if (selection != null) {
+                requestBuilder.append(" WHERE ").append(selection);
+            }
+            if (null != null) {
+                requestBuilder.append(" ORDER BY ").append((String) null);
+            }
+            requestBuilder.append(" LIMIT " + DEFAULT_RESULT_LIMIT);
+            String request = requestBuilder.toString();
+            logger.info("QUERY: {}", request);
+
+            PreparedStatement stmt1 = null;
+            try {
+                stmt1 = conn.prepareStatement(request);
+                int index = 0;
+                if (selectionArgs != null) {
+                    for (String value : selectionArgs) {
+                        stmt1.setString(++index, value);
+                    }
+                }
+                result = stmt1;
+            } catch (SQLException e) {
+                e.printStackTrace();
+                throw e;
+            }
+            stmt = result;
             rset = stmt.executeQuery();
             List<LastUpdateDescriptor> updates = new ArrayList<LastUpdateDescriptor>();
             while (rset.next()) {
@@ -312,7 +392,34 @@ public class SqlDataService implements DataService {
             }
             String order = SqlDownloadEntity.FIELD_ID + " DESC";
             conn = dbDataSource.getConnection();
-            stmt = query(conn, "downloads", selection, selectionArgs, order, DEFAULT_RESULT_LIMIT);
+            PreparedStatement result;
+
+            StringBuilder requestBuilder = new StringBuilder().append("SELECT * FROM ").append("downloads");
+            if (selection != null) {
+                requestBuilder.append(" WHERE ").append(selection);
+            }
+            if (order != null) {
+                requestBuilder.append(" ORDER BY ").append(order);
+            }
+            requestBuilder.append(" LIMIT " + DEFAULT_RESULT_LIMIT);
+            String request = requestBuilder.toString();
+            logger.info("QUERY: {}", request);
+
+            PreparedStatement stmt1 = null;
+            try {
+                stmt1 = conn.prepareStatement(request);
+                int index = 0;
+                if (selectionArgs != null) {
+                    for (String value : selectionArgs) {
+                        stmt1.setString(++index, value);
+                    }
+                }
+                result = stmt1;
+            } catch (SQLException e) {
+                e.printStackTrace();
+                throw e;
+            }
+            stmt = result;
             rset = stmt.executeQuery();
             ArrayList<DownloadEntity> downloads = new ArrayList<DownloadEntity>();
             while (rset.next()) {
@@ -354,7 +461,34 @@ public class SqlDataService implements DataService {
             }
             String order = SqlDownloadEntity.FIELD_ID + " DESC";
             conn = dbDataSource.getConnection();
-            stmt = query(conn, "purchases", selection, selectionArgs, order, DEFAULT_RESULT_LIMIT);
+            PreparedStatement result;
+
+            StringBuilder requestBuilder = new StringBuilder().append("SELECT * FROM ").append("purchases");
+            if (selection != null) {
+                requestBuilder.append(" WHERE ").append(selection);
+            }
+            if (order != null) {
+                requestBuilder.append(" ORDER BY ").append(order);
+            }
+            requestBuilder.append(" LIMIT " + DEFAULT_RESULT_LIMIT);
+            String request = requestBuilder.toString();
+            logger.info("QUERY: {}", request);
+
+            PreparedStatement stmt1 = null;
+            try {
+                stmt1 = conn.prepareStatement(request);
+                int index = 0;
+                if (selectionArgs != null) {
+                    for (String value : selectionArgs) {
+                        stmt1.setString(++index, value);
+                    }
+                }
+                result = stmt1;
+            } catch (SQLException e) {
+                e.printStackTrace();
+                throw e;
+            }
+            stmt = result;
             rset = stmt.executeQuery();
             ArrayList<PurchaseEntity> purchases = new ArrayList<PurchaseEntity>();
             while (rset.next()) {
@@ -396,7 +530,34 @@ public class SqlDataService implements DataService {
             }
             String order = SqlDownloadEntity.FIELD_ID + " DESC";
             conn = dbDataSource.getConnection();
-            stmt = query(conn, "reviews", selection, selectionArgs, order, DEFAULT_RESULT_LIMIT);
+            PreparedStatement result;
+
+            StringBuilder requestBuilder = new StringBuilder().append("SELECT * FROM ").append("reviews");
+            if (selection != null) {
+                requestBuilder.append(" WHERE ").append(selection);
+            }
+            if (order != null) {
+                requestBuilder.append(" ORDER BY ").append(order);
+            }
+            requestBuilder.append(" LIMIT " + DEFAULT_RESULT_LIMIT);
+            String request = requestBuilder.toString();
+            logger.info("QUERY: {}", request);
+
+            PreparedStatement stmt1 = null;
+            try {
+                stmt1 = conn.prepareStatement(request);
+                int index = 0;
+                if (selectionArgs != null) {
+                    for (String value : selectionArgs) {
+                        stmt1.setString(++index, value);
+                    }
+                }
+                result = stmt1;
+            } catch (SQLException e) {
+                e.printStackTrace();
+                throw e;
+            }
+            stmt = result;
             rset = stmt.executeQuery();
             ArrayList<ReviewEntity> reviews = new ArrayList<ReviewEntity>();
             while (rset.next()) {
@@ -466,38 +627,6 @@ public class SqlDataService implements DataService {
         }
         return stmt;
 
-    }
-
-    /**
-     * @return statement for SELECT query
-     */
-    private static PreparedStatement query(Connection connection, String tableName, String selection, String[] selectionArgs, String order, int limit) throws SQLException {
-
-        StringBuilder requestBuilder = new StringBuilder().append("SELECT * FROM ").append(tableName);
-        if (selection != null) {
-            requestBuilder.append(" WHERE ").append(selection);
-        }
-        if (order != null) {
-            requestBuilder.append(" ORDER BY ").append(order);
-        }
-        requestBuilder.append(" LIMIT " + limit);
-        String request = requestBuilder.toString();
-        logger.info("QUERY: {}", request);
-
-        PreparedStatement stmt = null;
-        try {
-            stmt = connection.prepareStatement(request);
-            int index = 0;
-            if (selectionArgs != null) {
-                for (String value : selectionArgs) {
-                    stmt.setString(++index, value);
-                }
-            }
-            return stmt;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            throw e;
-        }
     }
 
 
