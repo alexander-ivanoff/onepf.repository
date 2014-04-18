@@ -33,8 +33,8 @@ public class ApplicationEntity extends BaseEntity {
     @Column(name = "version")
     private String version;
 
-    @Column(name = "versionCode")
-    private int build;
+    @Column(name = "versionCode", nullable = true)
+    private Integer build;
 
     @Column(name = "datetime")
     private String datetime;
@@ -92,11 +92,11 @@ public class ApplicationEntity extends BaseEntity {
         this.version = version;
     }
 
-    public int getBuild() {
+    public Integer getBuild() {
         return build;
     }
 
-    public void setBuild(int build) {
+    public void setBuild(Integer build) {
         this.build = build;
     }
 
