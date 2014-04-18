@@ -191,10 +191,10 @@ public class SqlDataService implements DataService {
                 List list = query.list();
                 if (!list.isEmpty()) {
                     pageHash = ((ApplicationEntity) list.get(0)).getCurrPageHash();
+                    params.add(new Pair<String, Object>("currPageHashParam", pageHash));
                 } else {
-                    pageHash = 0;
+                    return new ArrayList<ApplicationEntity>();
                 }
-                params.add(new Pair<String, Object>("currPageHashParam", pageHash));
             }
         }
 
