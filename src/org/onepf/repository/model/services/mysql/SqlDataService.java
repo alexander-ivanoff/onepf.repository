@@ -101,7 +101,30 @@ public class SqlDataService implements DataService {
                     .withOffset(lastUpdateDescriptor.prevOffset);
 
             conn = dbDataSource.getConnection();
-            stmt = insert(conn, SqlLastUpdateEntity.TABLE_NAME, appEntity);
+
+            StringBuilder columnsBuilder = new StringBuilder().append("(");
+            StringBuilder valuesBuilder = new StringBuilder().append("(");
+            Map<String, String> item = appEntity.getItem();
+            for (String entry : item.keySet()) {
+                columnsBuilder.append(entry).append(',');
+                valuesBuilder.append('?').append(',');
+
+            }
+            int pos = columnsBuilder.length();
+            columnsBuilder.replace(pos - 1, pos, ")");
+            pos = valuesBuilder.length();
+            valuesBuilder.replace(pos - 1, pos, ")");
+
+            String request = "REPLACE INTO " + SqlLastUpdateEntity.TABLE_NAME + " " + columnsBuilder.toString() + " VALUES " + valuesBuilder.toString() + ";";
+
+            PreparedStatement stmt1 = conn.prepareStatement(request);
+            Collection<String> values = item.values();
+            int index = 0;
+            for (String value : values) {
+                stmt1.setString(++index, value);
+            }
+
+            stmt = stmt1;
             stmt.executeUpdate();
         } catch (SQLException e) {
             throw new DataException(e);
@@ -142,7 +165,7 @@ public class SqlDataService implements DataService {
 
 
     @Override
-    public  List<ApplicationEntity> getApplicationsLog(String packageName, int currPageHash) throws DataException {
+    public List<ApplicationEntity> getApplicationsLog(String packageName, int currPageHash) throws DataException {
         Configuration configuration = new Configuration();
         configuration.configure("/resources/hibernate.cfg.xml");
         StandardServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder().applySettings(
@@ -189,65 +212,21 @@ public class SqlDataService implements DataService {
 
     @Override
     public List<ApplicationEntity> getApplicationByHash(String packageName, String hash) throws DataException {
-        Connection conn = null;
-        PreparedStatement stmt = null;
-        ResultSet rset = null;
-        try {
-            String selection = SqlAppEntity.FIELD_PACKAGE_NAME + "=? AND " + SqlAppEntity.FIELD_HASH + "=?";
-            String[] selectionArgs = new String[]{packageName, hash};
-            String orderBy = SqlAppEntity.FIELD_ID + " DESC";
-            conn = dbDataSource.getConnection();
 
-            PreparedStatement result;
+        Configuration configuration = new Configuration();
+        configuration.configure("/resources/hibernate.cfg.xml");
+        StandardServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder().applySettings(
+                configuration.getProperties()).build();
+        SessionFactory sessionFactory = configuration
+                .buildSessionFactory(serviceRegistry);
+        Session session = sessionFactory.openSession();
 
-            StringBuilder requestBuilder = new StringBuilder().append("SELECT * FROM ").append(SqlAppEntity.TABLE_NAME);
-            if (selection != null) {
-                requestBuilder.append(" WHERE ").append(selection);
-            }
-            if (orderBy != null) {
-                requestBuilder.append(" ORDER BY ").append(orderBy);
-            }
-            requestBuilder.append(" LIMIT " + 1);
-            String request = requestBuilder.toString();
-            logger.info("QUERY: {}", request);
-
-            PreparedStatement stmt1 = null;
-            try {
-                stmt1 = conn.prepareStatement(request);
-                int index = 0;
-                if (selectionArgs != null) {
-                    for (String value : selectionArgs) {
-                        stmt1.setString(++index, value);
-                    }
-                }
-                result = stmt1;
-            } catch (SQLException e) {
-                e.printStackTrace();
-                throw e;
-            }
-            stmt = result;
-            rset = stmt.executeQuery();
-            ArrayList<ApplicationEntity> apps = new ArrayList<ApplicationEntity>();
-            while (rset.next()) {
-                apps.add(SqlAppEntity.getDescriptor(rset));
-            }
-            return apps;
-        } catch (SQLException e) {
-            throw new DataException(e);
-        } finally {
-            try {
-                if (rset != null) rset.close();
-            } catch (Exception e) {
-            }
-            try {
-                if (stmt != null) stmt.close();
-            } catch (Exception e) {
-            }
-            try {
-                if (conn != null) conn.close();
-            } catch (Exception e) {
-            }
-        }
+        Query query = session.createQuery("FROM ApplicationEntity where packageName = :packageParam and appdfHash = :hashParam ORDER BY id DESC");
+        query.setParameter("packageParam", packageName);
+        query.setParameter("hashParam", hash);
+        query.setMaxResults(1);
+        session.close();
+        return query.list();
     }
 
 
@@ -597,36 +576,6 @@ public class SqlDataService implements DataService {
         entity.setPrevPageHash(pageHashes.fst);
         entity.setCurrPageHash(pageHashes.snd);
         saveEntity(entity);
-    }
-
-    /**
-     * insert or replace record to table without paging
-     */
-    private static PreparedStatement insert(Connection connection, String tableName, SqlDBEntity dbEntity) throws SQLException {
-
-        StringBuilder columnsBuilder = new StringBuilder().append("(");
-        StringBuilder valuesBuilder = new StringBuilder().append("(");
-        Map<String, String> item = dbEntity.getItem();
-        for (String entry : item.keySet()) {
-            columnsBuilder.append(entry).append(',');
-            valuesBuilder.append('?').append(',');
-
-        }
-        int pos = columnsBuilder.length();
-        columnsBuilder.replace(pos - 1, pos, ")");
-        pos = valuesBuilder.length();
-        valuesBuilder.replace(pos - 1, pos, ")");
-
-        String request = "REPLACE INTO " + tableName + " " + columnsBuilder.toString() + " VALUES " + valuesBuilder.toString() + ";";
-
-        PreparedStatement stmt = connection.prepareStatement(request);
-        Collection<String> values = item.values();
-        int index = 0;
-        for (String value : values) {
-            stmt.setString(++index, value);
-        }
-        return stmt;
-
     }
 
 
