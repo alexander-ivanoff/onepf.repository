@@ -46,7 +46,7 @@ public abstract class SimpleListServlet<T extends BaseEntity, K extends BaseList
     protected void get(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String page = request.getParameter(PARAMETER_PAGE);
         try {
-            List<T> apps = handler.getList(getAppstore(request).appstoreId, page != null ? Integer.valueOf(page) : -1);
+            List<T> apps = handler.getList(getAppstore(request).getAppstoreId(), page != null ? Integer.valueOf(page) : -1);
             String offset = getOffset(request, apps);
             K listEntity = buildListEntity(apps);
             listEntity.setVersion("1");

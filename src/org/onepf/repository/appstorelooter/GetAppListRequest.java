@@ -5,8 +5,8 @@ import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.HttpContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.onepf.repository.api.responsewriter.entity.AppstoreEntity;
 import org.onepf.repository.model.RepositoryFactory;
-import org.onepf.repository.model.auth.AppstoreDescriptor;
 
 import java.io.File;
 import java.util.List;
@@ -21,7 +21,7 @@ public class GetAppListRequest implements Runnable {
     private final Logger alarmCauseLogger = LogManager.getLogger("AlarmCauseLogger");
     private final Logger logger = LogManager.getLogger(GetAppListRequest.class.getName());
 
-    private AppstoreDescriptor appstore;
+    private AppstoreEntity appstore;
 
     private HttpClient httpClient;
 
@@ -36,7 +36,7 @@ public class GetAppListRequest implements Runnable {
             /*ParserFactory parserFactory,*/
             RepositoryFactory repositoryFactory,
             HttpClient httpClient,
-            AppstoreDescriptor appstore,
+            AppstoreEntity appstore,
             File uploadDir) {
         this.appstore = appstore;
         this.httpClient = httpClient;
@@ -51,7 +51,7 @@ public class GetAppListRequest implements Runnable {
     @Override
     public void run() {
         try {
-            List<LastUpdateDescriptor> updates = repositoryFactory.getDataService().getLastUpdate(appstore.appstoreId);
+            List<LastUpdateDescriptor> updates = repositoryFactory.getDataService().getLastUpdate(appstore.getAppstoreId());
             LastUpdateDescriptor lastUpdateDescriptor = (updates.size() > 0) ? updates.get(0) : null;
             ApplicationsToUpdateLoader.Response appsToUpdateResponse =
                     applicationsToUpdateLoader.getUpdates(new ApplicationsToUpdateLoader.Request(appstore, lastUpdateDescriptor));
@@ -64,7 +64,7 @@ public class GetAppListRequest implements Runnable {
                 repositoryFactory.getDataService().saveLastUpdate(appsToUpdateResponse.getLastUpdate());
             }
         } catch (Exception e) {
-            alarmCauseLogger.error("Failed to get applications list from {}, reason {}", appstore.appstoreId, e.getMessage());
+            alarmCauseLogger.error("Failed to get applications list from {}, reason {}", appstore.getAppstoreId(), e.getMessage());
         }
     }
 

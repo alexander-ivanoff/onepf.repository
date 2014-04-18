@@ -5,7 +5,7 @@ import org.apache.logging.log4j.Logger;
 import org.onepf.appdf.parser.AppdfFileParser;
 import org.onepf.appdf.parser.ParseResult;
 import org.onepf.repository.api.responsewriter.entity.ApplicationEntity;
-import org.onepf.repository.model.auth.AppstoreDescriptor;
+import org.onepf.repository.api.responsewriter.entity.AppstoreEntity;
 import org.onepf.repository.model.services.DataException;
 import org.onepf.repository.model.services.DataService;
 import org.onepf.repository.model.services.StorageException;
@@ -57,7 +57,7 @@ public class UploadAppdfRequestHandler extends BaseRequestHandler {
      * @throws DataException
      * @throws NoSuchAlgorithmException
      */
-    public void processFile(File file, List<ApplicationEntity> appLog, AppstoreDescriptor appstoreDescriptor) throws IOException, StorageException, DataException, NoSuchAlgorithmException {
+    public void processFile(File file, List<ApplicationEntity> appLog, AppstoreEntity appstoreDescriptor) throws IOException, StorageException, DataException, NoSuchAlgorithmException {
         long time = System.currentTimeMillis();
         AppdfFileParser parser = new AppdfFileParser(file);
         ParseResult parseResult = parser.parse();
@@ -88,7 +88,7 @@ public class UploadAppdfRequestHandler extends BaseRequestHandler {
         appDescriptor.setDatetime(dateFormat.format(new Date(System.currentTimeMillis())));
         appDescriptor.setAppdfLink(appdfKey);
         appDescriptor.setAppdfHash(appdfHash);
-        appDescriptor.setAppstoreId(appstoreDescriptor.appstoreId);
+        appDescriptor.setAppstoreId(appstoreDescriptor.getAppstoreId());
 
         dataService.store(appDescriptor);
         logger.debug("Store Appdf time: {} ", (System.currentTimeMillis() - time));

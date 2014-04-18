@@ -1,9 +1,9 @@
 package org.onepf.repository;
 
+import org.onepf.repository.api.responsewriter.entity.AppstoreEntity;
 import org.onepf.repository.api.uploader.NoMultipartException;
 import org.onepf.repository.api.uploader.UploadFileHandler;
 import org.onepf.repository.model.UploadAppdfRequestHandler;
-import org.onepf.repository.model.auth.AppstoreDescriptor;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -45,7 +45,7 @@ public class UploadAppdfFileServlet extends BaseServlet {
         Map<String, String> formFields = appdfFileUploder.getFormFields();
         try {
             appdfFileUploder.upload(request);
-            AppstoreDescriptor appstore = getAuthenticator().getAuthorizedAppstore(formFields);
+            AppstoreEntity appstore = getAuthenticator().getAuthorizedAppstore(formFields);
             if (appstore != null) {
                 for (File file : appdfFileUploder.getUploadedFiles()) {
                     appdfHandler.processFile(file, null, appstore);

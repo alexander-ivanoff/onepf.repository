@@ -17,7 +17,6 @@ import org.hibernate.cfg.Configuration;
 import org.onepf.repository.api.Pair;
 import org.onepf.repository.api.responsewriter.entity.*;
 import org.onepf.repository.appstorelooter.LastUpdateDescriptor;
-import org.onepf.repository.model.auth.AppstoreDescriptor;
 import org.onepf.repository.model.services.DataException;
 import org.onepf.repository.model.services.DataService;
 import org.onepf.repository.model.services.mysql.entities.*;
@@ -193,6 +192,7 @@ public class SqlDataService implements DataService {
                     pageHash = ((ApplicationEntity) list.get(0)).getCurrPageHash();
                     params.add(new Pair<String, Object>("currPageHashParam", pageHash));
                 } else {
+                    session.close();
                     return new ArrayList<ApplicationEntity>();
                 }
             }
@@ -231,65 +231,25 @@ public class SqlDataService implements DataService {
 
 
     @Override
-    public Map<String, AppstoreDescriptor> getAppstores() throws DataException {
-        Connection conn = null;
-        PreparedStatement stmt = null;
-        ResultSet rset = null;
-        try {
-            conn = dbDataSource.getConnection();
-            PreparedStatement result;
+    public Map<String, AppstoreEntity> getAppstores() throws DataException {
+        Configuration configuration = new Configuration();
+        configuration.configure("/resources/hibernate.cfg.xml");
+        StandardServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder().applySettings(
+                configuration.getProperties()).build();
+        SessionFactory sessionFactory = configuration
+                .buildSessionFactory(serviceRegistry);
+        Session session = sessionFactory.openSession();
 
-            StringBuilder requestBuilder = new StringBuilder().append("SELECT * FROM ").append(SqlAppstoreEntity.TABLE_NAME);
-            if (null != null) {
-                requestBuilder.append(" WHERE ").append((String) null);
-            }
-            if (null != null) {
-                requestBuilder.append(" ORDER BY ").append((String) null);
-            }
-            requestBuilder.append(" LIMIT " + DEFAULT_RESULT_LIMIT);
-            String request = requestBuilder.toString();
-            logger.info("QUERY: {}", request);
-
-            PreparedStatement stmt1 = null;
-            try {
-                stmt1 = conn.prepareStatement(request);
-                int index = 0;
-                if (null != null) {
-                    for (String value : (String[]) null) {
-                        stmt1.setString(++index, value);
-                    }
-                }
-                result = stmt1;
-            } catch (SQLException e) {
-                e.printStackTrace();
-                throw e;
-            }
-            stmt = result;
-            rset = stmt.executeQuery();
-            Map<String, AppstoreDescriptor> apps = new HashMap<String, AppstoreDescriptor>();
-            AppstoreDescriptor appstore = null;
-            while (rset.next()) {
-                appstore = SqlAppstoreEntity.getDescriptor(rset);
-                apps.put(appstore.repositoryAccessToken, appstore);
-            }
-            return apps;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            throw new DataException(e);
-        } finally {
-            try {
-                if (rset != null) rset.close();
-            } catch (Exception e) {
-            }
-            try {
-                if (stmt != null) stmt.close();
-            } catch (Exception e) {
-            }
-            try {
-                if (conn != null) conn.close();
-            } catch (Exception e) {
-            }
+        Query query = session.createQuery("FROM AppstoreEntity");
+        query.setMaxResults(DEFAULT_RESULT_LIMIT);
+        List list = query.list();
+        session.close();
+        Map<String, AppstoreEntity> appstoreEntityMap = new HashMap<String, AppstoreEntity>();
+        for (Object object : list) {
+            AppstoreEntity appstoreEntity = (AppstoreEntity) object;
+            appstoreEntityMap.put(appstoreEntity.getRepositoryAccessToken(), appstoreEntity);
         }
+        return appstoreEntityMap;
     }
 
     @Override

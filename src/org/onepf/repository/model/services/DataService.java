@@ -1,11 +1,7 @@
 package org.onepf.repository.model.services;
 
-import org.onepf.repository.api.responsewriter.entity.ApplicationEntity;
-import org.onepf.repository.api.responsewriter.entity.DownloadEntity;
-import org.onepf.repository.api.responsewriter.entity.PurchaseEntity;
-import org.onepf.repository.api.responsewriter.entity.ReviewEntity;
+import org.onepf.repository.api.responsewriter.entity.*;
 import org.onepf.repository.appstorelooter.LastUpdateDescriptor;
-import org.onepf.repository.model.auth.AppstoreDescriptor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +29,7 @@ public interface DataService {
 
     List<ApplicationEntity> getApplicationsLog(String packageName, int page) throws DataException;
 
-    Map<String, AppstoreDescriptor> getAppstores() throws DataException;
+    Map<String, AppstoreEntity> getAppstores() throws DataException;
 
     /**
      * @param appstoreId

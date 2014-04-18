@@ -1,9 +1,9 @@
 package org.onepf.repository;
 
+import org.onepf.repository.api.responsewriter.entity.AppstoreEntity;
 import org.onepf.repository.model.RepositoryConfigurator;
 import org.onepf.repository.model.RepositoryFactory;
 import org.onepf.repository.model.auth.AppstoreAuthenticator;
-import org.onepf.repository.model.auth.AppstoreDescriptor;
 import org.onepf.repository.model.services.DataException;
 
 import javax.servlet.ServletException;
@@ -63,7 +63,7 @@ public abstract class BaseServlet extends HttpServlet {
         }
     }
 
-    protected AppstoreDescriptor getAppstore(HttpServletRequest req) throws DataException{
+    protected AppstoreEntity getAppstore(HttpServletRequest req) throws DataException{
         return authenticator.getAuthorizedAppstore(req);
     }
 

@@ -7,7 +7,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.protocol.HttpContext;
 import org.onepf.repository.ApiMapping;
 import org.onepf.repository.api.responsewriter.entity.ApplicationEntity;
-import org.onepf.repository.model.auth.AppstoreDescriptor;
+import org.onepf.repository.api.responsewriter.entity.AppstoreEntity;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -28,18 +28,18 @@ public class ApplicationsToUpdateLoader {
      */
     public static class Request {
 
-        private AppstoreDescriptor appstore;
+        private AppstoreEntity appstore;
         private LastUpdateDescriptor prevUpdate;
 
         /**
          * @param appstore - AppstoreDescriptor to get appdf files from
          * @param prevUpdate - object with information about previous update or 'null' if there is first update.
          */
-        public Request(AppstoreDescriptor appstore, LastUpdateDescriptor prevUpdate) {
+        public Request(AppstoreEntity appstore, LastUpdateDescriptor prevUpdate) {
             if (appstore == null) {
                 throw new NullPointerException("appstore can't be null");
             }
-            if (prevUpdate != null && !appstore.appstoreId.equals(prevUpdate.appstoreId)) {
+            if (prevUpdate != null && !appstore.getAppstoreId().equals(prevUpdate.appstoreId)) {
                 throw new IllegalArgumentException("prevUpdate from other appstore");
             }
             this.appstore = appstore;
@@ -88,18 +88,18 @@ public class ApplicationsToUpdateLoader {
      */
     public Response getUpdates(final Request request) throws IOException{
         Response response = new Response();
-        final AppstoreDescriptor appstore = request.appstore;
+        final AppstoreEntity appstore = request.appstore;
         final LastUpdateDescriptor prevUpdate = request.prevUpdate;
 
         Set<ApplicationEntity> appsToUpdate = new HashSet<ApplicationEntity>();
         String hash = null;
         LastUpdateDescriptor lastUpdate = null;
 
-        String url = ApiMapping.LIST_APPLICATIONS.getMethodUrl(appstore.openaepUrl);
+        String url = ApiMapping.LIST_APPLICATIONS.getMethodUrl(appstore.getOpenaepUrl());
         int iterations = 0;
         do {
             HttpGet httpGet = new HttpGet(url);
-            httpGet.addHeader("authToken", appstore.appstoreAccessToken);
+            httpGet.addHeader("authToken", appstore.getAppstoreAccessToken());
 
             HttpResponse httpResponse = httpClient.execute(httpGet, httpContext);
 
