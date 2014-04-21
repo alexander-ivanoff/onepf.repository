@@ -15,7 +15,7 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = "purchaseType")
 @Entity
 @Table(name = "purchases")
-public class PurchaseEntity extends BaseEntity{
+public class PurchaseEntity extends BaseHashEntity{
 
     @XmlAttribute(name = "package")
     @Column(name = "package")

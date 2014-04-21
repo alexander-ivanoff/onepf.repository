@@ -17,7 +17,7 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = "reviewType")
 @Entity
 @Table(name = "reviews")
-public class ReviewEntity extends BaseEntity {
+public class ReviewEntity extends BaseHashEntity {
     @XmlAttribute(name = "package", required = true)
     @Column(name = "package")
     private String packageName;

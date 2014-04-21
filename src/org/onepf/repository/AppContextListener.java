@@ -1,6 +1,8 @@
 package org.onepf.repository;
 
 import org.onepf.repository.appstorelooter.AppstoreRequester;
+import org.onepf.repository.model.RepositoryConfigurator;
+import org.onepf.repository.model.services.DataService;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
@@ -9,12 +11,12 @@ import javax.servlet.ServletContextListener;
 /**
  * This class launch appstore requester before the web application start
  * and stop it after application destroy.
- *
+ * <p/>
  * Starts polling appstores to get appdfs, reviews, downloads, purchases.
  * if that functionality is switched ON in web.xml ('pollStores' parameter set to 'true').
  *
- * @see AppstoreRequester
  * @author Alexander Ivanov
+ * @see AppstoreRequester
  */
 public class AppContextListener implements ServletContextListener {
 
@@ -39,5 +41,9 @@ public class AppContextListener implements ServletContextListener {
     @Override
     public void contextDestroyed(ServletContextEvent servletContextEvent) {
         appstoreRequester.stop();
+        DataService dataService = RepositoryConfigurator.getRepositoryFactory(servletContextEvent.getServletContext()).getDataService();
+        if (dataService != null) {
+            dataService.close();
+        }
     }
 }

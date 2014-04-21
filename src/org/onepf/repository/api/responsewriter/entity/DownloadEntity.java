@@ -17,7 +17,7 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = "downloadType")
 @Entity
 @Table(name = "downloads")
-public class DownloadEntity extends BaseEntity{
+public class DownloadEntity extends BaseHashEntity{
     @Id
     private int id;
 

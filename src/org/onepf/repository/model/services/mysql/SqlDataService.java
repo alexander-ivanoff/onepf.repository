@@ -50,11 +50,19 @@ public class SqlDataService implements DataService {
 
     private DataSource dbDataSource;
 
+    private Session session;
+
     public SqlDataService(SqlOptions options) {
 
         // init DBCP DataSource
         dbDataSource = setupDataSource(options);
-
+        Configuration configuration = new Configuration();
+        configuration.configure("/resources/hibernate.cfg.xml");
+        StandardServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder().applySettings(
+                configuration.getProperties()).build();
+        SessionFactory sessionFactory = configuration
+                .buildSessionFactory(serviceRegistry);
+        session = sessionFactory.openSession();
     }
 
     public static DataSource setupDataSource(SqlOptions options) {
@@ -119,8 +127,6 @@ public class SqlDataService implements DataService {
 
     @Override
     public List<ApplicationEntity> getApplicationsLog(String packageName, int currPageHash) throws DataException {
-        Session session = getSession();
-
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("FROM ApplicationEntity");
         List<Pair<String, Object>> params = new ArrayList<Pair<String, Object>>();
@@ -142,7 +148,7 @@ public class SqlDataService implements DataService {
                     stringBuilder.append(" WHERE currPageHash = :currPageHashParam");
                     params.add(new Pair<String, Object>("currPageHashParam", pageHash));
                 } else {
-                    session.close();
+
                     return new ArrayList<ApplicationEntity>();
                 }
             }
@@ -156,42 +162,27 @@ public class SqlDataService implements DataService {
 
         }
         List results = query.list();
-        session.close();
-        return results;
-    }
 
-    private Session getSession() {
-        Configuration configuration = new Configuration();
-        configuration.configure("/resources/hibernate.cfg.xml");
-        StandardServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder().applySettings(
-                configuration.getProperties()).build();
-        SessionFactory sessionFactory = configuration
-                .buildSessionFactory(serviceRegistry);
-        return sessionFactory.openSession();
+        return results;
     }
 
     @Override
     public List<ApplicationEntity> getApplicationByHash(String packageName, String hash) throws DataException {
-
-        Session session = getSession();
-
         Query query = session.createQuery("FROM ApplicationEntity where packageName = :packageParam and appdfHash = :hashParam ORDER BY id DESC");
         query.setParameter("packageParam", packageName);
         query.setParameter("hashParam", hash);
         query.setMaxResults(1);
-        session.close();
+
         return query.list();
     }
 
 
     @Override
     public Map<String, AppstoreEntity> getAppstores() throws DataException {
-        Session session = getSession();
-
         Query query = session.createQuery("FROM AppstoreEntity");
         query.setMaxResults(DEFAULT_RESULT_LIMIT);
         List list = query.list();
-        session.close();
+
         Map<String, AppstoreEntity> appstoreEntityMap = new HashMap<String, AppstoreEntity>();
         for (Object object : list) {
             AppstoreEntity appstoreEntity = (AppstoreEntity) object;
@@ -202,12 +193,11 @@ public class SqlDataService implements DataService {
 
     @Override
     public LastUpdateEntity getLastUpdate(String appstoreId) throws DataException {
-        Session session = getSession();
-        Query query = session.createQuery("FROM LastUpdateEntity WHERE appstoreId =: appstoreIdParam");
+        Query query = session.createQuery("FROM LastUpdateEntity WHERE appstoreId = :appstoreIdParam");
         query.setParameter("appstoreIdParam", appstoreId);
         query.setMaxResults(1);
         List results = query.list();
-        session.close();
+
         if (results != null && results.size() == 1) {
             return (LastUpdateEntity) results.get(0);
         } else {
@@ -425,14 +415,14 @@ public class SqlDataService implements DataService {
     /**
      * insert new record to table with paging (add page hashes to insert)
      */
-    private void insertWithHashes(Connection connection, String tableName, BaseEntity entity, int limit) throws SQLException {
+    private void insertWithHashes(Connection connection, String tableName, BaseHashEntity entity, int limit) throws SQLException {
         insertWithHashes(connection, tableName, null, entity, limit);
     }
 
     /**
      * insert new record to table with paging (add page hashes to insert)
      */
-    private void insertWithHashes(Connection connection, String tableName, String packageName, BaseEntity entity, int limit) throws SQLException {
+    private void insertWithHashes(Connection connection, String tableName, String packageName, BaseHashEntity entity, int limit) throws SQLException {
         Pair<Integer, Integer> pageHashes = getPageHashes(connection, tableName, packageName, limit);
         entity.setPrevPageHash(pageHashes.fst);
         entity.setCurrPageHash(pageHashes.snd);
@@ -478,11 +468,17 @@ public class SqlDataService implements DataService {
 
 
     public void saveEntity(BaseEntity entity) {
-        Session session = getSession();
         session.beginTransaction();
         session.save(entity);
         session.getTransaction().commit();
-        session.close();
+
+    }
+
+
+    public void close() {
+        if (session != null) {
+            session.close();
+        }
     }
 
 }
