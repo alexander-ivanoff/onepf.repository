@@ -185,11 +185,12 @@ public class SqlDataService implements DataService {
                 stringBuilder.append(" WHERE currPageHash = :currPageHashParam");
                 params.add(new Pair<String, Object>("currPageHashParam", currPageHash));
             } else {
-                String hqlSelection = "FROM ApplicationEntity ORDER BY id DESC ";
+                String hqlSelection = "FROM ApplicationEntity ORDER BY id DESC";
                 Query query = session.createQuery(hqlSelection);
                 List list = query.list();
                 if (!list.isEmpty()) {
                     pageHash = ((ApplicationEntity) list.get(0)).getCurrPageHash();
+                    stringBuilder.append(" WHERE currPageHash = :currPageHashParam");
                     params.add(new Pair<String, Object>("currPageHashParam", pageHash));
                 } else {
                     session.close();

@@ -1,11 +1,11 @@
 package org.onepf.repository;
 
-import org.onepf.repository.api.responsewriter.ResponseWriterV2;
+import org.onepf.repository.api.responsewriter.ResponseReaderWriter;
 import org.onepf.repository.api.responsewriter.WriteException;
 import org.onepf.repository.api.responsewriter.entity.ObjectFactory;
 import org.onepf.repository.api.responsewriter.entity.PurchaseEntity;
 import org.onepf.repository.api.responsewriter.entity.PurchaseListEntity;
-import org.onepf.repository.api.xmlapi.XmlResponseWriterV2;
+import org.onepf.repository.api.xmlapi.XmlResponseReaderWriter;
 import org.onepf.repository.model.services.SimpleListRequestHandler;
 
 import java.util.List;
@@ -24,9 +24,9 @@ public class GetPurchaseListServlet extends SimpleListServlet<PurchaseEntity, Pu
     }
 
     @Override
-    ResponseWriterV2 initResponseWriter() {
+    ResponseReaderWriter initResponseWriter() {
         try {
-            return new XmlResponseWriterV2(ObjectFactory._Purchases_QNAME, PurchaseListEntity.class.getPackage().getName());
+            return new XmlResponseReaderWriter(ObjectFactory._Purchases_QNAME, PurchaseListEntity.class.getPackage().getName());
         } catch (WriteException e) {
             e.printStackTrace();
         }

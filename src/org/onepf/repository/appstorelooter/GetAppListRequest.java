@@ -6,6 +6,7 @@ import org.apache.http.protocol.HttpContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.onepf.repository.api.responsewriter.entity.AppstoreEntity;
+import org.onepf.repository.api.xmlapi.XmlResponseReaderWriter;
 import org.onepf.repository.model.RepositoryFactory;
 
 import java.io.File;
@@ -26,14 +27,14 @@ public class GetAppListRequest implements Runnable {
     private HttpClient httpClient;
 
     private RepositoryFactory repositoryFactory;
-    //private ParserFactory parserFactory;
+    private XmlResponseReaderWriter xmlResponseWriter;
     private File uploadDir;
 
     private ApplicationsToUpdateLoader applicationsToUpdateLoader;
     private ApplicationsLoader appsLoader;
 
     public GetAppListRequest(
-            /*ParserFactory parserFactory,*/
+            XmlResponseReaderWriter xmlResponseWriter,
             RepositoryFactory repositoryFactory,
             HttpClient httpClient,
             AppstoreEntity appstore,
@@ -41,10 +42,10 @@ public class GetAppListRequest implements Runnable {
         this.appstore = appstore;
         this.httpClient = httpClient;
         this.repositoryFactory = repositoryFactory;
-        //this.parserFactory = parserFactory;
+        this.xmlResponseWriter = xmlResponseWriter;
         this.uploadDir = uploadDir;
         HttpContext httpContext = new BasicHttpContext();
-        applicationsToUpdateLoader = new ApplicationsToUpdateLoader(/*parserFactory, */ httpClient, httpContext);
+        applicationsToUpdateLoader = new ApplicationsToUpdateLoader(xmlResponseWriter, httpClient, httpContext);
         appsLoader = new ApplicationsLoader(repositoryFactory, httpClient, httpContext, uploadDir);
     }
 

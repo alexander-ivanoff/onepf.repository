@@ -3,7 +3,11 @@ package org.onepf.repository.appstorelooter;
 import org.apache.http.client.HttpClient;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.conn.PoolingClientConnectionManager;
+import org.onepf.repository.api.responsewriter.WriteException;
+import org.onepf.repository.api.responsewriter.entity.ApplicationListEntity;
 import org.onepf.repository.api.responsewriter.entity.AppstoreEntity;
+import org.onepf.repository.api.responsewriter.entity.ObjectFactory;
+import org.onepf.repository.api.xmlapi.XmlResponseReaderWriter;
 import org.onepf.repository.model.RepositoryConfigurator;
 import org.onepf.repository.model.RepositoryFactory;
 import org.onepf.repository.model.auth.AppstoreAuthenticator;
@@ -14,6 +18,7 @@ import java.io.File;
 import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 /**
  * This class schedule GetAppListRequest for all known appstores.
@@ -29,7 +34,7 @@ public class AppstoreRequester {
     private HttpClient httpClient;
     private ScheduledExecutorService scheduler;
 
-    //private ParserFactory parserFactory;
+    XmlResponseReaderWriter<ApplicationListEntity> xmlResponseWriterV2;
     private RepositoryFactory repositoryFactory;
     private AppstoreAuthenticator appstoreAuthenticator;
 
@@ -38,7 +43,11 @@ public class AppstoreRequester {
     public AppstoreRequester(ServletContext context) {
         repositoryFactory = RepositoryConfigurator.getRepositoryFactory(context);
         appstoreAuthenticator = RepositoryConfigurator.getAppstoreAuthenticator(context);
-        //parserFactory = ParserFactory.getXmlParserFactory();
+        try {
+            xmlResponseWriterV2 = new XmlResponseReaderWriter<ApplicationListEntity>(ObjectFactory._ApplicationList_QNAME, ApplicationListEntity.class.getPackage().getName());
+        } catch (WriteException e) {
+            e.printStackTrace();
+        }
 
         uploadDir = new File(context.getRealPath("/uploads/"));
     }
@@ -63,14 +72,13 @@ public class AppstoreRequester {
             // schedule GetAppListRequests
             scheduler = Executors.newScheduledThreadPool(appstores.size());
             for (AppstoreEntity appstore : appstores.values()) {
-                /*
-                if (appstore.appstoreId.equals("onepf.repository")) { //TEST PURPOSES ONLY
+                if (appstore.getAppstoreId().equals("localstore")) { //TEST PURPOSES ONLY
                     cm.setDefaultMaxPerRoute(CONNECTIONS_PER_STORE);
                     scheduler.scheduleAtFixedRate(
-                            new GetAppListRequest(parserFactory, repositoryFactory, httpClient, appstore, uploadDir ),
+                            new GetAppListRequest(xmlResponseWriterV2, repositoryFactory, httpClient, appstore, uploadDir ),
                             POLLING_PERIOD, POLLING_PERIOD, TimeUnit.SECONDS);
                 }
-                */
+
             }
         }
     }

@@ -1,11 +1,11 @@
 package org.onepf.repository;
 
-import org.onepf.repository.api.responsewriter.ResponseWriterV2;
+import org.onepf.repository.api.responsewriter.ResponseReaderWriter;
 import org.onepf.repository.api.responsewriter.WriteException;
 import org.onepf.repository.api.responsewriter.entity.ApplicationEntity;
 import org.onepf.repository.api.responsewriter.entity.ApplicationListEntity;
 import org.onepf.repository.api.responsewriter.entity.ObjectFactory;
-import org.onepf.repository.api.xmlapi.XmlResponseWriterV2;
+import org.onepf.repository.api.xmlapi.XmlResponseReaderWriter;
 import org.onepf.repository.model.services.SimpleListRequestHandler;
 
 import java.util.List;
@@ -25,9 +25,9 @@ public class GetApplicationsListServlet extends SimpleListServlet<ApplicationEnt
     }
 
     @Override
-    ResponseWriterV2 initResponseWriter() {
+    ResponseReaderWriter initResponseWriter() {
         try {
-            return new XmlResponseWriterV2(ObjectFactory._ApplicationList_QNAME, ApplicationListEntity.class.getPackage().getName());
+            return new XmlResponseReaderWriter(ObjectFactory._ApplicationList_QNAME, ApplicationListEntity.class.getPackage().getName());
         } catch (WriteException e) {
             e.printStackTrace();
         }

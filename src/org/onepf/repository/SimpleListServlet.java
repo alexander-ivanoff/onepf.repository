@@ -1,6 +1,6 @@
 package org.onepf.repository;
 
-import org.onepf.repository.api.responsewriter.ResponseWriterV2;
+import org.onepf.repository.api.responsewriter.ResponseReaderWriter;
 import org.onepf.repository.api.responsewriter.WriteException;
 import org.onepf.repository.api.responsewriter.entity.BaseEntity;
 import org.onepf.repository.api.responsewriter.entity.BaseListEntity;
@@ -24,12 +24,12 @@ public abstract class SimpleListServlet<T extends BaseEntity, K extends BaseList
     private static final String PARAMETER_PAGE = "page";
 
     private String fileTemplate;
-    private ResponseWriterV2 responseWriter;
+    private ResponseReaderWriter responseWriter;
     private SimpleListRequestHandler<T> handler;
 
 
     abstract String initOffsetTemplate();
-    abstract ResponseWriterV2 initResponseWriter();
+    abstract ResponseReaderWriter initResponseWriter();
     abstract SimpleListRequestHandler<T> initRequestHandler();
 
     @Override

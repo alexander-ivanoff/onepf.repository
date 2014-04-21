@@ -8,9 +8,15 @@ import org.apache.http.protocol.HttpContext;
 import org.onepf.repository.ApiMapping;
 import org.onepf.repository.api.responsewriter.entity.ApplicationEntity;
 import org.onepf.repository.api.responsewriter.entity.AppstoreEntity;
+import org.onepf.repository.api.responsewriter.entity.ApplicationListEntity;
+import org.onepf.repository.api.xmlapi.XmlResponseReaderWriter;
 
+import javax.xml.bind.annotation.adapters.HexBinaryAdapter;
 import java.io.IOException;
+import java.security.DigestInputStream;
+import java.security.MessageDigest;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -22,6 +28,7 @@ import java.util.Set;
 public class ApplicationsToUpdateLoader {
 
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    private static HexBinaryAdapter marshaler = new HexBinaryAdapter();
 
     /**
      * This class describes request parameters
@@ -68,15 +75,15 @@ public class ApplicationsToUpdateLoader {
         }
     }
 
-    //private ParserFactory parserFactory;
+    private XmlResponseReaderWriter<ApplicationListEntity> xmlResponseWriter;
     private HttpClient httpClient;
     private final HttpContext httpContext;
 
 
-    public ApplicationsToUpdateLoader(/*final ParserFactory parserFactory,*/ final HttpClient httpClient, HttpContext context) {
+    public ApplicationsToUpdateLoader(XmlResponseReaderWriter xmlResponseWriter, final HttpClient httpClient, HttpContext context) {
         this.httpClient = httpClient;
         this.httpContext = context;
-        //this.parserFactory = parserFactory;
+        this.xmlResponseWriter = xmlResponseWriter;
     }
 
     /**
@@ -86,7 +93,7 @@ public class ApplicationsToUpdateLoader {
      * @return response object with set of ApplicationDescriptor and object with information about this update
      * @throws IOException
      */
-    public Response getUpdates(final Request request) throws IOException{
+    public Response getUpdates(final Request request) throws IOException {
         Response response = new Response();
         final AppstoreEntity appstore = request.appstore;
         final LastUpdateDescriptor prevUpdate = request.prevUpdate;
@@ -106,18 +113,24 @@ public class ApplicationsToUpdateLoader {
             int result = httpResponse.getStatusLine().getStatusCode();
 
             if (result == HttpStatus.SC_OK) {
-                /*
-                ListParser<ApplicationEntity, ApplicationListHeaderDescriptor> appParser = parserFactory.getApplicationParser(appsToUpdate);
-                hash = parserFactory.parse(appParser, httpResponse.getEntity().getContent());
-//                url = appParser.getHeader().offset;
-                if (lastUpdate == null) {
-                    lastUpdate = new LastUpdateDescriptor();
-                    lastUpdate.appstoreId = appstore.appstoreId;
-                    lastUpdate.lastResponseDatetime = dateFormat.format(new Date(System.currentTimeMillis()));
-                    lastUpdate.lastResponseHash = hash;
-//                    lastUpdate.prevOffset = appParser.getHeader().offset;
+                hash = null;
+                try {
+                    MessageDigest md = MessageDigest.getInstance("MD5");
+                    DigestInputStream dis = new DigestInputStream(httpResponse.getEntity().getContent(), md);
+                    ApplicationListEntity applicationListEntity = xmlResponseWriter.read(ApplicationListEntity.class, dis);
+                    hash = marshaler.marshal(dis.getMessageDigest().digest());
+                    url = applicationListEntity.getOffset();
+                    appsToUpdate.addAll(applicationListEntity.getApplication());
+                    if (lastUpdate == null) {
+                        lastUpdate = new LastUpdateDescriptor();
+                        lastUpdate.appstoreId = appstore.getAppstoreId();
+                        lastUpdate.lastResponseDatetime = dateFormat.format(new Date(System.currentTimeMillis()));
+                        lastUpdate.lastResponseHash = hash;
+                        lastUpdate.prevOffset = applicationListEntity.getOffset();
+                    }
+                } catch (Exception e) {
+                    throw new IOException(e);
                 }
-                */
             } else {
                 throw new IOException("Applist request failed with result: " + httpResponse.getStatusLine());
             }

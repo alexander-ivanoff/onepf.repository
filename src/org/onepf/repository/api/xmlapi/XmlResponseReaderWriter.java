@@ -1,24 +1,22 @@
 package org.onepf.repository.api.xmlapi;
 
-import org.onepf.repository.api.responsewriter.ResponseWriterV2;
+import org.onepf.repository.api.responsewriter.ResponseReaderWriter;
 import org.onepf.repository.api.responsewriter.WriteException;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBElement;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
+import javax.xml.bind.*;
 import javax.xml.namespace.QName;
+import java.io.InputStream;
 import java.io.OutputStream;
 
 /**
  * Created by ivanoff on 17.04.14.
  */
-public class XmlResponseWriterV2<T extends JaxbElementMaker> implements ResponseWriterV2<T>{
+public class XmlResponseReaderWriter<T extends JaxbElementMaker> implements ResponseReaderWriter<T> {
 
     private QName qName;
     private JAXBContext context;
 
-    public XmlResponseWriterV2(QName qName, Class... classes) throws WriteException {
+    public XmlResponseReaderWriter(QName qName, Class... classes) throws WriteException {
         try {
             context = JAXBContext.newInstance(classes);
         } catch (JAXBException e) {
@@ -27,7 +25,7 @@ public class XmlResponseWriterV2<T extends JaxbElementMaker> implements Response
         this.qName = qName;
     }
 
-    public XmlResponseWriterV2(QName qName, String packageName) throws WriteException {
+    public XmlResponseReaderWriter(QName qName, String packageName) throws WriteException {
         try {
             context = JAXBContext.newInstance(packageName);
         } catch (JAXBException e) {
@@ -47,5 +45,17 @@ public class XmlResponseWriterV2<T extends JaxbElementMaker> implements Response
         } catch (JAXBException e) {
             throw new WriteException(e);
         }
+    }
+
+    public <T> T read( Class<T> docClass, InputStream inputStream ) throws WriteException {
+        JAXBElement<T> doc = null;
+        Unmarshaller u = null;
+        try {
+            u = context.createUnmarshaller();
+            doc = (JAXBElement<T>)u.unmarshal( inputStream );
+        } catch (JAXBException e) {
+            throw new WriteException(e);
+        }
+        return doc.getValue();
     }
 }

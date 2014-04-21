@@ -1,9 +1,9 @@
 package org.onepf.repository;
 
-import org.onepf.repository.api.responsewriter.ResponseWriterV2;
+import org.onepf.repository.api.responsewriter.ResponseReaderWriter;
 import org.onepf.repository.api.responsewriter.WriteException;
 import org.onepf.repository.api.responsewriter.entity.*;
-import org.onepf.repository.api.xmlapi.XmlResponseWriterV2;
+import org.onepf.repository.api.xmlapi.XmlResponseReaderWriter;
 import org.onepf.repository.model.services.SimpleListRequestHandler;
 
 import java.util.List;
@@ -23,9 +23,9 @@ public class GetDownloadListServlet extends SimpleListServlet<DownloadEntity, Do
     }
 
     @Override
-    ResponseWriterV2 initResponseWriter() {
+    ResponseReaderWriter initResponseWriter() {
         try {
-            return new XmlResponseWriterV2(ObjectFactory._Downloads_QNAME, DownloadListEntity.class.getPackage().getName());
+            return new XmlResponseReaderWriter(ObjectFactory._Downloads_QNAME, DownloadListEntity.class.getPackage().getName());
         } catch (WriteException e) {
             e.printStackTrace();
         }
