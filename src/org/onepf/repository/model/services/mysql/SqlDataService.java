@@ -16,6 +16,8 @@ import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import org.onepf.repository.api.Pair;
 import org.onepf.repository.api.responsewriter.entity.*;
+import org.onepf.repository.appstorelooter.FeedType;
+import org.onepf.repository.appstorelooter.LastStatisticsUpdateEntity;
 import org.onepf.repository.appstorelooter.LastUpdateEntity;
 import org.onepf.repository.model.services.DataException;
 import org.onepf.repository.model.services.DataService;
@@ -94,6 +96,11 @@ public class SqlDataService implements DataService {
     }
 
     @Override
+    public void saveLastStatisticsUpdate(LastStatisticsUpdateEntity lastStatisticsUpdate) throws DataException {
+        saveEntity(lastStatisticsUpdate);
+    }
+
+    @Override
     public void addDownload(DownloadEntity download) throws DataException {
         Connection conn = null;
         try {
@@ -160,7 +167,7 @@ public class SqlDataService implements DataService {
         return results;
     }
 
-    private Session getSession() {
+    public Session getSession() {
         Configuration configuration = new Configuration();
         configuration.configure("/resources/hibernate.cfg.xml");
         StandardServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder().applySettings(
@@ -216,34 +223,22 @@ public class SqlDataService implements DataService {
     }
 
 
-    /*@Override
-    public LastStatisticsUpdateDescriptor getLastStatisticsUpdate(String appstoreId, String feedType) throws DataException{
-        Connection conn = null;
-        PreparedStatement stmt = null;
-        ResultSet rset = null;
-        try {
-            conn = dbDataSource.getConnection();
-            String selection = SqlLastStatisticsUpdateEntity.FIELD_APPSTORE_ID + "=? AND " + SqlLastStatisticsUpdateEntity.FIELD_FEED_TYPE + "=?";
-            String[] selectionArgs = new String[] {appstoreId, feedType};
-            stmt = query(conn, SqlLastStatisticsUpdateEntity.TABLE_NAME, selection, selectionArgs, null, DEFAULT_RESULT_LIMIT);
-            rset = stmt.executeQuery();
-            LastStatisticsUpdateDescriptor lastUpdate = null;
-            if (rset.next()) {
-                lastUpdate = SqlLastStatisticsUpdateEntity.getDescriptor(rset);
-            }
-            if (rset.next()) {
-                throw new DataException("getLastStatisticsUpdate result set must contain at most one row");
-            }
-            return lastUpdate;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            throw new DataException(e);
-        } finally {
-            try { if (rset != null) rset.close(); } catch(Exception e) { }
-            try { if (stmt != null) stmt.close(); } catch(Exception e) { }
-            try { if (conn != null) conn.close(); } catch(Exception e) { }
+    @Override
+    public LastStatisticsUpdateEntity getLastStatisticsUpdate(String appstoreId, FeedType feedType) throws DataException {
+        Session session = getSession();
+        Query query = session.createQuery("FROM LastStatisticsUpdateEntity WHERE appstoreId =: appstoreIdParam AND feedType =: feedTypeParam");
+        query.setParameter("appstoreIdParam", appstoreId);
+        query.setParameter("feedTypeParam", feedType);
+        query.setMaxResults(1);
+        List results = query.list();
+        session.close();
+        if (results != null && results.size() == 1) {
+            return (LastStatisticsUpdateEntity)results.get(0);
+        } else {
+            return null;
         }
-    }*/
+    }
+
     @Override
     public ArrayList<DownloadEntity> getDownloads(String homeStoreId, long currPageHash) throws DataException {
         Connection conn = null;

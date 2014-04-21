@@ -21,7 +21,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * This class loads set of ApplicationDesription to update from remote appstore.
+ * This class loads set of ApplicationDescription to update from remote appstore.
  *
  * @author Alexander Ivanoff
  */

@@ -21,6 +21,7 @@
         <mapping class="org.onepf.repository.api.responsewriter.entity.PurchaseEntity"/>
         <mapping class="org.onepf.repository.api.responsewriter.entity.ReviewEntity"/>
         <mapping class="org.onepf.repository.appstorelooter.LastUpdateEntity"/>
+        <mapping class="org.onepf.repository.appstorelooter.LastStatisticsUpdateEntity"/>
     </session-factory>
 
 

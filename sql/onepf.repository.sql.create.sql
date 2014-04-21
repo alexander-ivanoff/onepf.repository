@@ -29,7 +29,6 @@ CREATE TABLE `onepf_repository`.`statistics_updates` (
 );
 
 CREATE TABLE `onepf_repository`.`applications` (
->>>>>>> 925a1161d1e3f765e185743e3fcfb5e4ad19eae0
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `package` varchar(255) NOT NULL,
   `appstoreId` varchar(255) DEFAULT NULL,
