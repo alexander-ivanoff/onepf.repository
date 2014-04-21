@@ -1,7 +1,7 @@
 package org.onepf.repository.model.services;
 
 import org.onepf.repository.api.responsewriter.entity.*;
-import org.onepf.repository.appstorelooter.LastUpdateDescriptor;
+import org.onepf.repository.appstorelooter.LastUpdateEntity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +21,7 @@ public interface DataService {
 
     void store(ApplicationEntity application) throws DataException;
 
-    void saveLastUpdate(LastUpdateDescriptor lastUpdateDescriptor) throws DataException;
+    void saveLastUpdate(LastUpdateEntity lastUpdateDescriptor) throws DataException;
 
     void addDownload(DownloadEntity download) throws DataException;
 
@@ -32,22 +32,23 @@ public interface DataService {
     Map<String, AppstoreEntity> getAppstores() throws DataException;
 
     /**
+     *
      * @param appstoreId
      * @return List of LastUpdateDescriptor for specified appstore ID
      * @throws DataException
-     * @see org.onepf.repository.appstorelooter.LastUpdateDescriptor
+     * @see org.onepf.repository.appstorelooter.LastUpdateEntity
      * @see org.onepf.repository.model.services.DataException
      */
-    List<LastUpdateDescriptor> getLastUpdate(String appstoreId) throws DataException;
+    LastUpdateEntity getLastUpdate(String appstoreId) throws DataException;
 
     /**
-     * @param hash        - MD5 calculated hash of appdf file
+     * @param hash - MD5 calculated hash of appdf file
      * @return List of ApplicationDescriptor with specified package name and MD5 hash
      * @throws DataException
      * @see org.onepf.repository.api.responsewriter.entity.ApplicationEntity
      * @see org.onepf.repository.model.services.DataException
      */
-    List<ApplicationEntity> getApplicationByHash(String packageName, String hash) throws DataException;
+    List getApplicationByHash(String packageName, String hash) throws DataException;
 
     ArrayList<DownloadEntity> getDownloads(String homeStoreId, long page) throws DataException;
 

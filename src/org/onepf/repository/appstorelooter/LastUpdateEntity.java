@@ -2,9 +2,7 @@ package org.onepf.repository.appstorelooter;
 
 import org.onepf.repository.api.responsewriter.entity.BaseEntity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 /**
  * Created by akarimova on 17.04.14.
@@ -13,6 +11,7 @@ import javax.persistence.Table;
 @Table(name = "appstoreupdates")
 public class LastUpdateEntity extends BaseEntity {
     @Column(name = "appstoreId")
+    @Id
     private String appstoreId;
 
     @Column(name = "lastUpdateHash")

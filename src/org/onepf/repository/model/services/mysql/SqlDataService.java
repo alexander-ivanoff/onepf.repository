@@ -16,7 +16,7 @@ import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import org.onepf.repository.api.Pair;
 import org.onepf.repository.api.responsewriter.entity.*;
-import org.onepf.repository.appstorelooter.LastUpdateDescriptor;
+import org.onepf.repository.appstorelooter.LastUpdateEntity;
 import org.onepf.repository.model.services.DataException;
 import org.onepf.repository.model.services.DataService;
 import org.onepf.repository.model.services.mysql.entities.*;
@@ -89,54 +89,8 @@ public class SqlDataService implements DataService {
     }
 
     @Override
-    public void saveLastUpdate(LastUpdateDescriptor lastUpdateDescriptor) throws DataException {
-        Connection conn = null;
-        PreparedStatement stmt = null;
-        try {
-            SqlLastUpdateEntity appEntity = new SqlLastUpdateEntity()
-                    .withAppstoreId(lastUpdateDescriptor.appstoreId)
-                    .withDateTime(lastUpdateDescriptor.lastResponseDatetime)
-                    .withHash(lastUpdateDescriptor.lastResponseHash)
-                    .withOffset(lastUpdateDescriptor.prevOffset);
-
-            conn = dbDataSource.getConnection();
-
-            StringBuilder columnsBuilder = new StringBuilder().append("(");
-            StringBuilder valuesBuilder = new StringBuilder().append("(");
-            Map<String, String> item = appEntity.getItem();
-            for (String entry : item.keySet()) {
-                columnsBuilder.append(entry).append(',');
-                valuesBuilder.append('?').append(',');
-
-            }
-            int pos = columnsBuilder.length();
-            columnsBuilder.replace(pos - 1, pos, ")");
-            pos = valuesBuilder.length();
-            valuesBuilder.replace(pos - 1, pos, ")");
-
-            String request = "REPLACE INTO " + SqlLastUpdateEntity.TABLE_NAME + " " + columnsBuilder.toString() + " VALUES " + valuesBuilder.toString() + ";";
-
-            PreparedStatement stmt1 = conn.prepareStatement(request);
-            Collection<String> values = item.values();
-            int index = 0;
-            for (String value : values) {
-                stmt1.setString(++index, value);
-            }
-
-            stmt = stmt1;
-            stmt.executeUpdate();
-        } catch (SQLException e) {
-            throw new DataException(e);
-        } finally {
-            try {
-                if (stmt != null) stmt.close();
-            } catch (Exception e) {
-            }
-            try {
-                if (conn != null) conn.close();
-            } catch (Exception e) {
-            }
-        }
+    public void saveLastUpdate(LastUpdateEntity lastUpdate) throws DataException {
+        saveEntity(lastUpdate);
     }
 
     @Override
@@ -165,13 +119,7 @@ public class SqlDataService implements DataService {
 
     @Override
     public List<ApplicationEntity> getApplicationsLog(String packageName, int currPageHash) throws DataException {
-        Configuration configuration = new Configuration();
-        configuration.configure("/resources/hibernate.cfg.xml");
-        StandardServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder().applySettings(
-                configuration.getProperties()).build();
-        SessionFactory sessionFactory = configuration
-                .buildSessionFactory(serviceRegistry);
-        Session session = sessionFactory.openSession();
+        Session session = getSession();
 
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("FROM ApplicationEntity");
@@ -187,6 +135,7 @@ public class SqlDataService implements DataService {
             } else {
                 String hqlSelection = "FROM ApplicationEntity ORDER BY id DESC";
                 Query query = session.createQuery(hqlSelection);
+                query.setMaxResults(1);
                 List list = query.list();
                 if (!list.isEmpty()) {
                     pageHash = ((ApplicationEntity) list.get(0)).getCurrPageHash();
@@ -211,16 +160,20 @@ public class SqlDataService implements DataService {
         return results;
     }
 
-    @Override
-    public List<ApplicationEntity> getApplicationByHash(String packageName, String hash) throws DataException {
-
+    private Session getSession() {
         Configuration configuration = new Configuration();
         configuration.configure("/resources/hibernate.cfg.xml");
         StandardServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder().applySettings(
                 configuration.getProperties()).build();
         SessionFactory sessionFactory = configuration
                 .buildSessionFactory(serviceRegistry);
-        Session session = sessionFactory.openSession();
+        return sessionFactory.openSession();
+    }
+
+    @Override
+    public List<ApplicationEntity> getApplicationByHash(String packageName, String hash) throws DataException {
+
+        Session session = getSession();
 
         Query query = session.createQuery("FROM ApplicationEntity where packageName = :packageParam and appdfHash = :hashParam ORDER BY id DESC");
         query.setParameter("packageParam", packageName);
@@ -233,13 +186,7 @@ public class SqlDataService implements DataService {
 
     @Override
     public Map<String, AppstoreEntity> getAppstores() throws DataException {
-        Configuration configuration = new Configuration();
-        configuration.configure("/resources/hibernate.cfg.xml");
-        StandardServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder().applySettings(
-                configuration.getProperties()).build();
-        SessionFactory sessionFactory = configuration
-                .buildSessionFactory(serviceRegistry);
-        Session session = sessionFactory.openSession();
+        Session session = getSession();
 
         Query query = session.createQuery("FROM AppstoreEntity");
         query.setMaxResults(DEFAULT_RESULT_LIMIT);
@@ -254,64 +201,17 @@ public class SqlDataService implements DataService {
     }
 
     @Override
-    public List<LastUpdateDescriptor> getLastUpdate(String appstoreId) throws DataException {
-        Connection conn = null;
-        PreparedStatement stmt = null;
-        ResultSet rset = null;
-        try {
-            conn = dbDataSource.getConnection();
-            String selection = SqlLastUpdateEntity.FIELD_APPSTORE_ID + "=?";
-            String[] selectionArgs = new String[]{appstoreId};
-            PreparedStatement result;
-
-            StringBuilder requestBuilder = new StringBuilder().append("SELECT * FROM ").append(SqlLastUpdateEntity.TABLE_NAME);
-            if (selection != null) {
-                requestBuilder.append(" WHERE ").append(selection);
-            }
-            if (null != null) {
-                requestBuilder.append(" ORDER BY ").append((String) null);
-            }
-            requestBuilder.append(" LIMIT " + DEFAULT_RESULT_LIMIT);
-            String request = requestBuilder.toString();
-            logger.info("QUERY: {}", request);
-
-            PreparedStatement stmt1 = null;
-            try {
-                stmt1 = conn.prepareStatement(request);
-                int index = 0;
-                if (selectionArgs != null) {
-                    for (String value : selectionArgs) {
-                        stmt1.setString(++index, value);
-                    }
-                }
-                result = stmt1;
-            } catch (SQLException e) {
-                e.printStackTrace();
-                throw e;
-            }
-            stmt = result;
-            rset = stmt.executeQuery();
-            List<LastUpdateDescriptor> updates = new ArrayList<LastUpdateDescriptor>();
-            while (rset.next()) {
-                updates.add(SqlLastUpdateEntity.getDescriptor(rset));
-            }
-            return updates;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            throw new DataException(e);
-        } finally {
-            try {
-                if (rset != null) rset.close();
-            } catch (Exception e) {
-            }
-            try {
-                if (stmt != null) stmt.close();
-            } catch (Exception e) {
-            }
-            try {
-                if (conn != null) conn.close();
-            } catch (Exception e) {
-            }
+    public LastUpdateEntity getLastUpdate(String appstoreId) throws DataException {
+        Session session = getSession();
+        Query query = session.createQuery("FROM LastUpdateEntity WHERE appstoreId =: appstoreIdParam");
+        query.setParameter("appstoreIdParam", appstoreId);
+        query.setMaxResults(1);
+        List results = query.list();
+        session.close();
+        if (results != null && results.size() == 1) {
+            return (LastUpdateEntity) results.get(0);
+        } else {
+            return null;
         }
     }
 
@@ -525,14 +425,14 @@ public class SqlDataService implements DataService {
     /**
      * insert new record to table with paging (add page hashes to insert)
      */
-    private static void insertWithHashes(Connection connection, String tableName, BaseEntity entity, int limit) throws SQLException {
+    private void insertWithHashes(Connection connection, String tableName, BaseEntity entity, int limit) throws SQLException {
         insertWithHashes(connection, tableName, null, entity, limit);
     }
 
     /**
      * insert new record to table with paging (add page hashes to insert)
      */
-    private static void insertWithHashes(Connection connection, String tableName, String packageName, BaseEntity entity, int limit) throws SQLException {
+    private void insertWithHashes(Connection connection, String tableName, String packageName, BaseEntity entity, int limit) throws SQLException {
         Pair<Integer, Integer> pageHashes = getPageHashes(connection, tableName, packageName, limit);
         entity.setPrevPageHash(pageHashes.fst);
         entity.setCurrPageHash(pageHashes.snd);
@@ -577,14 +477,8 @@ public class SqlDataService implements DataService {
     }
 
 
-    public static void saveEntity(BaseEntity entity) {
-        Configuration configuration = new Configuration();
-        configuration.configure("/resources/hibernate.cfg.xml");
-        StandardServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder().applySettings(
-                configuration.getProperties()).build();
-        SessionFactory sessionFactory = configuration
-                .buildSessionFactory(serviceRegistry);
-        Session session = sessionFactory.openSession();
+    public void saveEntity(BaseEntity entity) {
+        Session session = getSession();
         session.beginTransaction();
         session.save(entity);
         session.getTransaction().commit();

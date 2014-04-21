@@ -52,14 +52,13 @@ public class GetAppListRequest implements Runnable {
     @Override
     public void run() {
         try {
-            List<LastUpdateDescriptor> updates = repositoryFactory.getDataService().getLastUpdate(appstore.getAppstoreId());
-            LastUpdateDescriptor lastUpdateDescriptor = (updates.size() > 0) ? updates.get(0) : null;
+            LastUpdateEntity lastUpdateDescriptor = repositoryFactory.getDataService().getLastUpdate(appstore.getAppstoreId());
             ApplicationsToUpdateLoader.Response appsToUpdateResponse =
                     applicationsToUpdateLoader.getUpdates(new ApplicationsToUpdateLoader.Request(appstore, lastUpdateDescriptor));
             if (appsToUpdateResponse.getAppsToUpdate() == null) {
                 logger.info("Update is not needed. Everything is up to date!");
             } else {
-                logger.info("Updating: {}", appsToUpdateResponse.getLastUpdate().lastResponseHash);
+                logger.info("Updating: {}", appsToUpdateResponse.getLastUpdate().getLastResponseHash());
                 appsLoader.loadApplications(new ApplicationsLoader.Request(appstore, appsToUpdateResponse.getAppsToUpdate()));
                 // if everything was ok, store last Update
                 repositoryFactory.getDataService().saveLastUpdate(appsToUpdateResponse.getLastUpdate());
