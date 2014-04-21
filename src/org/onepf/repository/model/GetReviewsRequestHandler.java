@@ -5,6 +5,7 @@ import org.apache.logging.log4j.Logger;
 import org.onepf.repository.api.responsewriter.entity.ReviewEntity;
 import org.onepf.repository.model.services.DataException;
 import org.onepf.repository.model.services.DataService;
+import org.onepf.repository.model.services.SimpleListRequestHandler;
 import org.onepf.repository.model.services.StorageService;
 
 import java.util.ArrayList;
@@ -16,7 +17,7 @@ import java.util.List;
  *
 * @author Alexander Ivanoff on 12.03.14.
  */
-public class GetReviewsRequestHandler extends BaseRequestHandler {
+public class GetReviewsRequestHandler extends SimpleListRequestHandler<ReviewEntity> {
 
     private final Logger logger = LogManager.getLogger(GetReviewsRequestHandler.class.getName());
 
@@ -25,16 +26,10 @@ public class GetReviewsRequestHandler extends BaseRequestHandler {
         super(dataService, storageService);
     }
 
-    /**
-     * return list of reviews for given packageName and page
-     *
-     * @param pageHash - hash of the page to return
-     * @return List of ReviewDescriptors
-     * @throws DataException
-     */
-    public List<ReviewEntity> getReviews(String homeStoreId, int pageHash) throws DataException {
+    @Override
+    public List<ReviewEntity> getList(String appstoreId, int pageHash) throws DataException {
         long time = System.currentTimeMillis();
-        ArrayList<ReviewEntity> reviews = dataService.getReviews(homeStoreId, pageHash);
+        ArrayList<ReviewEntity> reviews = dataService.getReviews(appstoreId, pageHash);
         logger.debug("List reviews time: {}", (System.currentTimeMillis() - time));
         return reviews;
     }

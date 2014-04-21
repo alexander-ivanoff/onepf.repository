@@ -1,12 +1,7 @@
 package org.onepf.repository.model.services;
 
-import org.onepf.repository.api.responsewriter.entity.ApplicationEntity;
-import org.onepf.repository.api.responsewriter.entity.DownloadEntity;
-import org.onepf.repository.api.responsewriter.entity.PurchaseEntity;
-import org.onepf.repository.api.responsewriter.entity.ReviewEntity;
-import org.onepf.repository.appstorelooter.LastStatisticsUpdateDescriptor;
-import org.onepf.repository.appstorelooter.LastUpdateDescriptor;
-import org.onepf.repository.model.auth.AppstoreDescriptor;
+import org.onepf.repository.api.responsewriter.entity.*;
+import org.onepf.repository.appstorelooter.LastUpdateEntity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +21,7 @@ public interface DataService {
 
     void store(ApplicationEntity application) throws DataException;
 
-    void saveLastUpdate(LastUpdateDescriptor lastUpdateDescriptor) throws DataException;
+    void saveLastUpdate(LastUpdateEntity lastUpdateDescriptor) throws DataException;
 
     void addDownload(DownloadEntity download) throws DataException;
 
@@ -34,26 +29,26 @@ public interface DataService {
 
     List<ApplicationEntity> getApplicationsLog(String packageName, int page) throws DataException;
 
-    Map<String, AppstoreDescriptor> getAppstores() throws DataException;
+    Map<String, AppstoreEntity> getAppstores() throws DataException;
 
     /**
+     *
      * @param appstoreId
      * @return List of LastUpdateDescriptor for specified appstore ID
      * @throws DataException
-     * @see org.onepf.repository.appstorelooter.LastUpdateDescriptor
+     * @see org.onepf.repository.appstorelooter.LastUpdateEntity
      * @see org.onepf.repository.model.services.DataException
      */
-    List<LastUpdateDescriptor> getLastUpdate(String appstoreId) throws DataException;
-    LastStatisticsUpdateDescriptor getLastStatisticsUpdate(String appstoreId, String feedType) throws DataException;
+    LastUpdateEntity getLastUpdate(String appstoreId) throws DataException;
 
     /**
-     * @param hash        - MD5 calculated hash of appdf file
+     * @param hash - MD5 calculated hash of appdf file
      * @return List of ApplicationDescriptor with specified package name and MD5 hash
      * @throws DataException
      * @see org.onepf.repository.api.responsewriter.entity.ApplicationEntity
      * @see org.onepf.repository.model.services.DataException
      */
-    List<ApplicationEntity> getApplicationByHash(String packageName, String hash) throws DataException;
+    List getApplicationByHash(String packageName, String hash) throws DataException;
 
     ArrayList<DownloadEntity> getDownloads(String homeStoreId, long page) throws DataException;
 

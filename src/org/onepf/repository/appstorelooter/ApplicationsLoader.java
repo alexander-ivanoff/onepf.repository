@@ -9,10 +9,10 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.onepf.repository.ApiMapping;
 import org.onepf.repository.api.responsewriter.entity.ApplicationEntity;
+import org.onepf.repository.api.responsewriter.entity.AppstoreEntity;
 import org.onepf.repository.model.FileType;
 import org.onepf.repository.model.RepositoryFactory;
 import org.onepf.repository.model.UploadAppdfRequestHandler;
-import org.onepf.repository.model.auth.AppstoreDescriptor;
 import org.onepf.repository.model.services.DataException;
 import org.onepf.repository.model.services.StorageException;
 
@@ -40,14 +40,14 @@ public class ApplicationsLoader {
      */
     public static class Request {
 
-        private AppstoreDescriptor appstore;
+        private AppstoreEntity appstore;
         private Set<ApplicationEntity> application;
 
         /**
          * @param appstore - AppstoreDescriptor to get appdf files from
          * @param applications - set of ApplicationDescriptor to get from remote appstore
          */
-        public Request(AppstoreDescriptor appstore, Set<ApplicationEntity> applications) {
+        public Request(AppstoreEntity appstore, Set<ApplicationEntity> applications) {
             this.appstore = appstore;
             this.application = applications;
         }
@@ -80,7 +80,7 @@ public class ApplicationsLoader {
      */
     public void loadApplications(final Request request) throws IOException {
 
-        final AppstoreDescriptor appstore = request.appstore;
+        final AppstoreEntity appstore = request.appstore;
         final Set<ApplicationEntity> applications = request.application;
 
         Map<ApplicationEntity, String> failedAppsWithReason = loadApplicationsInt(appstore, applications);
@@ -102,7 +102,7 @@ public class ApplicationsLoader {
      * @return Map of ApplicationDescriptor and String represented reason why it was failed
      * @throws IOException
      */
-    private Map<ApplicationEntity, String> loadApplicationsInt(final AppstoreDescriptor appstore, final Set<ApplicationEntity> apps) throws IOException {
+    private Map<ApplicationEntity, String> loadApplicationsInt(final AppstoreEntity appstore, final Set<ApplicationEntity> apps) throws IOException {
         Map<ApplicationEntity, String> failedAppsWithReason = new HashMap<ApplicationEntity, String>();
         String url;
         for (ApplicationEntity appToLoad : apps) {
@@ -111,9 +111,9 @@ public class ApplicationsLoader {
                 List<ApplicationEntity> appLog = factory.getDataService().getApplicationsLog(appToLoad.getPackageName(), -1);
                 if (appLog.size() > 0) {
                     // check that uploading store is home store
-                    if (!appLog.get(0).getAppstoreId().equals(appstore.appstoreId)) {
+                    if (!appLog.get(0).getAppstoreId().equals(appstore.getAppstoreId())) {
                         throw new DataException(String.format("Store '%s' is not home store for package '%s'",
-                                appstore.appstoreId, appToLoad.getPackageName()));
+                                appstore.getAppstoreId(), appToLoad.getPackageName()));
                     }
                     for (ApplicationEntity app : appLog) {
                         // check if there is appdf file with the same hash, if it is here means appdf is up to date
@@ -124,9 +124,9 @@ public class ApplicationsLoader {
                     }
                 }
                 if (needUpdate) {
-                    url = ApiMapping.GET_APPDF.getMethodUrl(appstore.openaepUrl) + "?package=" + appToLoad.getPackageName();
+                    url = ApiMapping.GET_APPDF.getMethodUrl(appstore.getOpenaepUrl()) + "?package=" + appToLoad.getPackageName();
                     HttpGet httpGet = new HttpGet(url);
-                    httpGet.addHeader("authToken", appstore.appstoreAccessToken);
+                    httpGet.addHeader("authToken", appstore.getAppstoreAccessToken());
                     HttpResponse response = httpClient.execute(httpGet, httpContext);
 
                     int result = response.getStatusLine().getStatusCode();
