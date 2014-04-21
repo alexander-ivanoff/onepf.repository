@@ -50,10 +50,14 @@ public class SqlDataService implements DataService {
 
     private DataSource dbDataSource;
 
+    private SessionFactory hibSessionFactory;
+
     public SqlDataService(SqlOptions options) {
 
         // init DBCP DataSource
         dbDataSource = setupDataSource(options);
+
+        hibSessionFactory = setupHibernateSessionFactory();
 
     }
 
@@ -70,6 +74,15 @@ public class SqlDataService implements DataService {
         PoolingDataSource dataSource = new PoolingDataSource(connectionPool);
         return dataSource;
     }
+
+    public static SessionFactory setupHibernateSessionFactory() {
+        Configuration configuration = new Configuration();
+        configuration.configure("/resources/hibernate.cfg.xml");
+        StandardServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder().applySettings(
+                configuration.getProperties()).build();
+        return configuration.buildSessionFactory(serviceRegistry);
+    }
+
 
     @Override
     public void store(ApplicationEntity appEntity) throws DataException {
@@ -165,13 +178,7 @@ public class SqlDataService implements DataService {
 
     @Override
     public List<ApplicationEntity> getApplicationsLog(String packageName, int currPageHash) throws DataException {
-        Configuration configuration = new Configuration();
-        configuration.configure("/resources/hibernate.cfg.xml");
-        StandardServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder().applySettings(
-                configuration.getProperties()).build();
-        SessionFactory sessionFactory = configuration
-                .buildSessionFactory(serviceRegistry);
-        Session session = sessionFactory.openSession();
+        Session session = hibSessionFactory.openSession();
 
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("FROM ApplicationEntity");
@@ -214,13 +221,7 @@ public class SqlDataService implements DataService {
     @Override
     public List<ApplicationEntity> getApplicationByHash(String packageName, String hash) throws DataException {
 
-        Configuration configuration = new Configuration();
-        configuration.configure("/resources/hibernate.cfg.xml");
-        StandardServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder().applySettings(
-                configuration.getProperties()).build();
-        SessionFactory sessionFactory = configuration
-                .buildSessionFactory(serviceRegistry);
-        Session session = sessionFactory.openSession();
+        Session session = hibSessionFactory.openSession();
 
         Query query = session.createQuery("FROM ApplicationEntity where packageName = :packageParam and appdfHash = :hashParam ORDER BY id DESC");
         query.setParameter("packageParam", packageName);
@@ -233,13 +234,7 @@ public class SqlDataService implements DataService {
 
     @Override
     public Map<String, AppstoreEntity> getAppstores() throws DataException {
-        Configuration configuration = new Configuration();
-        configuration.configure("/resources/hibernate.cfg.xml");
-        StandardServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder().applySettings(
-                configuration.getProperties()).build();
-        SessionFactory sessionFactory = configuration
-                .buildSessionFactory(serviceRegistry);
-        Session session = sessionFactory.openSession();
+        Session session = hibSessionFactory.openSession();
 
         Query query = session.createQuery("FROM AppstoreEntity");
         query.setMaxResults(DEFAULT_RESULT_LIMIT);
@@ -525,14 +520,14 @@ public class SqlDataService implements DataService {
     /**
      * insert new record to table with paging (add page hashes to insert)
      */
-    private static void insertWithHashes(Connection connection, String tableName, BaseEntity entity, int limit) throws SQLException {
+    private void insertWithHashes(Connection connection, String tableName, BaseEntity entity, int limit) throws SQLException {
         insertWithHashes(connection, tableName, null, entity, limit);
     }
 
     /**
      * insert new record to table with paging (add page hashes to insert)
      */
-    private static void insertWithHashes(Connection connection, String tableName, String packageName, BaseEntity entity, int limit) throws SQLException {
+    private void insertWithHashes(Connection connection, String tableName, String packageName, BaseEntity entity, int limit) throws SQLException {
         Pair<Integer, Integer> pageHashes = getPageHashes(connection, tableName, packageName, limit);
         entity.setPrevPageHash(pageHashes.fst);
         entity.setCurrPageHash(pageHashes.snd);
@@ -577,18 +572,19 @@ public class SqlDataService implements DataService {
     }
 
 
-    public static void saveEntity(BaseEntity entity) {
-        Configuration configuration = new Configuration();
-        configuration.configure("/resources/hibernate.cfg.xml");
-        StandardServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder().applySettings(
-                configuration.getProperties()).build();
-        SessionFactory sessionFactory = configuration
-                .buildSessionFactory(serviceRegistry);
-        Session session = sessionFactory.openSession();
+    public void saveEntity(BaseEntity entity) {
+        Session session = hibSessionFactory.openSession();
         session.beginTransaction();
         session.save(entity);
         session.getTransaction().commit();
         session.close();
+    }
+
+    @Override
+    public void close() {
+        if (hibSessionFactory != null) {
+            hibSessionFactory.close();
+        }
     }
 
 }

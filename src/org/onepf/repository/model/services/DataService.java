@@ -54,4 +54,6 @@ public interface DataService {
     ArrayList<PurchaseEntity> getPurchases(String homeStoreId, long page) throws DataException;
 
     ArrayList<ReviewEntity> getReviews(String homeStoreId, long page) throws DataException;
+
+    void close();
 }

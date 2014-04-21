@@ -72,7 +72,7 @@ public class AppstoreRequester {
             // schedule GetAppListRequests
             scheduler = Executors.newScheduledThreadPool(appstores.size());
             for (AppstoreEntity appstore : appstores.values()) {
-                if (appstore.getAppstoreId().equals("localstore")) { //TEST PURPOSES ONLY
+                if (appstore.getAppstoreId().equals("onepf.repository")) { //TEST PURPOSES ONLY
                     cm.setDefaultMaxPerRoute(CONNECTIONS_PER_STORE);
                     scheduler.scheduleAtFixedRate(
                             new GetAppListRequest(xmlResponseWriterV2, repositoryFactory, httpClient, appstore, uploadDir ),
