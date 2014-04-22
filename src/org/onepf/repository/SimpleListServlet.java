@@ -3,6 +3,7 @@ package org.onepf.repository;
 import org.onepf.repository.api.responsewriter.ResponseReaderWriter;
 import org.onepf.repository.api.responsewriter.WriteException;
 import org.onepf.repository.api.responsewriter.entity.BaseEntity;
+import org.onepf.repository.api.responsewriter.entity.BaseHashEntity;
 import org.onepf.repository.api.responsewriter.entity.BaseListEntity;
 import org.onepf.repository.model.services.DataException;
 import org.onepf.repository.model.services.SimpleListRequestHandler;
@@ -19,7 +20,7 @@ import java.util.List;
  *
  * @author Alexander Ivanoff on 11.03.14.
  */
-public abstract class SimpleListServlet<T extends BaseEntity, K extends BaseListEntity> extends BaseServlet {
+public abstract class SimpleListServlet<T extends BaseHashEntity, K extends BaseListEntity> extends BaseServlet {
 
     private static final String PARAMETER_PAGE = "page";
 

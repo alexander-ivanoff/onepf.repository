@@ -455,14 +455,14 @@ public class SqlDataService implements DataService {
     /**
      * insert new record to table with paging (add page hashes to insert)
      */
-    private void insertWithHashes(Connection connection, String tableName, BaseEntity entity, int limit) throws SQLException {
+    private void insertWithHashes(Connection connection, String tableName, BaseHashEntity entity, int limit) throws SQLException {
         insertWithHashes(connection, tableName, null, entity, limit);
     }
 
     /**
      * insert new record to table with paging (add page hashes to insert)
      */
-    private void insertWithHashes(Connection connection, String tableName, String packageName, BaseEntity entity, int limit) throws SQLException {
+    private void insertWithHashes(Connection connection, String tableName, String packageName, BaseHashEntity entity, int limit) throws SQLException {
         Pair<Integer, Integer> pageHashes = getPageHashes(connection, tableName, packageName, limit);
         entity.setPrevPageHash(pageHashes.fst);
         entity.setCurrPageHash(pageHashes.snd);

@@ -18,7 +18,7 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = "applicationType")
 @Entity
 @Table(name = "applications")
-public class ApplicationEntity extends BaseEntity {
+public class ApplicationEntity extends BaseHashEntity {
     @Id
     private int id;
 
