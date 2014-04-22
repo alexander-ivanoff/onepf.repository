@@ -243,71 +243,26 @@ public class SqlDataService implements DataService {
 
     @Override
     public ArrayList<DownloadEntity> getDownloads(String homeStoreId, long currPageHash) throws DataException {
-        Connection conn = null;
-        PreparedStatement stmt = null;
-        ResultSet rset = null;
-        try {
-            String selection = "homeStoreId=? AND ";
-            String[] selectionArgs;
-            if (currPageHash >= 0) {
-                selection += "currPageHash=?";
-                selectionArgs = new String[]{homeStoreId, String.valueOf(currPageHash)};
+        Session session = getSession();
+        Query query = session.createQuery("FROM PurchaseEntity WHERE homeStoreId= :homeStoreIdParam AND currPageHash= :currPageHashParam ORDER BY id DESC");
+        query.setParameter("homeStoreIdParam", homeStoreId);
+        if (currPageHash >= 0) {
+            query.setParameter("currPageHashParam", currPageHash);
+        } else {
+            Query currPageHashQuery = session.createQuery("FROM DownloadEntity WHERE homeStoreId= :homeStoreIdParam ORDER BY id DESC");
+            currPageHashQuery.setMaxResults(1);
+            List list = currPageHashQuery.list();
+            if (list != null && !list.isEmpty()) {
+                DownloadEntity download = (DownloadEntity) list.get(0);
+                query.setParameter("currPageHashParam", download.getCurrPageHash());
             } else {
-                selection += "currPageHash = (SELECT currPageHash FROM downloads WHERE homeStoreId=? ORDER BY id DESC LIMIT 1)";
-                selectionArgs = new String[]{homeStoreId, homeStoreId};
-            }
-            String order = SqlDownloadEntity.FIELD_ID + " DESC";
-            conn = dbDataSource.getConnection();
-            PreparedStatement result;
-
-            StringBuilder requestBuilder = new StringBuilder().append("SELECT * FROM ").append("downloads");
-            if (selection != null) {
-                requestBuilder.append(" WHERE ").append(selection);
-            }
-            if (order != null) {
-                requestBuilder.append(" ORDER BY ").append(order);
-            }
-            requestBuilder.append(" LIMIT " + DEFAULT_RESULT_LIMIT);
-            String request = requestBuilder.toString();
-            logger.info("QUERY: {}", request);
-
-            PreparedStatement stmt1 = null;
-            try {
-                stmt1 = conn.prepareStatement(request);
-                int index = 0;
-                if (selectionArgs != null) {
-                    for (String value : selectionArgs) {
-                        stmt1.setString(++index, value);
-                    }
-                }
-                result = stmt1;
-            } catch (SQLException e) {
-                e.printStackTrace();
-                throw e;
-            }
-            stmt = result;
-            rset = stmt.executeQuery();
-            ArrayList<DownloadEntity> downloads = new ArrayList<DownloadEntity>();
-            while (rset.next()) {
-                downloads.add(SqlDownloadEntity.getDescriptor(rset));
-            }
-            return downloads;
-        } catch (SQLException e) {
-            throw new DataException(e);
-        } finally {
-            try {
-                if (rset != null) rset.close();
-            } catch (Exception e) {
-            }
-            try {
-                if (stmt != null) stmt.close();
-            } catch (Exception e) {
-            }
-            try {
-                if (conn != null) conn.close();
-            } catch (Exception e) {
+                return new ArrayList<DownloadEntity>();
             }
         }
+        query.setMaxResults(DEFAULT_RESULT_LIMIT);
+        List list = query.list();
+        session.close();
+        return new ArrayList<DownloadEntity>(list);
     }
 
     @Override
