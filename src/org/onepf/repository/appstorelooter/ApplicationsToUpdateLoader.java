@@ -21,7 +21,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * This class loads set of ApplicationDesription to update from remote appstore.
+ * This class loads set of ApplicationDescription to update from remote appstore.
  *
  * @author Alexander Ivanoff
  */
@@ -36,17 +36,17 @@ public class ApplicationsToUpdateLoader {
     public static class Request {
 
         private AppstoreEntity appstore;
-        private LastUpdateDescriptor prevUpdate;
+        private LastUpdateEntity prevUpdate;
 
         /**
          * @param appstore - AppstoreDescriptor to get appdf files from
          * @param prevUpdate - object with information about previous update or 'null' if there is first update.
          */
-        public Request(AppstoreEntity appstore, LastUpdateDescriptor prevUpdate) {
+        public Request(AppstoreEntity appstore, LastUpdateEntity prevUpdate) {
             if (appstore == null) {
                 throw new NullPointerException("appstore can't be null");
             }
-            if (prevUpdate != null && !appstore.getAppstoreId().equals(prevUpdate.appstoreId)) {
+            if (prevUpdate != null && !appstore.getAppstoreId().equals(prevUpdate.getAppstoreId())) {
                 throw new IllegalArgumentException("prevUpdate from other appstore");
             }
             this.appstore = appstore;
@@ -64,9 +64,9 @@ public class ApplicationsToUpdateLoader {
     public static class Response {
 
         private Set<ApplicationEntity> appsToUpdate;
-        private LastUpdateDescriptor lastUpdate;
+        private LastUpdateEntity lastUpdate;
 
-        public LastUpdateDescriptor getLastUpdate() {
+        public LastUpdateEntity getLastUpdate() {
             return lastUpdate;
         }
 
@@ -96,11 +96,11 @@ public class ApplicationsToUpdateLoader {
     public Response getUpdates(final Request request) throws IOException {
         Response response = new Response();
         final AppstoreEntity appstore = request.appstore;
-        final LastUpdateDescriptor prevUpdate = request.prevUpdate;
+        final LastUpdateEntity prevUpdate = request.prevUpdate;
 
         Set<ApplicationEntity> appsToUpdate = new HashSet<ApplicationEntity>();
         String hash = null;
-        LastUpdateDescriptor lastUpdate = null;
+        LastUpdateEntity lastUpdate = null;
 
         String url = ApiMapping.LIST_APPLICATIONS.getMethodUrl(appstore.getOpenaepUrl());
         int iterations = 0;
@@ -122,11 +122,11 @@ public class ApplicationsToUpdateLoader {
                     url = applicationListEntity.getOffset();
                     appsToUpdate.addAll(applicationListEntity.getApplication());
                     if (lastUpdate == null) {
-                        lastUpdate = new LastUpdateDescriptor();
-                        lastUpdate.appstoreId = appstore.getAppstoreId();
-                        lastUpdate.lastResponseDatetime = dateFormat.format(new Date(System.currentTimeMillis()));
-                        lastUpdate.lastResponseHash = hash;
-                        lastUpdate.prevOffset = applicationListEntity.getOffset();
+                        lastUpdate = new LastUpdateEntity();
+                        lastUpdate.setAppstoreId(appstore.getAppstoreId());
+                        lastUpdate.setLastResponseDatetime(dateFormat.format(new Date(System.currentTimeMillis())));
+                        lastUpdate.setLastResponseHash(hash);
+                        lastUpdate.setPrevOffset(applicationListEntity.getOffset());
                     }
                 } catch (Exception e) {
                     throw new IOException(e);
@@ -135,8 +135,8 @@ public class ApplicationsToUpdateLoader {
                 throw new IOException("Applist request failed with result: " + httpResponse.getStatusLine());
             }
             iterations++;
-        } while (url != null && (prevUpdate == null || !url.equals(prevUpdate.prevOffset)));
-        if (iterations == 1 && prevUpdate != null && prevUpdate.lastResponseHash.equals(hash)) {
+        } while (url != null && (prevUpdate == null || !url.equals(prevUpdate.getPrevOffset())));
+        if (iterations == 1 && prevUpdate != null && prevUpdate.getLastResponseHash().equals(hash)) {
             //do nothing - return empty response
         } else {
             response.lastUpdate = lastUpdate;

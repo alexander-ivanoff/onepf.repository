@@ -21,9 +21,10 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 /**
- * This class schedule GetAppListRequest for all known appstores.
+ * This class schedule GetAppListRequest and GetStatisticsRequest for all known appstores.
  *
  * @see GetAppListRequest
+ * @see GetStatisticsRequest
  * @author Alexander Ivanov
  */
 public class AppstoreRequester {
@@ -39,6 +40,7 @@ public class AppstoreRequester {
     private AppstoreAuthenticator appstoreAuthenticator;
 
     private File uploadDir;
+    private File tmpDir;
 
     public AppstoreRequester(ServletContext context) {
         repositoryFactory = RepositoryConfigurator.getRepositoryFactory(context);
@@ -50,10 +52,11 @@ public class AppstoreRequester {
         }
 
         uploadDir = new File(context.getRealPath("/uploads/"));
+        tmpDir = new File(context.getRealPath("/tmp/"));
     }
 
     /**
-     * Schedule GetAppListRequest
+     * Schedule GetAppListRequest and GetStatisticsRequest
      */
     public void  start() {
 
@@ -69,16 +72,20 @@ public class AppstoreRequester {
             cm.setMaxTotal(appstores.size() * CONNECTIONS_PER_STORE);
             cm.setDefaultMaxPerRoute(CONNECTIONS_PER_STORE);
             httpClient = new DefaultHttpClient(cm);
-            // schedule GetAppListRequests
+
             scheduler = Executors.newScheduledThreadPool(appstores.size());
             for (AppstoreEntity appstore : appstores.values()) {
                 if (appstore.getAppstoreId().equals("onepf.repository")) { //TEST PURPOSES ONLY
                     cm.setDefaultMaxPerRoute(CONNECTIONS_PER_STORE);
+                    // schedule GetAppListRequests
                     scheduler.scheduleAtFixedRate(
-                            new GetAppListRequest(xmlResponseWriterV2, repositoryFactory, httpClient, appstore, uploadDir ),
+                            new GetAppListRequest(xmlResponseWriterV2, repositoryFactory, httpClient, appstore, uploadDir),
+                            POLLING_PERIOD, POLLING_PERIOD, TimeUnit.SECONDS);
+                    // schedule GetStatisticsRequests
+                    scheduler.scheduleAtFixedRate(
+                            new GetStatisticsRequest(xmlResponseWriterV2, repositoryFactory, httpClient, appstore, tmpDir),
                             POLLING_PERIOD, POLLING_PERIOD, TimeUnit.SECONDS);
                 }
-
             }
         }
     }
