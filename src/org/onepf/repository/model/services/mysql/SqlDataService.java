@@ -216,7 +216,7 @@ public class SqlDataService implements DataService {
     @Override
     public LastUpdateEntity getLastUpdate(String appstoreId) throws DataException {
         Session session = getSession();
-        Query query = session.createQuery("FROM LastUpdateEntity WHERE appstoreId =: appstoreIdParam");
+        Query query = session.createQuery("FROM LastUpdateEntity WHERE appstoreId = :appstoreIdParam");
         query.setParameter("appstoreIdParam", appstoreId);
         query.setMaxResults(1);
         List results = query.list();
@@ -232,7 +232,7 @@ public class SqlDataService implements DataService {
     @Override
     public LastStatisticsUpdateEntity getLastStatisticsUpdate(String appstoreId, FeedType feedType) throws DataException {
         Session session = getSession();
-        Query query = session.createQuery("FROM LastStatisticsUpdateEntity WHERE appstoreId =: appstoreIdParam AND feedType =: feedTypeParam");
+        Query query = session.createQuery("FROM LastStatisticsUpdateEntity WHERE appstoreId = :appstoreIdParam AND feedType = :feedTypeParam");
         query.setParameter("appstoreIdParam", appstoreId);
         query.setParameter("feedTypeParam", feedType);
         query.setMaxResults(1);
