@@ -1,11 +1,5 @@
 package org.onepf.repository.model.services.mysql;
 
-import org.apache.commons.dbcp.ConnectionFactory;
-import org.apache.commons.dbcp.DriverManagerConnectionFactory;
-import org.apache.commons.dbcp.PoolableConnectionFactory;
-import org.apache.commons.dbcp.PoolingDataSource;
-import org.apache.commons.pool.ObjectPool;
-import org.apache.commons.pool.impl.GenericObjectPool;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Query;
@@ -21,14 +15,8 @@ import org.onepf.repository.appstorelooter.LastStatisticsUpdateEntity;
 import org.onepf.repository.appstorelooter.LastUpdateEntity;
 import org.onepf.repository.model.services.DataException;
 import org.onepf.repository.model.services.DataService;
-import org.onepf.repository.model.services.mysql.entities.*;
 
-import javax.persistence.Table;
 import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.*;
 
 /**
@@ -55,26 +43,8 @@ public class SqlDataService implements DataService {
     private SessionFactory hibSessionFactory;
 
     public SqlDataService(SqlOptions options) {
-
-        // init DBCP DataSource
-        dbDataSource = setupDataSource(options);
-
         hibSessionFactory = setupHibernateSessionFactory();
 
-    }
-
-    public static DataSource setupDataSource(SqlOptions options) {
-
-        try {
-            Class.forName(options.driverClassName);
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-        ObjectPool connectionPool = new GenericObjectPool(null, options.maxConnections, GenericObjectPool.WHEN_EXHAUSTED_BLOCK, options.maxWait);
-        ConnectionFactory connectionFactory = new DriverManagerConnectionFactory(options.dbUrl, options.dbUser, options.dbPassword);
-        PoolableConnectionFactory poolableConnectionFactory = new PoolableConnectionFactory(connectionFactory, connectionPool, null, null, false, true);
-        PoolingDataSource dataSource = new PoolingDataSource(connectionPool);
-        return dataSource;
     }
 
     public static SessionFactory setupHibernateSessionFactory() {
@@ -88,19 +58,8 @@ public class SqlDataService implements DataService {
 
     @Override
     public void store(ApplicationEntity appEntity) throws DataException {
-        Connection conn = null;
-        try {
-            conn = dbDataSource.getConnection();
-            Table table = appEntity.getClass().getAnnotation(Table.class);
-            insertWithHashes(conn, table.name(), appEntity, PAGE_LIMIT_APPLICATIONS);
-        } catch (SQLException e) {
-            throw new DataException(e);
-        } finally {
-            try {
-                if (conn != null) conn.close();
-            } catch (Exception ignored) {
-            }
-        }
+        insertWithHashes(appEntity, PAGE_LIMIT_APPLICATIONS);
+
     }
 
     @Override
@@ -115,20 +74,7 @@ public class SqlDataService implements DataService {
 
     @Override
     public void addDownload(DownloadEntity download) throws DataException {
-        Connection conn = null;
-        try {
-            conn = dbDataSource.getConnection();
-            Table table = download.getClass().getAnnotation(Table.class);
-            insertWithHashes(conn, table.name(), download.getPackageName(), download, PAGE_LIMIT_OTHER);
-        } catch (SQLException e) {
-            throw new DataException(e);
-        } finally {
-            try {
-                if (conn != null) conn.close();
-            } catch (Exception ignored) {
-            }
-        }
-
+        insertWithHashes(download.getPackageName(), download, PAGE_LIMIT_OTHER);
     }
 
     @Override
@@ -181,26 +127,22 @@ public class SqlDataService implements DataService {
     }
 
 
-
     @Override
     public List<ApplicationEntity> getApplicationByHash(String packageName, String hash) throws DataException {
-
         Session session = getSession();
-
         Query query = session.createQuery("FROM ApplicationEntity where packageName = :packageParam and appdfHash = :hashParam ORDER BY id DESC");
         query.setParameter("packageParam", packageName);
         query.setParameter("hashParam", hash);
         query.setMaxResults(1);
+        List list = query.list();
         session.close();
-        return query.list();
+        return list;
     }
 
 
     @Override
     public Map<String, AppstoreEntity> getAppstores() throws DataException {
-
         Session session = getSession();
-
         Query query = session.createQuery("FROM AppstoreEntity");
         query.setMaxResults(DEFAULT_RESULT_LIMIT);
         List list = query.list();
@@ -239,7 +181,7 @@ public class SqlDataService implements DataService {
         List results = query.list();
         session.close();
         if (results != null && results.size() == 1) {
-            return (LastStatisticsUpdateEntity)results.get(0);
+            return (LastStatisticsUpdateEntity) results.get(0);
         } else {
             return null;
         }
@@ -247,223 +189,89 @@ public class SqlDataService implements DataService {
 
     @Override
     public ArrayList<DownloadEntity> getDownloads(String homeStoreId, long currPageHash) throws DataException {
-        Connection conn = null;
-        PreparedStatement stmt = null;
-        ResultSet rset = null;
-        try {
-            String selection = "homeStoreId=? AND ";
-            String[] selectionArgs;
-            if (currPageHash >= 0) {
-                selection += "currPageHash=?";
-                selectionArgs = new String[]{homeStoreId, String.valueOf(currPageHash)};
+        Session session = getSession();
+        Query query = session.createQuery("FROM PurchaseEntity WHERE homeStoreId= :homeStoreIdParam AND currPageHash= :currPageHashParam ORDER BY id DESC");
+        query.setParameter("homeStoreIdParam", homeStoreId);
+        if (currPageHash >= 0) {
+            query.setParameter("currPageHashParam", currPageHash);
+        } else {
+            Query currPageHashQuery = session.createQuery("FROM DownloadEntity WHERE homeStoreId= :homeStoreIdParam ORDER BY id DESC");
+            currPageHashQuery.setMaxResults(1);
+            List list = currPageHashQuery.list();
+            if (list != null && !list.isEmpty()) {
+                DownloadEntity download = (DownloadEntity) list.get(0);
+                query.setParameter("currPageHashParam", download.getCurrPageHash());
             } else {
-                selection += "currPageHash = (SELECT currPageHash FROM downloads WHERE homeStoreId=? ORDER BY id DESC LIMIT 1)";
-                selectionArgs = new String[]{homeStoreId, homeStoreId};
-            }
-            String order = SqlDownloadEntity.FIELD_ID + " DESC";
-            conn = dbDataSource.getConnection();
-            PreparedStatement result;
-
-            StringBuilder requestBuilder = new StringBuilder().append("SELECT * FROM ").append("downloads");
-            if (selection != null) {
-                requestBuilder.append(" WHERE ").append(selection);
-            }
-            if (order != null) {
-                requestBuilder.append(" ORDER BY ").append(order);
-            }
-            requestBuilder.append(" LIMIT " + DEFAULT_RESULT_LIMIT);
-            String request = requestBuilder.toString();
-            logger.info("QUERY: {}", request);
-
-            PreparedStatement stmt1 = null;
-            try {
-                stmt1 = conn.prepareStatement(request);
-                int index = 0;
-                if (selectionArgs != null) {
-                    for (String value : selectionArgs) {
-                        stmt1.setString(++index, value);
-                    }
-                }
-                result = stmt1;
-            } catch (SQLException e) {
-                e.printStackTrace();
-                throw e;
-            }
-            stmt = result;
-            rset = stmt.executeQuery();
-            ArrayList<DownloadEntity> downloads = new ArrayList<DownloadEntity>();
-            while (rset.next()) {
-                downloads.add(SqlDownloadEntity.getDescriptor(rset));
-            }
-            return downloads;
-        } catch (SQLException e) {
-            throw new DataException(e);
-        } finally {
-            try {
-                if (rset != null) rset.close();
-            } catch (Exception e) {
-            }
-            try {
-                if (stmt != null) stmt.close();
-            } catch (Exception e) {
-            }
-            try {
-                if (conn != null) conn.close();
-            } catch (Exception e) {
+                return new ArrayList<DownloadEntity>();
             }
         }
+        query.setMaxResults(DEFAULT_RESULT_LIMIT);
+        List list = query.list();
+        session.close();
+        return new ArrayList<DownloadEntity>(list);
     }
 
     @Override
     public ArrayList<PurchaseEntity> getPurchases(String homeStoreId, long currPageHash) throws DataException {
-        Connection conn = null;
-        PreparedStatement stmt = null;
-        ResultSet rset = null;
-        try {
-            String selection = "homeStoreId=? AND ";
-            String[] selectionArgs;
-            if (currPageHash >= 0) {
-                selection += "currPageHash=?";
-                selectionArgs = new String[]{homeStoreId, String.valueOf(currPageHash)};
+        Session session = getSession();
+        Query query = session.createQuery("FROM PurchaseEntity WHERE homeStoreId= :homeStoreIdParam AND currPageHash= :currPageHashParam ORDER BY id DESC");
+        query.setParameter("homeStoreIdParam", homeStoreId);
+        if (currPageHash >= 0) {
+            query.setParameter("currPageHashParam", currPageHash);
+        } else {
+            Query currPageHashQuery = session.createQuery("FROM DownloadEntity WHERE homeStoreId= :homeStoreIdParam ORDER BY id DESC");
+            currPageHashQuery.setMaxResults(1);
+            List list = currPageHashQuery.list();
+            if (list != null && !list.isEmpty()) {
+                DownloadEntity download = (DownloadEntity) list.get(0);
+                query.setParameter("currPageHashParam", download.getCurrPageHash());
             } else {
-                selection += "currPageHash = (SELECT currPageHash FROM downloads WHERE homeStoreId=? ORDER BY id DESC LIMIT 1)";
-                selectionArgs = new String[]{homeStoreId, homeStoreId};
-            }
-            String order = SqlDownloadEntity.FIELD_ID + " DESC";
-            conn = dbDataSource.getConnection();
-            PreparedStatement result;
-
-            StringBuilder requestBuilder = new StringBuilder().append("SELECT * FROM ").append("purchases");
-            if (selection != null) {
-                requestBuilder.append(" WHERE ").append(selection);
-            }
-            if (order != null) {
-                requestBuilder.append(" ORDER BY ").append(order);
-            }
-            requestBuilder.append(" LIMIT " + DEFAULT_RESULT_LIMIT);
-            String request = requestBuilder.toString();
-            logger.info("QUERY: {}", request);
-
-            PreparedStatement stmt1 = null;
-            try {
-                stmt1 = conn.prepareStatement(request);
-                int index = 0;
-                if (selectionArgs != null) {
-                    for (String value : selectionArgs) {
-                        stmt1.setString(++index, value);
-                    }
-                }
-                result = stmt1;
-            } catch (SQLException e) {
-                e.printStackTrace();
-                throw e;
-            }
-            stmt = result;
-            rset = stmt.executeQuery();
-            ArrayList<PurchaseEntity> purchases = new ArrayList<PurchaseEntity>();
-            while (rset.next()) {
-                purchases.add(SqlPurchaseEntity.getDescriptor(rset));
-            }
-            return purchases;
-        } catch (SQLException e) {
-            throw new DataException(e);
-        } finally {
-            try {
-                if (rset != null) rset.close();
-            } catch (Exception e) {
-            }
-            try {
-                if (stmt != null) stmt.close();
-            } catch (Exception e) {
-            }
-            try {
-                if (conn != null) conn.close();
-            } catch (Exception e) {
+                return new ArrayList<PurchaseEntity>();
             }
         }
+        query.setMaxResults(DEFAULT_RESULT_LIMIT);
+        List list = query.list();
+        session.close();
+        return new ArrayList<PurchaseEntity>(list);
     }
 
     @Override
     public ArrayList<ReviewEntity> getReviews(String homeStoreId, long currPageHash) throws DataException {
-        Connection conn = null;
-        PreparedStatement stmt = null;
-        ResultSet rset = null;
-        try {
-            String selection = "homeStoreId=? AND ";
-            String[] selectionArgs;
-            if (currPageHash >= 0) {
-                selection += "currPageHash=?";
-                selectionArgs = new String[]{homeStoreId, String.valueOf(currPageHash)};
+        Session session = getSession();
+        Query query = session.createQuery("FROM ReviewEntity WHERE homeStoreId= :homeStoreIdParam AND currPageHash= :currPageHashParam ORDER BY id DESC");
+        query.setParameter("homeStoreIdParam", homeStoreId);
+        if (currPageHash >= 0) {
+            query.setParameter("currPageHashParam", currPageHash);
+        } else {
+            Query currPageHashQuery = session.createQuery("FROM DownloadEntity WHERE homeStoreId= :homeStoreIdParam ORDER BY id DESC");
+            currPageHashQuery.setMaxResults(1);
+            List list = currPageHashQuery.list();
+            if (list != null && !list.isEmpty()) {
+                DownloadEntity download = (DownloadEntity) list.get(0);
+                query.setParameter("currPageHashParam", download.getCurrPageHash());
             } else {
-                selection += "currPageHash = (SELECT currPageHash FROM downloads WHERE homeStoreId=? ORDER BY id DESC LIMIT 1)";
-                selectionArgs = new String[]{homeStoreId, homeStoreId};
-            }
-            String order = SqlDownloadEntity.FIELD_ID + " DESC";
-            conn = dbDataSource.getConnection();
-            PreparedStatement result;
-
-            StringBuilder requestBuilder = new StringBuilder().append("SELECT * FROM ").append("reviews");
-            if (selection != null) {
-                requestBuilder.append(" WHERE ").append(selection);
-            }
-            if (order != null) {
-                requestBuilder.append(" ORDER BY ").append(order);
-            }
-            requestBuilder.append(" LIMIT " + DEFAULT_RESULT_LIMIT);
-            String request = requestBuilder.toString();
-            logger.info("QUERY: {}", request);
-
-            PreparedStatement stmt1 = null;
-            try {
-                stmt1 = conn.prepareStatement(request);
-                int index = 0;
-                if (selectionArgs != null) {
-                    for (String value : selectionArgs) {
-                        stmt1.setString(++index, value);
-                    }
-                }
-                result = stmt1;
-            } catch (SQLException e) {
-                e.printStackTrace();
-                throw e;
-            }
-            stmt = result;
-            rset = stmt.executeQuery();
-            ArrayList<ReviewEntity> reviews = new ArrayList<ReviewEntity>();
-            while (rset.next()) {
-                reviews.add(SqlReviewEntity.getDescriptor(rset));
-            }
-            return reviews;
-        } catch (SQLException e) {
-            throw new DataException(e);
-        } finally {
-            try {
-                if (rset != null) rset.close();
-            } catch (Exception e) {
-            }
-            try {
-                if (stmt != null) stmt.close();
-            } catch (Exception e) {
-            }
-            try {
-                if (conn != null) conn.close();
-            } catch (Exception e) {
+                return new ArrayList<ReviewEntity>();
             }
         }
+        query.setMaxResults(DEFAULT_RESULT_LIMIT);
+        List list = query.list();
+        session.close();
+        return new ArrayList<ReviewEntity>(list);
     }
 
     /**
      * insert new record to table with paging (add page hashes to insert)
      */
-    private void insertWithHashes(Connection connection, String tableName, BaseHashEntity entity, int limit) throws SQLException {
-        insertWithHashes(connection, tableName, null, entity, limit);
+
+    private void insertWithHashes(BaseHashEntity entity, int limit) {
+        insertWithHashes(null, entity, limit);
     }
 
     /**
      * insert new record to table with paging (add page hashes to insert)
      */
-    private void insertWithHashes(Connection connection, String tableName, String packageName, BaseHashEntity entity, int limit) throws SQLException {
-        Pair<Integer, Integer> pageHashes = getPageHashes(connection, tableName, packageName, limit);
+    private void insertWithHashes(String packageName, BaseHashEntity entity, int limit) {
+        Pair<Integer, Integer> pageHashes = getPageHashes(entity, packageName, limit);
         entity.setPrevPageHash(pageHashes.fst);
         entity.setCurrPageHash(pageHashes.snd);
         saveEntity(entity);
@@ -471,38 +279,48 @@ public class SqlDataService implements DataService {
 
 
     /**
-     * @param connection
-     * @param tableName
      * @param packageName is used in downloads, purchases, reviews
      * @param limit       number of the records per one page
      * @return pair <currPageHash, prevPageHash>
      * @throws java.sql.SQLException
      */
-    private static Pair<Integer, Integer> getPageHashes(Connection connection, String tableName, String packageName, int limit) throws SQLException {
-        String selection = "SELECT count(currPageHash) as cunt, currPageHash as chash, prevPageHash as phash FROM " + tableName + " WHERE currPageHash = (SELECT currPageHash FROM " + tableName;
+    private Pair<Integer, Integer> getPageHashes(BaseHashEntity entity, String packageName, int limit) {
+        Session session = getSession();
+        int currentPageHashParam = 0;
+        StringBuilder subQueryBuilder = new StringBuilder("FROM ApplicationEntity");
         if (packageName != null) {
-            selection += " WHERE package=?";
+            subQueryBuilder.append(" WHERE packageName = :packageNameParam");
         }
-        selection += " ORDER BY id DESC LIMIT 1)";
+        subQueryBuilder.append(" ORDER BY id DESC");
 
-        PreparedStatement stmt = connection.prepareStatement(selection);
+        Query query = session.createQuery(subQueryBuilder.toString());
         if (packageName != null) {
-            stmt.setString(0, packageName);
+            query.setParameter("packageNameParam", packageName);
         }
-        ResultSet rs = stmt.executeQuery();
+        query.setMaxResults(1); //todo try uniqueObject()
+        List list = query.list();
+        if (list != null && !list.isEmpty()) {
+            ApplicationEntity applicationEntity = (ApplicationEntity) list.get(0);
+            currentPageHashParam = applicationEntity.getCurrPageHash();
+        }
+        Query hashQuery = session.createQuery(String.format("FROM %s WHERE currPageHash = :currPageHashParam", entity.getClass().getName()));
+        hashQuery.setParameter("currPageHashParam", currentPageHashParam);
+        List hashQueryList = hashQuery.list();
+        session.close();
         int count = 0;
         int chash = 0, phash = 0;
-        if (rs.next()) {
-            count = rs.getInt(1);
-            chash = rs.getInt(2);
-            phash = rs.getInt(3);
+        if (hashQueryList != null) {
+            count = hashQueryList.size();
+            ArrayList<BaseHashEntity> hashEntities = new ArrayList<BaseHashEntity>(hashQueryList);
+            for (BaseHashEntity hashEntity : hashEntities) {
+                chash = hashEntity.getCurrPageHash();
+                phash = hashEntity.getPrevPageHash();
+            }
         }
         if (count >= limit) {
             phash = chash;
             chash += 1;
         }
-        rs.close();
-        stmt.close();
         return new Pair<Integer, Integer>(chash, phash);
     }
 
