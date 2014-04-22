@@ -1,11 +1,5 @@
 package org.onepf.repository.model.services.mysql;
 
-import org.apache.commons.dbcp.ConnectionFactory;
-import org.apache.commons.dbcp.DriverManagerConnectionFactory;
-import org.apache.commons.dbcp.PoolableConnectionFactory;
-import org.apache.commons.dbcp.PoolingDataSource;
-import org.apache.commons.pool.ObjectPool;
-import org.apache.commons.pool.impl.GenericObjectPool;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Query;
@@ -21,14 +15,8 @@ import org.onepf.repository.appstorelooter.LastStatisticsUpdateEntity;
 import org.onepf.repository.appstorelooter.LastUpdateEntity;
 import org.onepf.repository.model.services.DataException;
 import org.onepf.repository.model.services.DataService;
-import org.onepf.repository.model.services.mysql.entities.*;
 
-import javax.persistence.Table;
 import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.*;
 
 /**
@@ -55,26 +43,8 @@ public class SqlDataService implements DataService {
     private SessionFactory hibSessionFactory;
 
     public SqlDataService(SqlOptions options) {
-
-        // init DBCP DataSource
-        dbDataSource = setupDataSource(options);
-
         hibSessionFactory = setupHibernateSessionFactory();
 
-    }
-
-    public static DataSource setupDataSource(SqlOptions options) {
-
-        try {
-            Class.forName(options.driverClassName);
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-        ObjectPool connectionPool = new GenericObjectPool(null, options.maxConnections, GenericObjectPool.WHEN_EXHAUSTED_BLOCK, options.maxWait);
-        ConnectionFactory connectionFactory = new DriverManagerConnectionFactory(options.dbUrl, options.dbUser, options.dbPassword);
-        PoolableConnectionFactory poolableConnectionFactory = new PoolableConnectionFactory(connectionFactory, connectionPool, null, null, false, true);
-        PoolingDataSource dataSource = new PoolingDataSource(connectionPool);
-        return dataSource;
     }
 
     public static SessionFactory setupHibernateSessionFactory() {
@@ -88,19 +58,8 @@ public class SqlDataService implements DataService {
 
     @Override
     public void store(ApplicationEntity appEntity) throws DataException {
-        Connection conn = null;
-        try {
-            conn = dbDataSource.getConnection();
-            Table table = appEntity.getClass().getAnnotation(Table.class);
-            insertWithHashes(conn, table.name(), appEntity, PAGE_LIMIT_APPLICATIONS);
-        } catch (SQLException e) {
-            throw new DataException(e);
-        } finally {
-            try {
-                if (conn != null) conn.close();
-            } catch (Exception ignored) {
-            }
-        }
+        insertWithHashes(appEntity, PAGE_LIMIT_APPLICATIONS);
+
     }
 
     @Override
@@ -115,20 +74,7 @@ public class SqlDataService implements DataService {
 
     @Override
     public void addDownload(DownloadEntity download) throws DataException {
-        Connection conn = null;
-        try {
-            conn = dbDataSource.getConnection();
-            Table table = download.getClass().getAnnotation(Table.class);
-            insertWithHashes(conn, table.name(), download.getPackageName(), download, PAGE_LIMIT_OTHER);
-        } catch (SQLException e) {
-            throw new DataException(e);
-        } finally {
-            try {
-                if (conn != null) conn.close();
-            } catch (Exception ignored) {
-            }
-        }
-
+        insertWithHashes(download.getPackageName(), download, PAGE_LIMIT_OTHER);
     }
 
     @Override
@@ -317,15 +263,15 @@ public class SqlDataService implements DataService {
      * insert new record to table with paging (add page hashes to insert)
      */
 
-    private void insertWithHashes(Connection connection, String tableName, BaseHashEntity entity, int limit) throws SQLException {
-        insertWithHashes(connection, tableName, null, entity, limit);
+    private void insertWithHashes(BaseHashEntity entity, int limit) {
+        insertWithHashes(null, entity, limit);
     }
 
     /**
      * insert new record to table with paging (add page hashes to insert)
      */
-    private void insertWithHashes(Connection connection, String tableName, String packageName, BaseHashEntity entity, int limit) throws SQLException {
-        Pair<Integer, Integer> pageHashes = getPageHashes(connection, tableName, packageName, limit);
+    private void insertWithHashes(String packageName, BaseHashEntity entity, int limit) {
+        Pair<Integer, Integer> pageHashes = getPageHashes(entity, packageName, limit);
         entity.setPrevPageHash(pageHashes.fst);
         entity.setCurrPageHash(pageHashes.snd);
         saveEntity(entity);
@@ -333,38 +279,48 @@ public class SqlDataService implements DataService {
 
 
     /**
-     * @param connection
-     * @param tableName
      * @param packageName is used in downloads, purchases, reviews
      * @param limit       number of the records per one page
      * @return pair <currPageHash, prevPageHash>
      * @throws java.sql.SQLException
      */
-    private static Pair<Integer, Integer> getPageHashes(Connection connection, String tableName, String packageName, int limit) throws SQLException {
-        String selection = "SELECT count(currPageHash) as cunt, currPageHash as chash, prevPageHash as phash FROM " + tableName + " WHERE currPageHash = (SELECT currPageHash FROM " + tableName;
+    private Pair<Integer, Integer> getPageHashes(BaseHashEntity entity, String packageName, int limit) {
+        Session session = getSession();
+        int currentPageHashParam = 0;
+        StringBuilder subQueryBuilder = new StringBuilder("FROM ApplicationEntity");
         if (packageName != null) {
-            selection += " WHERE package=?";
+            subQueryBuilder.append(" WHERE packageName = :packageNameParam");
         }
-        selection += " ORDER BY id DESC LIMIT 1)";
+        subQueryBuilder.append(" ORDER BY id DESC");
 
-        PreparedStatement stmt = connection.prepareStatement(selection);
+        Query query = session.createQuery(subQueryBuilder.toString());
         if (packageName != null) {
-            stmt.setString(0, packageName);
+            query.setParameter("packageNameParam", packageName);
         }
-        ResultSet rs = stmt.executeQuery();
+        query.setMaxResults(1); //todo try uniqueObject()
+        List list = query.list();
+        if (list != null && !list.isEmpty()) {
+            ApplicationEntity applicationEntity = (ApplicationEntity) list.get(0);
+            currentPageHashParam = applicationEntity.getCurrPageHash();
+        }
+        Query hashQuery = session.createQuery(String.format("FROM %s WHERE currPageHash = :currPageHashParam", entity.getClass().getName()));
+        hashQuery.setParameter("currPageHashParam", currentPageHashParam);
+        List hashQueryList = hashQuery.list();
+        session.close();
         int count = 0;
         int chash = 0, phash = 0;
-        if (rs.next()) {
-            count = rs.getInt(1);
-            chash = rs.getInt(2);
-            phash = rs.getInt(3);
+        if (hashQueryList != null) {
+            count = hashQueryList.size();
+            ArrayList<BaseHashEntity> hashEntities = new ArrayList<BaseHashEntity>(hashQueryList);
+            for (BaseHashEntity hashEntity : hashEntities) {
+                chash = hashEntity.getCurrPageHash();
+                phash = hashEntity.getPrevPageHash();
+            }
         }
         if (count >= limit) {
             phash = chash;
             chash += 1;
         }
-        rs.close();
-        stmt.close();
         return new Pair<Integer, Integer>(chash, phash);
     }
 
