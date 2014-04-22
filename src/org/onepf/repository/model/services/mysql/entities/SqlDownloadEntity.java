@@ -11,21 +11,22 @@ import java.util.Map;
  *
  * Create DownloadDescriptor from ResultSet.
  *
- * @see org.onepf.repository.api.responsewriter.descriptors.DownloadDescriptor
  * @author Alexander Ivanoff
  */
 public class SqlDownloadEntity extends SqlDBEntity {
 
     public static final String FIELD_ID = "id";
     public static final String FIELD_PACKAGE_NAME = "package"; // DynamoDB Hash key
-    public static final String FIELD_DATE_TIME = "opDate"; // DynamoDB Range key
+    public static final String FIELD_DATE_TIME = "datetime"; // DynamoDB Range key
+    public static final String FIELD_HOMESTORE_ID = "homeStoreId";
+    public static final String FIELD_DISTRIBUTORSTORE_ID = "distributorStoreId";
     public static final String FIELD_VERSION = "version";
-    public static final String FIELD_BUILD = "build";
-    public static final String FIELD_LAST_UPDATE = "lastUpdate";
+    public static final String FIELD_BUILD = "versionCode";
     public static final String FIELD_DEVICE_MODEL = "deviceModel";
     public static final String FIELD_DEVICE_NAME = "deviceName";
     public static final String FIELD_COUNTRY = "country";
     public static final String FIELD_IS_UPDATE = "isUpdate";
+
     public static final String TABLE_NAME = "downloads";
 
     public SqlDownloadEntity() {
@@ -76,11 +77,6 @@ public class SqlDownloadEntity extends SqlDBEntity {
         return this;
     }
 
-    public SqlDownloadEntity withLastUpdate(String lastUpdateTime) {
-        put(FIELD_LAST_UPDATE, lastUpdateTime);
-        return this;
-    }
-
     public SqlDownloadEntity withBuild(long build) {
         put(FIELD_BUILD, build);
         return this;
@@ -91,7 +87,8 @@ public class SqlDownloadEntity extends SqlDBEntity {
         DownloadEntity descriptor = new DownloadEntity();
         descriptor.setPackageName(item.getString(FIELD_PACKAGE_NAME));
         descriptor.setDateTime(item.getString(FIELD_DATE_TIME));
-        descriptor.setLastUpdate(item.getString(FIELD_LAST_UPDATE));
+        descriptor.setHomeStoreId(item.getString(FIELD_HOMESTORE_ID));
+        descriptor.setDistributorStoreId(item.getString(FIELD_DISTRIBUTORSTORE_ID));
         descriptor.setBuild(item.getInt(FIELD_BUILD));
         descriptor.setVersion(item.getString(FIELD_VERSION));
         descriptor.setCountry(item.getString(FIELD_COUNTRY));

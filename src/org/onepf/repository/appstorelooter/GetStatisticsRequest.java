@@ -65,7 +65,9 @@ public class GetStatisticsRequest implements Runnable {
         try {
             LastStatisticsUpdateEntity lastStatisticsUpdate =
                     repositoryFactory.getDataService().getLastStatisticsUpdate(appstore.getAppstoreId(), feedType);
-
+            if (!tempDir.exists()) {
+                tempDir.mkdirs();
+            }
             List<String> filesList = new ArrayList<String>();
             String requestUrl = feedType.getApiMapping().getMethodUrl(appstore.getOpenaepUrl());
             boolean wasError = false;
@@ -117,11 +119,14 @@ public class GetStatisticsRequest implements Runnable {
                         //TODO move all work with database to dataService
                         Session session = ((SqlDataService) repositoryFactory.getDataService()).getSession();
                         try {
+                            DownloadEntity downloadEntity = downloads.get(i);
+                            // TODO need to find appstoreId for given package and add it here as home store Id
+                            //downloadEntity.setHomeStoreId(appstore.getAppstoreId()); //add homeStoreId to download
                             session.beginTransaction();
-                            session.save(downloads.get(i));
+                            session.save(downloadEntity);
                             lastStatisticsUpdate.setLastResponseCount(lastStatisticsUpdate.getLastResponseCount() + 1);
                             lastStatisticsUpdate.setLastResponseDatetime(DATE_FORMAT.format(new Date(System.currentTimeMillis())));
-                            session.update(lastStatisticsUpdate);
+                            session.saveOrUpdate(lastStatisticsUpdate);
                             session.getTransaction().commit();
                             session.close();
                         } catch (RuntimeException e) {

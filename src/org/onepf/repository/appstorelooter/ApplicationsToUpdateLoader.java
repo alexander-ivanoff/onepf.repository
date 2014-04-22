@@ -136,12 +136,12 @@ public class ApplicationsToUpdateLoader {
             }
             iterations++;
         } while (url != null && (prevUpdate == null || !url.equals(prevUpdate.getPrevOffset())));
-//        if (iterations == 1 && prevUpdate != null && prevUpdate.getLastResponseHash().equals(hash)) {
-//            //do nothing - return empty response
-//        } else {
+        if (iterations == 1 && prevUpdate != null && prevUpdate.getLastResponseHash().equals(hash)) {
+            //do nothing - return empty response
+        } else {
             response.lastUpdate = lastUpdate;
             response.appsToUpdate = appsToUpdate;
-//        }
+        }
         return response;
     }
 

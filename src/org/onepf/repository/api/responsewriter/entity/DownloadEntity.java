@@ -38,11 +38,8 @@ public class DownloadEntity extends BaseHashEntity{
     private String version;
 
     @XmlAttribute(name = "versionCode", required = true)
-    @Column(name = "build")
+    @Column(name = "versionCode")
     private int build;
-
-    @Column(name = "lastUpdate")
-    private String lastUpdate;
 
     @XmlAttribute(name = "device-model", required = true)
     @Column(name = "deviceModel")
@@ -101,14 +98,6 @@ public class DownloadEntity extends BaseHashEntity{
 
     public void setBuild(int build) {
         this.build = build;
-    }
-
-    public String getLastUpdate() {
-        return lastUpdate;
-    }
-
-    public void setLastUpdate(String lastUpdate) {
-        this.lastUpdate = lastUpdate;
     }
 
     public String getDeviceModel() {
