@@ -9,10 +9,7 @@ import org.apache.http.protocol.HttpContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
-import org.onepf.repository.api.responsewriter.entity.AppstoreEntity;
-import org.onepf.repository.api.responsewriter.entity.BaseListEntity;
-import org.onepf.repository.api.responsewriter.entity.DownloadEntity;
-import org.onepf.repository.api.responsewriter.entity.DownloadListEntity;
+import org.onepf.repository.api.responsewriter.entity.*;
 import org.onepf.repository.api.xmlapi.XmlResponseReaderWriter;
 import org.onepf.repository.model.RepositoryFactory;
 import org.onepf.repository.model.services.mysql.SqlDataService;
@@ -120,8 +117,10 @@ public class GetStatisticsRequest implements Runnable {
                         Session session = ((SqlDataService) repositoryFactory.getDataService()).getSession();
                         try {
                             DownloadEntity downloadEntity = downloads.get(i);
-                            // TODO need to find appstoreId for given package and add it here as home store Id
-                            //downloadEntity.setHomeStoreId(appstore.getAppstoreId()); //add homeStoreId to download
+                            ApplicationEntity app =
+                                    repositoryFactory.getDataService().getApplicationsLog(downloadEntity.getPackageName(), -1).get(0);
+                            // add homeStoreId to download
+                            downloadEntity.setHomeStoreId(app.getAppstoreId());
                             session.beginTransaction();
                             session.save(downloadEntity);
                             lastStatisticsUpdate.setLastResponseCount(lastStatisticsUpdate.getLastResponseCount() + 1);
