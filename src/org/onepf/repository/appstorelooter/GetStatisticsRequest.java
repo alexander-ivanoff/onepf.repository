@@ -126,7 +126,7 @@ public class GetStatisticsRequest implements Runnable {
                             session.save(downloadEntity);
                             lastStatisticsUpdate.setLastResponseCount(lastStatisticsUpdate.getLastResponseCount() + 1);
                             lastStatisticsUpdate.setLastResponseDatetime(DATE_FORMAT.format(new Date(System.currentTimeMillis())));
-                            session.saveOrUpdate(lastStatisticsUpdate);
+                            session.saveOrUpdate(lastStatisticsUpdate); //
                             session.getTransaction().commit();
                             session.close();
                         } catch (RuntimeException e) {
