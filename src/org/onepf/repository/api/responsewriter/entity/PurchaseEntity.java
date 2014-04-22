@@ -25,9 +25,12 @@ public class PurchaseEntity extends BaseHashEntity{
     @Column(name = "datetime")
     private String dateTime;
 
-    @XmlAttribute(name = "id")
     @javax.persistence.Id
     private int id;
+
+    @XmlAttribute(name = "id")
+    @Column(name = "purchaseId")
+    private String purchaseId;
 
     @XmlAttribute(name = "version")
     @Column(name = "version")
@@ -36,9 +39,6 @@ public class PurchaseEntity extends BaseHashEntity{
     @XmlAttribute(name = "versionCode")
     @Column(name = "versionCode")
     private int build;
-
-    @Column(name = "lastUpdate")
-    private String lastUpdate;
 
     @XmlAttribute(name = "device-model")
     @Column(name = "deviceModel")
@@ -117,14 +117,6 @@ public class PurchaseEntity extends BaseHashEntity{
 
     public void setBuild(int build) {
         this.build = build;
-    }
-
-    public String getLastUpdate() {
-        return lastUpdate;
-    }
-
-    public void setLastUpdate(String lastUpdate) {
-        this.lastUpdate = lastUpdate;
     }
 
     public String getDeviceModel() {
@@ -207,4 +199,11 @@ public class PurchaseEntity extends BaseHashEntity{
         this.homeStoreId = homeStoreId;
     }
 
+    public String getPurchaseId() {
+        return purchaseId;
+    }
+
+    public void setPurchaseId(String purchaseId) {
+        this.purchaseId = purchaseId;
+    }
 }

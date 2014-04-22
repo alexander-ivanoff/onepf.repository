@@ -22,6 +22,10 @@ public class ReviewEntity extends BaseHashEntity {
     @Column(name = "package")
     private String packageName;
 
+    @XmlAttribute(name = "datetime")
+    @Column(name = "datetime")
+    private String dateTime;
+
     @XmlAttribute(name = "version")
     @Column(name = "version")
     private String version;

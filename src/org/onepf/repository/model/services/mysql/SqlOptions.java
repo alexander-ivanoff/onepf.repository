@@ -15,25 +15,14 @@ public class SqlOptions implements DataServiceOptions {
 
     public static final String SERVICE_NAME= "mysql";
 
-    private static final String PROPERTY_DBURL= "dbUrl";
-    private static final String PROPERTY_DBDRIVER= "dbDriver";
-    private static final String PROPERTY_DBUSER= "dbUser";
-    private static final String PROPERTY_DBPASSWORD= "dbPassword";
+    private static final String PROPERTY_HIBERNATE_SETTING_FILE= "sql_hibernate_settings";
 
     // sql connection options
-    public String driverClassName = "com.mysql.jdbc.Driver";
-    public String dbUser = null;
-    public String dbPassword = null;
-    public String dbUrl = null; // must be overridden in web.xml
-    public int maxConnections = 4;
-    public int maxWait = 10000; // 10sec
+    public String hibernateSettingFile;
 
     public SqlOptions(Properties props) {
-        driverClassName = props.getProperty(PROPERTY_DBDRIVER);
-        dbUrl = props.getProperty(PROPERTY_DBURL);
-        dbUser = props.getProperty(PROPERTY_DBUSER);
-        dbPassword = props.getProperty(PROPERTY_DBPASSWORD);
-        if (driverClassName == null || dbUrl == null || dbUser == null || dbPassword == null) {
+        hibernateSettingFile = props.getProperty(PROPERTY_HIBERNATE_SETTING_FILE);
+        if (hibernateSettingFile == null) {
             throw new IllegalArgumentException("configuration file is not completed");
         }
     }

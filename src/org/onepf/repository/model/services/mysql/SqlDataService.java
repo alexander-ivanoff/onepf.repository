@@ -43,13 +43,13 @@ public class SqlDataService implements DataService {
     private SessionFactory hibSessionFactory;
 
     public SqlDataService(SqlOptions options) {
-        hibSessionFactory = setupHibernateSessionFactory();
+        hibSessionFactory = setupHibernateSessionFactory(options);
 
     }
 
-    public static SessionFactory setupHibernateSessionFactory() {
+    public static SessionFactory setupHibernateSessionFactory(SqlOptions options) {
         Configuration configuration = new Configuration();
-        configuration.configure("/resources/hibernate.cfg.xml");
+        configuration.configure(options.hibernateSettingFile);
         StandardServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder().applySettings(
                 configuration.getProperties()).build();
         return configuration.buildSessionFactory(serviceRegistry);
@@ -190,12 +190,13 @@ public class SqlDataService implements DataService {
     @Override
     public ArrayList<DownloadEntity> getDownloads(String homeStoreId, long currPageHash) throws DataException {
         Session session = getSession();
-        Query query = session.createQuery("FROM PurchaseEntity WHERE homeStoreId= :homeStoreIdParam AND currPageHash= :currPageHashParam ORDER BY id DESC");
+        Query query = session.createQuery("FROM DownloadEntity WHERE homeStoreId= :homeStoreIdParam AND currPageHash= :currPageHashParam ORDER BY id DESC");
         query.setParameter("homeStoreIdParam", homeStoreId);
         if (currPageHash >= 0) {
             query.setParameter("currPageHashParam", currPageHash);
         } else {
             Query currPageHashQuery = session.createQuery("FROM DownloadEntity WHERE homeStoreId= :homeStoreIdParam ORDER BY id DESC");
+            currPageHashQuery.setParameter("homeStoreIdParam", homeStoreId);
             currPageHashQuery.setMaxResults(1);
             List list = currPageHashQuery.list();
             if (list != null && !list.isEmpty()) {
@@ -219,12 +220,13 @@ public class SqlDataService implements DataService {
         if (currPageHash >= 0) {
             query.setParameter("currPageHashParam", currPageHash);
         } else {
-            Query currPageHashQuery = session.createQuery("FROM DownloadEntity WHERE homeStoreId= :homeStoreIdParam ORDER BY id DESC");
+            Query currPageHashQuery = session.createQuery("FROM PurchaseEntity WHERE homeStoreId= :homeStoreIdParam ORDER BY id DESC");
+            currPageHashQuery.setParameter("homeStoreIdParam", homeStoreId);
             currPageHashQuery.setMaxResults(1);
             List list = currPageHashQuery.list();
             if (list != null && !list.isEmpty()) {
-                DownloadEntity download = (DownloadEntity) list.get(0);
-                query.setParameter("currPageHashParam", download.getCurrPageHash());
+                BaseHashEntity purchase = (BaseHashEntity) list.get(0);
+                query.setParameter("currPageHashParam", purchase.getCurrPageHash());
             } else {
                 return new ArrayList<PurchaseEntity>();
             }
@@ -243,12 +245,13 @@ public class SqlDataService implements DataService {
         if (currPageHash >= 0) {
             query.setParameter("currPageHashParam", currPageHash);
         } else {
-            Query currPageHashQuery = session.createQuery("FROM DownloadEntity WHERE homeStoreId= :homeStoreIdParam ORDER BY id DESC");
+            Query currPageHashQuery = session.createQuery("FROM ReviewEntity WHERE homeStoreId= :homeStoreIdParam ORDER BY id DESC");
+            currPageHashQuery.setParameter("homeStoreIdParam", homeStoreId);
             currPageHashQuery.setMaxResults(1);
             List list = currPageHashQuery.list();
             if (list != null && !list.isEmpty()) {
-                DownloadEntity download = (DownloadEntity) list.get(0);
-                query.setParameter("currPageHashParam", download.getCurrPageHash());
+                BaseHashEntity hashEntity = (BaseHashEntity) list.get(0);
+                query.setParameter("currPageHashParam", hashEntity.getCurrPageHash());
             } else {
                 return new ArrayList<ReviewEntity>();
             }
