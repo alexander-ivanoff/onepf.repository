@@ -75,6 +75,15 @@ public class RepositoryConfigurator {
     }
 
     /**
+     * return RepositoryFactory if it was created.
+     *
+     * @return RepositoryFactory with linked DataService and StorageService
+     */
+    public static synchronized RepositoryFactory getRepositoryFactory() {
+        return repositoryFactory;
+    }
+
+    /**
      * Initialize and return AppstoreAuthenticator (also initialize RepositoryFactory).
      *
      * @param context - servlet context

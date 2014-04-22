@@ -1,8 +1,11 @@
 package org.onepf.repository.model.services;
 
 import org.onepf.repository.api.responsewriter.entity.*;
+import org.onepf.repository.appstorelooter.FeedType;
+import org.onepf.repository.appstorelooter.LastStatisticsUpdateEntity;
 import org.onepf.repository.appstorelooter.LastUpdateEntity;
 
+import javax.xml.crypto.Data;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -17,11 +20,13 @@ import java.util.Map;
 public interface DataService {
 
 
-    // TODO refactoring: move method in different req    uests (Maybe Entities), here should be only generic requests
+    // TODO refactoring: move method in different requests (Maybe Entities), here should be only generic requests
 
     void store(ApplicationEntity application) throws DataException;
 
-    void saveLastUpdate(LastUpdateEntity lastUpdateDescriptor) throws DataException;
+    void saveLastUpdate(LastUpdateEntity lastUpdate) throws DataException;
+
+    void saveLastStatisticsUpdate(LastStatisticsUpdateEntity lastStatisticsUpdate) throws DataException;
 
     void addDownload(DownloadEntity download) throws DataException;
 
@@ -34,12 +39,22 @@ public interface DataService {
     /**
      *
      * @param appstoreId
-     * @return List of LastUpdateDescriptor for specified appstore ID
+     * @return LastUpdateEntiry for specified appstore ID
      * @throws DataException
      * @see org.onepf.repository.appstorelooter.LastUpdateEntity
      * @see org.onepf.repository.model.services.DataException
      */
     LastUpdateEntity getLastUpdate(String appstoreId) throws DataException;
+
+    /**
+     *
+     * @param appstoreId
+     * @return LastUpdateEntity for specified appstore ID and feed type
+     * @throws DataException
+     * @see org.onepf.repository.appstorelooter.LastStatisticsUpdateEntity
+     * @see org.onepf.repository.model.services.DataException
+     */
+    LastStatisticsUpdateEntity getLastStatisticsUpdate(String appstoreId, FeedType feedType) throws DataException;
 
     /**
      * @param hash - MD5 calculated hash of appdf file

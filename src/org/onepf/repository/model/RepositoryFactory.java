@@ -56,4 +56,8 @@ public class RepositoryFactory {
     public StorageService getStorageService() {
         return storageService;
     }
+
+    public void close() {
+        dataService.close();
+    }
 }

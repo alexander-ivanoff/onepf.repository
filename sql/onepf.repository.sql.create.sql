@@ -19,6 +19,15 @@ CREATE TABLE `onepf_repository`.`appstoreupdates` (
   FOREIGN KEY (`appstoreId`) REFERENCES `onepf_repository`.`appstores` (`appstoreId`)
 );
 
+CREATE TABLE `onepf_repository`.`statistics_updates` (
+  `appstoreId` varchar(255) NOT NULL,
+  `feedType` varchar(255) NOT NULL,
+  `lastUpdateCount` int(11) NOT NULL,
+  `lastUpdateDateTime` datetime NOT NULL,
+  `lastUpdateOffset` varchar(255) DEFAULT NULL,
+  FOREIGN KEY (`appstoreId`) REFERENCES `onepf_repository`.`appstores` (`appstoreId`)
+);
+
 CREATE TABLE `onepf_repository`.`applications` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `package` varchar(255) NOT NULL,
