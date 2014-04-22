@@ -1,10 +1,12 @@
 package org.onepf.repository.api.responsewriter.entity;
 
 import javax.persistence.Column;
+import javax.persistence.MappedSuperclass;
 
 /**
  * Created by akarimova on 21.04.14.
  */
+@MappedSuperclass
 public abstract class BaseHashEntity extends BaseEntity {
     @Column(name = "currPageHash")
     private int currPageHash;
