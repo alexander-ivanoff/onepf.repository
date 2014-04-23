@@ -117,8 +117,10 @@ public class GetStatisticsRequest implements Runnable {
                         Session session = ((SqlDataService) repositoryFactory.getDataService()).getSession();
                         try {
                             DownloadEntity downloadEntity = downloads.get(i);
-                            // TODO need to find appstoreId for given package and add it here as home store Id
-                            //downloadEntity.setHomeStoreId(appstore.getAppstoreId()); //add homeStoreId to download
+                            ApplicationEntity app =
+                                    repositoryFactory.getDataService().getApplicationsLog(downloadEntity.getPackageName(), -1).get(0);
+                            // add homeStoreId to download
+                            downloadEntity.setHomeStoreId(app.getAppstoreId());
                             session.beginTransaction();
                             session.save(downloadEntity);
                             lastStatisticsUpdate.setLastResponseCount(lastStatisticsUpdate.getLastResponseCount() + 1);
