@@ -1,6 +1,8 @@
 package org.onepf.repository;
 
 import org.onepf.repository.appstorelooter.AppstoreRequester;
+import org.onepf.repository.model.RepositoryConfigurator;
+import org.onepf.repository.model.RepositoryFactory;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
@@ -39,5 +41,9 @@ public class AppContextListener implements ServletContextListener {
     @Override
     public void contextDestroyed(ServletContextEvent servletContextEvent) {
         appstoreRequester.stop();
+        RepositoryFactory repositoryFactory = RepositoryConfigurator.getRepositoryFactory();
+        if (repositoryFactory != null) {
+            repositoryFactory.close();
+        }
     }
 }

@@ -4,46 +4,52 @@ import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.protocol.HttpContext;
 import org.onepf.repository.ApiMapping;
-import org.onepf.repository.api.ListParser;
-import org.onepf.repository.api.ParserFactory;
-import org.onepf.repository.api.responsewriter.descriptors.ApplicationDescriptor;
-import org.onepf.repository.api.responsewriter.descriptors.ApplicationListHeaderDescriptor;
-import org.onepf.repository.model.auth.AppstoreDescriptor;
+import org.onepf.repository.api.responsewriter.entity.ApplicationEntity;
+import org.onepf.repository.api.responsewriter.entity.ApplicationListEntity;
+import org.onepf.repository.api.responsewriter.entity.AppstoreEntity;
+import org.onepf.repository.api.xmlapi.XmlResponseReaderWriter;
 
+import javax.xml.bind.annotation.adapters.HexBinaryAdapter;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.security.DigestInputStream;
+import java.security.MessageDigest;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
 /**
- * This class loads set of ApplicationDesription to update from remote appstore.
+ * This class loads set of ApplicationDescription to update from remote appstore.
  *
  * @author Alexander Ivanoff
  */
 public class ApplicationsToUpdateLoader {
 
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    private static HexBinaryAdapter marshaler = new HexBinaryAdapter();
 
     /**
      * This class describes request parameters
      */
     public static class Request {
 
-        private AppstoreDescriptor appstore;
-        private LastUpdateDescriptor prevUpdate;
+        private AppstoreEntity appstore;
+        private LastUpdateEntity prevUpdate;
 
         /**
          * @param appstore - AppstoreDescriptor to get appdf files from
          * @param prevUpdate - object with information about previous update or 'null' if there is first update.
          */
-        public Request(AppstoreDescriptor appstore, LastUpdateDescriptor prevUpdate) {
+        public Request(AppstoreEntity appstore, LastUpdateEntity prevUpdate) {
             if (appstore == null) {
                 throw new NullPointerException("appstore can't be null");
             }
-            if (prevUpdate != null && !appstore.appstoreId.equals(prevUpdate.appstoreId)) {
+            if (prevUpdate != null && !appstore.getAppstoreId().equals(prevUpdate.getAppstoreId())) {
                 throw new IllegalArgumentException("prevUpdate from other appstore");
             }
             this.appstore = appstore;
@@ -60,27 +66,27 @@ public class ApplicationsToUpdateLoader {
      */
     public static class Response {
 
-        private Set<ApplicationDescriptor> appsToUpdate;
-        private LastUpdateDescriptor lastUpdate;
+        private Set<ApplicationEntity> appsToUpdate;
+        private LastUpdateEntity lastUpdate;
 
-        public LastUpdateDescriptor getLastUpdate() {
+        public LastUpdateEntity getLastUpdate() {
             return lastUpdate;
         }
 
-        public Set<ApplicationDescriptor> getAppsToUpdate() {
+        public Set<ApplicationEntity> getAppsToUpdate() {
             return appsToUpdate;
         }
     }
 
-    private ParserFactory parserFactory;
+    private XmlResponseReaderWriter<ApplicationListEntity> xmlResponseWriter;
     private HttpClient httpClient;
     private final HttpContext httpContext;
 
 
-    public ApplicationsToUpdateLoader(final ParserFactory parserFactory, final HttpClient httpClient, HttpContext context) {
+    public ApplicationsToUpdateLoader(XmlResponseReaderWriter xmlResponseWriter, final HttpClient httpClient, HttpContext context) {
         this.httpClient = httpClient;
         this.httpContext = context;
-        this.parserFactory = parserFactory;
+        this.xmlResponseWriter = xmlResponseWriter;
     }
 
     /**
@@ -89,45 +95,62 @@ public class ApplicationsToUpdateLoader {
      * @param request
      * @return response object with set of ApplicationDescriptor and object with information about this update
      * @throws IOException
-     * @throws ParserFactory.ParseException
      */
-    public Response getUpdates(final Request request) throws IOException, ParserFactory.ParseException {
+    public Response getUpdates(final Request request) throws IOException {
         Response response = new Response();
-        final AppstoreDescriptor appstore = request.appstore;
-        final LastUpdateDescriptor prevUpdate = request.prevUpdate;
+        final AppstoreEntity appstore = request.appstore;
+        final LastUpdateEntity prevUpdate = request.prevUpdate;
 
-        Set<ApplicationDescriptor> appsToUpdate = new HashSet<ApplicationDescriptor>();
+        Set<ApplicationEntity> appsToUpdate = new HashSet<ApplicationEntity>();
         String hash = null;
-        LastUpdateDescriptor lastUpdate = null;
+        LastUpdateEntity lastUpdate = null;
 
-        String url = ApiMapping.LIST_APPLICATIONS.getMethodUrl(appstore.openaepUrl);
+        String url = ApiMapping.LIST_APPLICATIONS.getMethodUrl(appstore.getOpenaepUrl());
         int iterations = 0;
+        URI uri = null;
         do {
-            HttpGet httpGet = new HttpGet(url);
-            httpGet.addHeader("authToken", appstore.appstoreAccessToken);
+
+            try {
+                URIBuilder builder = null;
+                builder = new URIBuilder(url);
+                builder.addParameter("authToken",appstore.getAppstoreAccessToken() );
+                uri = builder.build();
+            } catch (URISyntaxException e) {
+                throw new IOException(e);
+            }
+
+            HttpGet httpGet = new HttpGet(uri);
+            httpGet.addHeader("authToken", appstore.getAppstoreAccessToken());
 
             HttpResponse httpResponse = httpClient.execute(httpGet, httpContext);
 
             int result = httpResponse.getStatusLine().getStatusCode();
 
             if (result == HttpStatus.SC_OK) {
-                ListParser<ApplicationDescriptor, ApplicationListHeaderDescriptor> appParser = parserFactory.getApplicationParser(appsToUpdate);
-                hash = parserFactory.parse(appParser, httpResponse.getEntity().getContent());
-                url = appParser.getHeader().offset;
-                if (lastUpdate == null) {
-                    lastUpdate = new LastUpdateDescriptor();
-                    lastUpdate.appstoreId = appstore.appstoreId;
-                    lastUpdate.lastResponseDatetime = dateFormat.format(new Date(System.currentTimeMillis()));
-                    lastUpdate.lastResponseHash = hash;
-                    lastUpdate.prevOffset = appParser.getHeader().offset;
+                hash = null;
+                try {
+                    MessageDigest md = MessageDigest.getInstance("MD5");
+                    DigestInputStream dis = new DigestInputStream(httpResponse.getEntity().getContent(), md);
+                    ApplicationListEntity applicationListEntity = xmlResponseWriter.read(ApplicationListEntity.class, dis);
+                    hash = marshaler.marshal(dis.getMessageDigest().digest());
+                    url = applicationListEntity.getOffset();
+                    appsToUpdate.addAll(applicationListEntity.getApplication());
+                    if (lastUpdate == null) {
+                        lastUpdate = new LastUpdateEntity();
+                        lastUpdate.setAppstoreId(appstore.getAppstoreId());
+                        lastUpdate.setLastResponseDatetime(dateFormat.format(new Date(System.currentTimeMillis())));
+                        lastUpdate.setLastResponseHash(hash);
+                        lastUpdate.setPrevOffset(applicationListEntity.getOffset());
+                    }
+                } catch (Exception e) {
+                    throw new IOException(e);
                 }
-
             } else {
                 throw new IOException("Applist request failed with result: " + httpResponse.getStatusLine());
             }
             iterations++;
-        } while (url != null && (prevUpdate == null || !url.equals(prevUpdate.prevOffset)));
-        if (iterations == 1 && prevUpdate != null && prevUpdate.lastResponseHash.equals(hash)) {
+        } while (url != null && (prevUpdate == null || !url.equals(prevUpdate.getPrevOffset())));
+        if (iterations == 1 && prevUpdate != null && prevUpdate.getLastResponseHash().equals(hash)) {
             //do nothing - return empty response
         } else {
             response.lastUpdate = lastUpdate;

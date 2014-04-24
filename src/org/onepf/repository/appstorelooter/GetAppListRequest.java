@@ -5,9 +5,9 @@ import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.HttpContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.onepf.repository.api.ParserFactory;
+import org.onepf.repository.api.responsewriter.entity.AppstoreEntity;
+import org.onepf.repository.api.xmlapi.XmlResponseReaderWriter;
 import org.onepf.repository.model.RepositoryFactory;
-import org.onepf.repository.model.auth.AppstoreDescriptor;
 
 import java.io.File;
 import java.util.List;
@@ -22,50 +22,49 @@ public class GetAppListRequest implements Runnable {
     private final Logger alarmCauseLogger = LogManager.getLogger("AlarmCauseLogger");
     private final Logger logger = LogManager.getLogger(GetAppListRequest.class.getName());
 
-    private AppstoreDescriptor appstore;
+    private AppstoreEntity appstore;
 
     private HttpClient httpClient;
 
     private RepositoryFactory repositoryFactory;
-    private ParserFactory parserFactory;
+    private XmlResponseReaderWriter xmlResponseWriter;
     private File uploadDir;
 
     private ApplicationsToUpdateLoader applicationsToUpdateLoader;
     private ApplicationsLoader appsLoader;
 
     public GetAppListRequest(
-            ParserFactory parserFactory,
+            XmlResponseReaderWriter xmlResponseWriter,
             RepositoryFactory repositoryFactory,
             HttpClient httpClient,
-            AppstoreDescriptor appstore,
+            AppstoreEntity appstore,
             File uploadDir) {
         this.appstore = appstore;
         this.httpClient = httpClient;
         this.repositoryFactory = repositoryFactory;
-        this.parserFactory = parserFactory;
+        this.xmlResponseWriter = xmlResponseWriter;
         this.uploadDir = uploadDir;
         HttpContext httpContext = new BasicHttpContext();
-        applicationsToUpdateLoader = new ApplicationsToUpdateLoader(parserFactory, httpClient, httpContext);
+        applicationsToUpdateLoader = new ApplicationsToUpdateLoader(xmlResponseWriter, httpClient, httpContext);
         appsLoader = new ApplicationsLoader(repositoryFactory, httpClient, httpContext, uploadDir);
     }
 
     @Override
     public void run() {
         try {
-            List<LastUpdateDescriptor> updates = repositoryFactory.getDataService().getLastUpdate(appstore.appstoreId);
-            LastUpdateDescriptor lastUpdateDescriptor = (updates.size() > 0) ? updates.get(0) : null;
+            LastUpdateEntity lastUpdateDescriptor = repositoryFactory.getDataService().getLastUpdate(appstore.getAppstoreId());
             ApplicationsToUpdateLoader.Response appsToUpdateResponse =
                     applicationsToUpdateLoader.getUpdates(new ApplicationsToUpdateLoader.Request(appstore, lastUpdateDescriptor));
             if (appsToUpdateResponse.getAppsToUpdate() == null) {
                 logger.info("Update is not needed. Everything is up to date!");
             } else {
-                logger.info("Updating: {}", appsToUpdateResponse.getLastUpdate().lastResponseHash);
+                logger.info("Updating: {}", appsToUpdateResponse.getLastUpdate().getLastResponseHash());
                 appsLoader.loadApplications(new ApplicationsLoader.Request(appstore, appsToUpdateResponse.getAppsToUpdate()));
                 // if everything was ok, store last Update
                 repositoryFactory.getDataService().saveLastUpdate(appsToUpdateResponse.getLastUpdate());
             }
         } catch (Exception e) {
-            alarmCauseLogger.error("Failed to get applications list from {}, reason {}", appstore.appstoreId, e.getMessage());
+            alarmCauseLogger.error("Failed to get applications list from {}, reason {}", appstore.getAppstoreId(), e.getMessage());
         }
     }
 

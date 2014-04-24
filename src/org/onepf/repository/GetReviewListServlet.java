@@ -1,16 +1,13 @@
 package org.onepf.repository;
 
-import org.onepf.repository.model.GetReviewsRequestHandler;
-import org.onepf.repository.model.services.DataException;
-import org.onepf.repository.api.responsewriter.ResponseWriter;
+import org.onepf.repository.api.responsewriter.ResponseReaderWriter;
 import org.onepf.repository.api.responsewriter.WriteException;
-import org.onepf.repository.api.responsewriter.XmlResponseWriter;
-import org.onepf.repository.api.responsewriter.descriptors.ReviewDescriptor;
+import org.onepf.repository.api.responsewriter.entity.ObjectFactory;
+import org.onepf.repository.api.responsewriter.entity.ReviewEntity;
+import org.onepf.repository.api.responsewriter.entity.ReviewsListEntity;
+import org.onepf.repository.api.xmlapi.XmlResponseReaderWriter;
+import org.onepf.repository.model.services.SimpleListRequestHandler;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.List;
 
 /**
@@ -19,55 +16,33 @@ import java.util.List;
  *
 * @author Alexander Ivanoff on 11.03.14.
  */
-public class GetReviewListServlet extends BaseServlet {
+public class GetReviewListServlet extends SimpleListServlet<ReviewEntity, ReviewsListEntity> {
 
-    private static final String PARAMETER_PACKAGE = "package";
-    private static final String PARAMETER_PAGE = "page";
-
-    public final static String FILE_PREFIX = "reviews";
-    private final static String FILE_TEMPLATE = FILE_PREFIX + "_%s_%d.xml";
-
-    private GetReviewsRequestHandler handler;
 
     @Override
-    public void init() throws ServletException {
-        super.init();
-        handler = getRepositoryFactory().createReviewsHandler();
+    String initOffsetTemplate() {
+        return "reviews_%d.xml";
     }
 
-    protected void post(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-    }
-
-    protected void get(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-        String packageName = request.getParameter(PARAMETER_PACKAGE);
-        if (packageName == null) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "No package defined");
-            return;
-        }
-
+    @Override
+    ResponseReaderWriter initResponseWriter() {
         try {
-            String page = request.getParameter(PARAMETER_PAGE);
-            List<ReviewDescriptor> reviews = handler.getReviews(packageName, page != null ? Integer.valueOf(page) : -1);
-            ResponseWriter responseWriter = new XmlResponseWriter();
-            String prevOffset = null;
-            String lastUpdate = null;
-            if (reviews.size() > 0 ) {
-                ReviewDescriptor lastReview = reviews.get(0);
-                lastUpdate = lastReview.lastUpdate;
-                if (lastReview.currPageHash != lastReview.prevPageHash) {
-                    prevOffset = String.format(FILE_TEMPLATE, packageName, lastReview.prevPageHash);
-                }
-
-            }
-            responseWriter.writeReviews(response.getWriter(), reviews, prevOffset);
+            return new XmlResponseReaderWriter(ObjectFactory._Reviews_QNAME, ReviewsListEntity.class.getPackage().getName());
         } catch (WriteException e) {
             e.printStackTrace();
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-        } catch (DataException e) {
-            e.printStackTrace();
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
+        return null;
     }
 
+    @Override
+    SimpleListRequestHandler<ReviewEntity> initRequestHandler() {
+        return getRepositoryFactory().createReviewsHandler();
+    }
+
+    @Override
+    public ReviewsListEntity buildListEntity(List<ReviewEntity> entities) {
+        ReviewsListEntity listEntity = new ReviewsListEntity();
+        listEntity.getReview().addAll(entities);
+        return listEntity;
+    }
 }

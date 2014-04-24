@@ -4,15 +4,16 @@ import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.protocol.HttpContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.onepf.repository.ApiMapping;
-import org.onepf.repository.api.responsewriter.descriptors.ApplicationDescriptor;
+import org.onepf.repository.api.responsewriter.entity.ApplicationEntity;
+import org.onepf.repository.api.responsewriter.entity.AppstoreEntity;
 import org.onepf.repository.model.FileType;
 import org.onepf.repository.model.RepositoryFactory;
 import org.onepf.repository.model.UploadAppdfRequestHandler;
-import org.onepf.repository.model.auth.AppstoreDescriptor;
 import org.onepf.repository.model.services.DataException;
 import org.onepf.repository.model.services.StorageException;
 
@@ -20,6 +21,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
 import java.security.NoSuchAlgorithmException;
@@ -40,14 +43,14 @@ public class ApplicationsLoader {
      */
     public static class Request {
 
-        private AppstoreDescriptor appstore;
-        private Set<ApplicationDescriptor> application;
+        private AppstoreEntity appstore;
+        private Set<ApplicationEntity> application;
 
         /**
          * @param appstore - AppstoreDescriptor to get appdf files from
          * @param applications - set of ApplicationDescriptor to get from remote appstore
          */
-        public Request(AppstoreDescriptor appstore, Set<ApplicationDescriptor> applications) {
+        public Request(AppstoreEntity appstore, Set<ApplicationEntity> applications) {
             this.appstore = appstore;
             this.application = applications;
         }
@@ -80,16 +83,16 @@ public class ApplicationsLoader {
      */
     public void loadApplications(final Request request) throws IOException {
 
-        final AppstoreDescriptor appstore = request.appstore;
-        final Set<ApplicationDescriptor> applications = request.application;
+        final AppstoreEntity appstore = request.appstore;
+        final Set<ApplicationEntity> applications = request.application;
 
-        Map<ApplicationDescriptor, String> failedAppsWithReason = loadApplicationsInt(appstore, applications);
+        Map<ApplicationEntity, String> failedAppsWithReason = loadApplicationsInt(appstore, applications);
         // trying one more time for failed packages:
         failedAppsWithReason = loadApplicationsInt(appstore, failedAppsWithReason.keySet());
         // if second try failed, log to alarm file
         if (failedAppsWithReason.size() > 0) {
-            for (ApplicationDescriptor failedToLoadApp : failedAppsWithReason.keySet()) {
-                alarmCauseLogger.error("failed to load package: {}, reason {}", failedToLoadApp.packageName, failedAppsWithReason.get(failedToLoadApp));
+            for (ApplicationEntity failedToLoadApp : failedAppsWithReason.keySet()) {
+                alarmCauseLogger.error("failed to load package: {}, reason {}", failedToLoadApp.getPackageName(), failedAppsWithReason.get(failedToLoadApp));
             }
         }
     }
@@ -102,37 +105,46 @@ public class ApplicationsLoader {
      * @return Map of ApplicationDescriptor and String represented reason why it was failed
      * @throws IOException
      */
-    private Map<ApplicationDescriptor, String> loadApplicationsInt(final AppstoreDescriptor appstore, final Set<ApplicationDescriptor> apps) throws IOException {
-        Map<ApplicationDescriptor, String> failedAppsWithReason = new HashMap<ApplicationDescriptor, String>();
+    private Map<ApplicationEntity, String> loadApplicationsInt(final AppstoreEntity appstore, final Set<ApplicationEntity> apps) throws IOException {
+        Map<ApplicationEntity, String> failedAppsWithReason = new HashMap<ApplicationEntity, String>();
         String url;
-        for (ApplicationDescriptor appToLoad : apps) {
+        URI uri;
+        for (ApplicationEntity appToLoad : apps) {
             try {
                 boolean needUpdate = true;
-                List<ApplicationDescriptor> appLog = factory.getDataService().getApplicationsLog(appToLoad.packageName, -1);
+                List<ApplicationEntity> appLog = factory.getDataService().getApplicationsLog(appToLoad.getPackageName(), -1);
                 if (appLog.size() > 0) {
                     // check that uploading store is home store
-                    if (!appLog.get(0).appstoreId.equals(appstore.appstoreId)) {
+                    if (!appLog.get(0).getAppstoreId().equals(appstore.getAppstoreId())) {
                         throw new DataException(String.format("Store '%s' is not home store for package '%s'",
-                                appstore.appstoreId, appToLoad.packageName));
+                                appstore.getAppstoreId(), appToLoad.getPackageName()));
                     }
-                    for (ApplicationDescriptor app : appLog) {
+                    for (ApplicationEntity app : appLog) {
                         // check if there is appdf file with the same hash, if it is here means appdf is up to date
-                        if (app.appdfHash.equals(appToLoad.appdfHash)) {
+                        if (app.getAppdfHash().equals(appToLoad.getAppdfHash())) {
                             needUpdate = false;
                             break;
                         }
                     }
                 }
                 if (needUpdate) {
-                    url = ApiMapping.GET_APPDF.getMethodUrl(appstore.openaepUrl) + "?package=" + appToLoad.packageName;
-                    HttpGet httpGet = new HttpGet(url);
-                    httpGet.addHeader("authToken", appstore.appstoreAccessToken);
+                    try {
+                        URIBuilder builder = null;
+                        builder = new URIBuilder(ApiMapping.GET_APPDF.getMethodUrl(appstore.getOpenaepUrl()));
+                        builder.addParameter("authToken",appstore.getAppstoreAccessToken());
+                        builder.addParameter("package",appToLoad.getPackageName());
+                        uri = builder.build();
+                    } catch (URISyntaxException e) {
+                        throw new IOException(e);
+                    }
+                    HttpGet httpGet = new HttpGet(uri);
+                    httpGet.addHeader("authToken", appstore.getAppstoreAccessToken());
                     HttpResponse response = httpClient.execute(httpGet, httpContext);
 
                     int result = response.getStatusLine().getStatusCode();
 
                     if (result == HttpStatus.SC_OK) {
-                        File  file = storeToUploadDir(response.getEntity().getContent(), appToLoad.packageName);
+                        File  file = storeToUploadDir(response.getEntity().getContent(), appToLoad.getPackageName());
                         appdfHandler.processFile(file, appLog, appstore);
                         file.delete();
                     } else {

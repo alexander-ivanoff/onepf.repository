@@ -63,6 +63,10 @@
         <servlet-name>DownloadListServlet</servlet-name>
         <servlet-class>org.onepf.repository.GetDownloadListServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ReviewListServlet</servlet-name>
+        <servlet-class>org.onepf.repository.GetReviewListServlet</servlet-class>
+    </servlet>
 
     <!-- Mappings -->
 
@@ -86,6 +90,10 @@
     <servlet-mapping>
         <servlet-name>DownloadListServlet</servlet-name>
         <url-pattern>/openaep/downloads</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ReviewListServlet</servlet-name>
+        <url-pattern>/openaep/reviews</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>FileDownloadServlet</servlet-name>

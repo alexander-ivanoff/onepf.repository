@@ -2,6 +2,7 @@ package org.onepf.repository.model.auth;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.onepf.repository.api.responsewriter.entity.AppstoreEntity;
 import org.onepf.repository.model.BaseRequestHandler;
 import org.onepf.repository.model.services.DataException;
 import org.onepf.repository.model.services.DataService;
@@ -21,7 +22,7 @@ public class AppstoreAuthenticator extends BaseRequestHandler {
 
     private final Logger logger = LogManager.getLogger(AppstoreAuthenticator.class.getName());
 
-    private Map<String, AppstoreDescriptor> appstores;
+    private Map<String, AppstoreEntity> appstores;
 
     public AppstoreAuthenticator(DataService dataService, StorageService storageService) {
         super(dataService, storageService);
@@ -58,7 +59,7 @@ public class AppstoreAuthenticator extends BaseRequestHandler {
      * @return AppstoreDescriptor, if requests contains authToken for known Appstore, null otherwise
      * @throws DataException
      */
-    public AppstoreDescriptor getAuthorizedAppstore(HttpServletRequest request) throws DataException {
+    public AppstoreEntity getAuthorizedAppstore(HttpServletRequest request) throws DataException {
         String token = request.getHeader(AUTH_TOKEN);
         if (token == null) {
             token = request.getParameter(AUTH_TOKEN);
@@ -72,11 +73,11 @@ public class AppstoreAuthenticator extends BaseRequestHandler {
      * @return AppstoreDescriptor, if parameters contains key="authToken" and vakue for known Appstore, null otherwise
      * @throws DataException
      */
-    public AppstoreDescriptor getAuthorizedAppstore(Map<String, String> parameters) throws DataException {
+    public AppstoreEntity getAuthorizedAppstore(Map<String, String> parameters) throws DataException {
         return getAuthorized(parameters.get(AUTH_TOKEN));
     }
 
-    private AppstoreDescriptor getAuthorized(String token) throws DataException {
+    private AppstoreEntity getAuthorized(String token) throws DataException {
         return token != null ? getAppstores().get(token) : null;
     }
 
@@ -85,7 +86,7 @@ public class AppstoreAuthenticator extends BaseRequestHandler {
      * @return list of all known appstores
      * @throws DataException
      */
-    public Map<String, AppstoreDescriptor> getAppstores() throws DataException {
+    public Map<String, AppstoreEntity> getAppstores() throws DataException {
         if (appstores == null) {
             appstores = getAppstoresInt();
         }
@@ -93,9 +94,9 @@ public class AppstoreAuthenticator extends BaseRequestHandler {
     }
 
 
-    private Map<String, AppstoreDescriptor> getAppstoresInt() throws DataException {
+    private Map<String, AppstoreEntity> getAppstoresInt() throws DataException {
         long time = System.currentTimeMillis();
-        Map<String, AppstoreDescriptor> apps = dataService.getAppstores();
+        Map<String, AppstoreEntity> apps = dataService.getAppstores();
         logger.debug("List appstores time: {}", (System.currentTimeMillis() - time));
         return apps;
     }

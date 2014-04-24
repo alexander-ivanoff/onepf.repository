@@ -1,0 +1,29 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+
+    <session-factory>
+        <property name="hibernate.bytecode.use_reflection_optimizer">false</property>
+        <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
+        <property name="hibernate.connection.password">pKDAVYi9fIlxha0RVyBM</property>
+        <property name="hibernate.connection.url">
+            jdbc:mysql://onepf-repository.cxn84uhli0ok.us-east-1.rds.amazonaws.com:3306/onepf_repository_1
+        </property>
+        <property name="hibernate.connection.username">application_user</property>
+        <property name="hibernate.connection.pool_size">10</property>
+        <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
+        <property name="show_sql">true</property>
+        <mapping class="org.onepf.repository.api.responsewriter.entity.ApplicationEntity"/>
+        <mapping class="org.onepf.repository.api.responsewriter.entity.AppstoreEntity"/>
+        <mapping class="org.onepf.repository.api.responsewriter.entity.DownloadEntity"/>
+        <mapping class="org.onepf.repository.api.responsewriter.entity.PurchaseEntity"/>
+        <mapping class="org.onepf.repository.api.responsewriter.entity.ReviewEntity"/>
+        <mapping class="org.onepf.repository.appstorelooter.LastUpdateEntity"/>
+        <mapping class="org.onepf.repository.appstorelooter.LastStatisticsUpdateEntity"/>
+    </session-factory>
+
+
+</hibernate-configuration>

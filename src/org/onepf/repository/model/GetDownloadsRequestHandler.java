@@ -2,10 +2,11 @@ package org.onepf.repository.model;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.onepf.repository.api.responsewriter.entity.DownloadEntity;
 import org.onepf.repository.model.services.DataException;
 import org.onepf.repository.model.services.DataService;
+import org.onepf.repository.model.services.SimpleListRequestHandler;
 import org.onepf.repository.model.services.StorageService;
-import org.onepf.repository.api.responsewriter.descriptors.DownloadDescriptor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +17,7 @@ import java.util.List;
  *
 * @author Alexander Ivanoff on 12.03.14.
  */
-public class GetDownloadsRequestHandler extends BaseRequestHandler {
+public class GetDownloadsRequestHandler extends SimpleListRequestHandler<DownloadEntity> {
 
     private final Logger logger = LogManager.getLogger(GetDownloadsRequestHandler.class.getName());
 
@@ -25,18 +26,12 @@ public class GetDownloadsRequestHandler extends BaseRequestHandler {
         super(dataService, storageService);
     }
 
-    /**
-     * return list of downloads for given packageName and page
-     *
-     * @param packageName - name of the package
-     * @param pageHash - hash of the page to return
-     * @return List of DownloadDescriptors
-     * @throws DataException
-     */
-    public List<DownloadDescriptor> getDownloads(String packageName, long pageHash) throws DataException{
+    @Override
+    public List<DownloadEntity> getList(String appstoreId, int pageHash) throws DataException {
         long time = System.currentTimeMillis();
-        ArrayList<DownloadDescriptor> descriptors = dataService.getDownloads(packageName, pageHash);
+        ArrayList<DownloadEntity> descriptors = dataService.getDownloads(appstoreId, pageHash);
         logger.debug("List downloads time: {}", (System.currentTimeMillis() - time));
         return descriptors;
     }
+
 }
