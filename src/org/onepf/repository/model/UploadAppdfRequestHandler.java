@@ -4,6 +4,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.onepf.appdf.parser.AppdfFileParser;
 import org.onepf.appdf.parser.ParseResult;
+import org.onepf.appdf.parser.ParsingException;
 import org.onepf.repository.api.responsewriter.entity.ApplicationEntity;
 import org.onepf.repository.api.responsewriter.entity.AppstoreEntity;
 import org.onepf.repository.model.services.DataException;
@@ -57,10 +58,15 @@ public class UploadAppdfRequestHandler extends BaseRequestHandler {
      * @throws DataException
      * @throws NoSuchAlgorithmException
      */
-    public void processFile(File file, List<ApplicationEntity> appLog, AppstoreEntity appstoreDescriptor) throws IOException, StorageException, DataException, NoSuchAlgorithmException {
+    public void processFile(File file, ApplicationEntity app, List<ApplicationEntity> appLog, AppstoreEntity appstoreDescriptor) throws IOException, StorageException, DataException, NoSuchAlgorithmException {
         long time = System.currentTimeMillis();
         AppdfFileParser parser = new AppdfFileParser(file);
-        ParseResult parseResult = parser.parse();
+        ParseResult parseResult = null;
+        try {
+            parseResult = parser.parse();
+        } catch (ParsingException e) {
+            throw new DataException(e);
+        }
 
         //Default application
         org.onepf.appdf.model.Application application = parseResult.getApplication();
@@ -69,6 +75,10 @@ public class UploadAppdfRequestHandler extends BaseRequestHandler {
 
         if (packageName == null) {
             throw new IOException("Bad AppDF file!");
+        }
+
+        if (app != null && !app.getPackageName().equals(packageName)) {
+            throw new IOException("Incorrect package name! ");
         }
         if (appLog == null) {
             appLog = dataService.getApplicationsLog(packageName, -1);
@@ -82,15 +92,16 @@ public class UploadAppdfRequestHandler extends BaseRequestHandler {
         logger.debug("Appdf file hash: {}", appdfHash);
         sendDescription(descrKey, parseResult.getFile());
 
+        if (app == null) {
+            app = new ApplicationEntity();
+            app.setPackageName(packageName);
+            app.setAppdfHash(appdfHash);
+        }
+        app.setDatetime(dateFormat.format(new Date(System.currentTimeMillis())));
+        app.setAppdfLink(appdfKey);
+        app.setAppstoreId(appstoreDescriptor.getAppstoreId());
 
-        ApplicationEntity appDescriptor = new ApplicationEntity();
-        appDescriptor.setPackageName(packageName);
-        appDescriptor.setDatetime(dateFormat.format(new Date(System.currentTimeMillis())));
-        appDescriptor.setAppdfLink(appdfKey);
-        appDescriptor.setAppdfHash(appdfHash);
-        appDescriptor.setAppstoreId(appstoreDescriptor.getAppstoreId());
-
-        dataService.store(appDescriptor);
+        dataService.store(app);
         logger.debug("Store Appdf time: {} ", (System.currentTimeMillis() - time));
     }
 

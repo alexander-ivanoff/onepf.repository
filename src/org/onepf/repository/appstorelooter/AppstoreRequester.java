@@ -1,9 +1,10 @@
 package org.onepf.repository.appstorelooter;
 
 import org.apache.http.client.HttpClient;
-import org.apache.http.client.params.HttpClientParams;
+import org.apache.http.client.params.ClientPNames;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.conn.PoolingClientConnectionManager;
+import org.apache.http.params.HttpParams;
 import org.onepf.repository.api.responsewriter.WriteException;
 import org.onepf.repository.api.responsewriter.entity.ApplicationListEntity;
 import org.onepf.repository.api.responsewriter.entity.AppstoreEntity;
@@ -74,7 +75,13 @@ public class AppstoreRequester {
             cm.setDefaultMaxPerRoute(CONNECTIONS_PER_STORE);
             httpClient = new DefaultHttpClient(cm);
             // ser redirectiong to true
-            HttpClientParams.setRedirecting(httpClient.getParams(), true);
+            HttpParams httpClientParams = httpClient.getParams();
+            //HttpClientParams.setRedirecting(httpClientParams, true);
+            httpClientParams.setParameter(ClientPNames.HANDLE_REDIRECTS, true);
+            httpClientParams.setParameter(ClientPNames.ALLOW_CIRCULAR_REDIRECTS, true);
+
+
+
 
             scheduler = Executors.newScheduledThreadPool(appstores.size());
             for (AppstoreEntity appstore : appstores.values()) {

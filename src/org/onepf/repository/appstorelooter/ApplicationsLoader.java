@@ -15,17 +15,14 @@ import org.onepf.repository.model.FileType;
 import org.onepf.repository.model.RepositoryFactory;
 import org.onepf.repository.model.UploadAppdfRequestHandler;
 import org.onepf.repository.model.services.DataException;
-import org.onepf.repository.model.services.StorageException;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
-import java.security.NoSuchAlgorithmException;
 import java.util.*;
 
 /**
@@ -107,6 +104,7 @@ public class ApplicationsLoader {
      */
     private Map<ApplicationEntity, String> loadApplicationsInt(final AppstoreEntity appstore, final Set<ApplicationEntity> apps) throws IOException {
         Map<ApplicationEntity, String> failedAppsWithReason = new HashMap<ApplicationEntity, String>();
+        File tmpFile = null;
         String url;
         URI uri;
         for (ApplicationEntity appToLoad : apps) {
@@ -128,15 +126,11 @@ public class ApplicationsLoader {
                     }
                 }
                 if (needUpdate) {
-                    try {
-                        URIBuilder builder = null;
-                        builder = new URIBuilder(ApiMapping.GET_APPDF.getMethodUrl(appstore.getOpenaepUrl()));
-                        builder.addParameter("authToken",appstore.getAppstoreAccessToken());
-                        builder.addParameter("package",appToLoad.getPackageName());
-                        uri = builder.build();
-                    } catch (URISyntaxException e) {
-                        throw new IOException(e);
-                    }
+                    URIBuilder builder = null;
+                    builder = new URIBuilder(ApiMapping.GET_APPDF.getMethodUrl(appstore.getOpenaepUrl()));
+                    builder.addParameter("authToken",appstore.getAppstoreAccessToken());
+                    builder.addParameter("package",appToLoad.getPackageName());
+                    uri = builder.build();
                     HttpGet httpGet = new HttpGet(uri);
                     httpGet.addHeader("authToken", appstore.getAppstoreAccessToken());
                     HttpResponse response = httpClient.execute(httpGet, httpContext);
@@ -144,22 +138,19 @@ public class ApplicationsLoader {
                     int result = response.getStatusLine().getStatusCode();
 
                     if (result == HttpStatus.SC_OK) {
-                        File  file = storeToUploadDir(response.getEntity().getContent(), appToLoad.getPackageName());
-                        appdfHandler.processFile(file, appLog, appstore);
-                        file.delete();
+                        tmpFile = storeToUploadDir(response.getEntity().getContent(), appToLoad.getPackageName());
+                        appdfHandler.processFile(tmpFile, appToLoad, appLog, appstore);
                     } else {
                         failedAppsWithReason.put(appToLoad, response.getStatusLine().toString());
                     }
                 }
-            } catch (StorageException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
                 failedAppsWithReason.put(appToLoad, e.getMessage());
-            } catch (DataException e) {
-                e.printStackTrace();
-                failedAppsWithReason.put(appToLoad, e.getMessage());
-            } catch (NoSuchAlgorithmException e) {
-                e.printStackTrace();
-                failedAppsWithReason.put(appToLoad, e.getMessage());
+            } finally {
+                if (tmpFile != null) {
+                    tmpFile.delete();
+                }
             }
         }
         return failedAppsWithReason;

@@ -64,12 +64,12 @@ public class SqlDataService implements DataService {
 
     @Override
     public void saveLastUpdate(LastUpdateEntity lastUpdate) throws DataException {
-        saveEntity(lastUpdate);
+        saveOrUpdateEntity(lastUpdate);
     }
 
     @Override
     public void saveLastStatisticsUpdate(LastStatisticsUpdateEntity lastStatisticsUpdate) throws DataException {
-        saveEntity(lastStatisticsUpdate);
+        saveOrUpdateEntity(lastStatisticsUpdate);
     }
 
     @Override
@@ -289,7 +289,7 @@ public class SqlDataService implements DataService {
      */
     private Pair<Integer, Integer> getPageHashes(BaseHashEntity entity, String packageName, int limit) {
         Session session = getSession();
-        int currentPageHashParam = 0;
+        int chash = 0, phash = 0;
         StringBuilder subQueryBuilder = new StringBuilder("FROM ApplicationEntity");
         if (packageName != null) {
             subQueryBuilder.append(" WHERE packageName = :packageNameParam");
@@ -304,21 +304,17 @@ public class SqlDataService implements DataService {
         List list = query.list();
         if (list != null && !list.isEmpty()) {
             ApplicationEntity applicationEntity = (ApplicationEntity) list.get(0);
-            currentPageHashParam = applicationEntity.getCurrPageHash();
+            chash = applicationEntity.getCurrPageHash();
+            phash = applicationEntity.getPrevPageHash();
         }
         Query hashQuery = session.createQuery(String.format("FROM %s WHERE currPageHash = :currPageHashParam", entity.getClass().getName()));
-        hashQuery.setParameter("currPageHashParam", currentPageHashParam);
+        hashQuery.setParameter("currPageHashParam", chash);
         List hashQueryList = hashQuery.list();
         session.close();
         int count = 0;
-        int chash = 0, phash = 0;
+
         if (hashQueryList != null) {
             count = hashQueryList.size();
-            ArrayList<BaseHashEntity> hashEntities = new ArrayList<BaseHashEntity>(hashQueryList);
-            for (BaseHashEntity hashEntity : hashEntities) {
-                chash = hashEntity.getCurrPageHash();
-                phash = hashEntity.getPrevPageHash();
-            }
         }
         if (count >= limit) {
             phash = chash;
@@ -332,6 +328,14 @@ public class SqlDataService implements DataService {
         Session session = getSession();
         session.beginTransaction();
         session.save(entity);
+        session.getTransaction().commit();
+        session.close();
+    }
+
+    public void saveOrUpdateEntity(BaseEntity entity) {
+        Session session = getSession();
+        session.beginTransaction();
+        session.saveOrUpdate(entity);
         session.getTransaction().commit();
         session.close();
     }
