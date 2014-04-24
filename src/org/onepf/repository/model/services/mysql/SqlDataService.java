@@ -275,8 +275,8 @@ public class SqlDataService implements DataService {
      */
     private void insertWithHashes(String packageName, BaseHashEntity entity, int limit) {
         Pair<Integer, Integer> pageHashes = getPageHashes(entity, packageName, limit);
-        entity.setPrevPageHash(pageHashes.fst);
-        entity.setCurrPageHash(pageHashes.snd);
+        entity.setCurrPageHash(pageHashes.fst);
+        entity.setPrevPageHash(pageHashes.snd);
         saveEntity(entity);
     }
 
@@ -290,7 +290,7 @@ public class SqlDataService implements DataService {
     private Pair<Integer, Integer> getPageHashes(BaseHashEntity entity, String packageName, int limit) {
         Session session = getSession();
         int chash = 0, phash = 0;
-        StringBuilder subQueryBuilder = new StringBuilder("FROM ApplicationEntity");
+        StringBuilder subQueryBuilder = new StringBuilder(String.format("FROM %s", entity.getClass().getName()));
         if (packageName != null) {
             subQueryBuilder.append(" WHERE packageName = :packageNameParam");
         }
