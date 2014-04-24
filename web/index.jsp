@@ -1,15 +1,16 @@
-<%-- Created by IntelliJ IDEA. --%>
+<%--
+  Created by IntelliJ IDEA.
+  User: ivanoff
+  Date: 23.04.14
+  Time: 14:25
+  To change this template use File | Settings | File Templates.
+--%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>Upload</title>
+    <title>onepf-repository</title>
 </head>
 <body>
-<form action="openaep/upload" method="post" enctype="multipart/form-data">
-    Token: <input name="authToken" type="text"><br>
-    developer's contact: <input name="developersContact" type="text"><br>
-    <input name="data" type="file"><br>
-    <input type="submit"><br>
-</form>
+    test purposes version of repository.
 </body>
 </html>

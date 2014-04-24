@@ -4,15 +4,18 @@ import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.protocol.HttpContext;
 import org.onepf.repository.ApiMapping;
 import org.onepf.repository.api.responsewriter.entity.ApplicationEntity;
-import org.onepf.repository.api.responsewriter.entity.AppstoreEntity;
 import org.onepf.repository.api.responsewriter.entity.ApplicationListEntity;
+import org.onepf.repository.api.responsewriter.entity.AppstoreEntity;
 import org.onepf.repository.api.xmlapi.XmlResponseReaderWriter;
 
 import javax.xml.bind.annotation.adapters.HexBinaryAdapter;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.security.DigestInputStream;
 import java.security.MessageDigest;
 import java.text.SimpleDateFormat;
@@ -104,8 +107,19 @@ public class ApplicationsToUpdateLoader {
 
         String url = ApiMapping.LIST_APPLICATIONS.getMethodUrl(appstore.getOpenaepUrl());
         int iterations = 0;
+        URI uri = null;
         do {
-            HttpGet httpGet = new HttpGet(url);
+
+            try {
+                URIBuilder builder = null;
+                builder = new URIBuilder(url);
+                builder.addParameter("authToken",appstore.getAppstoreAccessToken() );
+                uri = builder.build();
+            } catch (URISyntaxException e) {
+                throw new IOException(e);
+            }
+
+            HttpGet httpGet = new HttpGet(uri);
             httpGet.addHeader("authToken", appstore.getAppstoreAccessToken());
 
             HttpResponse httpResponse = httpClient.execute(httpGet, httpContext);

@@ -2,7 +2,6 @@ package org.onepf.repository;
 
 import org.onepf.repository.api.responsewriter.ResponseReaderWriter;
 import org.onepf.repository.api.responsewriter.WriteException;
-import org.onepf.repository.api.responsewriter.entity.BaseEntity;
 import org.onepf.repository.api.responsewriter.entity.BaseHashEntity;
 import org.onepf.repository.api.responsewriter.entity.BaseListEntity;
 import org.onepf.repository.model.services.DataException;
@@ -52,6 +51,7 @@ public abstract class SimpleListServlet<T extends BaseHashEntity, K extends Base
             K listEntity = buildListEntity(apps);
             listEntity.setVersion("1");
             listEntity.setOffset(offset);
+            response.setContentType("application/xml");
             responseWriter.write(response.getOutputStream(), listEntity);
         } catch (WriteException e) {
             e.printStackTrace();

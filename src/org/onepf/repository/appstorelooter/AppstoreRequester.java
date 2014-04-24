@@ -1,6 +1,7 @@
 package org.onepf.repository.appstorelooter;
 
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.params.HttpClientParams;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.conn.PoolingClientConnectionManager;
 import org.onepf.repository.api.responsewriter.WriteException;
@@ -72,19 +73,23 @@ public class AppstoreRequester {
             cm.setMaxTotal(appstores.size() * CONNECTIONS_PER_STORE);
             cm.setDefaultMaxPerRoute(CONNECTIONS_PER_STORE);
             httpClient = new DefaultHttpClient(cm);
+            // ser redirectiong to true
+            HttpClientParams.setRedirecting(httpClient.getParams(), true);
 
             scheduler = Executors.newScheduledThreadPool(appstores.size());
             for (AppstoreEntity appstore : appstores.values()) {
-                if (appstore.getAppstoreId().equals("onepf.repository")) { //TEST PURPOSES ONLY
+                if (!appstore.getAppstoreId().equals("com.appstore.test") ) { //TEST PURPOSES ONLY
                     cm.setDefaultMaxPerRoute(CONNECTIONS_PER_STORE);
                     // schedule GetAppListRequests
                     scheduler.scheduleAtFixedRate(
                             new GetAppListRequest(xmlResponseWriterV2, repositoryFactory, httpClient, appstore, uploadDir),
                             POLLING_PERIOD, POLLING_PERIOD, TimeUnit.SECONDS);
                     // schedule GetStatisticsRequests
+                    /*
                     scheduler.scheduleAtFixedRate(
                             new GetStatisticsRequest(xmlResponseWriterV2, repositoryFactory, httpClient, appstore, tmpDir),
                             POLLING_PERIOD, POLLING_PERIOD, TimeUnit.SECONDS);
+                    */
                 }
             }
         }

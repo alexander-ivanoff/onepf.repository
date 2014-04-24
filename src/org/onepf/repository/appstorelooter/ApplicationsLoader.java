@@ -4,6 +4,7 @@ import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.protocol.HttpContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -20,6 +21,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
 import java.security.NoSuchAlgorithmException;
@@ -105,6 +108,7 @@ public class ApplicationsLoader {
     private Map<ApplicationEntity, String> loadApplicationsInt(final AppstoreEntity appstore, final Set<ApplicationEntity> apps) throws IOException {
         Map<ApplicationEntity, String> failedAppsWithReason = new HashMap<ApplicationEntity, String>();
         String url;
+        URI uri;
         for (ApplicationEntity appToLoad : apps) {
             try {
                 boolean needUpdate = true;
@@ -124,8 +128,16 @@ public class ApplicationsLoader {
                     }
                 }
                 if (needUpdate) {
-                    url = ApiMapping.GET_APPDF.getMethodUrl(appstore.getOpenaepUrl()) + "?package=" + appToLoad.getPackageName();
-                    HttpGet httpGet = new HttpGet(url);
+                    try {
+                        URIBuilder builder = null;
+                        builder = new URIBuilder(ApiMapping.GET_APPDF.getMethodUrl(appstore.getOpenaepUrl()));
+                        builder.addParameter("authToken",appstore.getAppstoreAccessToken());
+                        builder.addParameter("package",appToLoad.getPackageName());
+                        uri = builder.build();
+                    } catch (URISyntaxException e) {
+                        throw new IOException(e);
+                    }
+                    HttpGet httpGet = new HttpGet(uri);
                     httpGet.addHeader("authToken", appstore.getAppstoreAccessToken());
                     HttpResponse response = httpClient.execute(httpGet, httpContext);
 
