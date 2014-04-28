@@ -1,6 +1,7 @@
 package org.onepf.repository.appstorelooter;
 
 import org.onepf.repository.api.responsewriter.entity.BaseEntity;
+
 import javax.persistence.*;
 
 /**
@@ -27,6 +28,10 @@ public class LastStatisticsUpdateEntity extends BaseEntity {
 
     @Column(name = "lastUpdateOffset")
     private String prevOffset;
+
+    LastStatisticsUpdateEntity(){
+        super();
+    }
 
     LastStatisticsUpdateEntity(String appstoreId,
                                FeedType feedType,

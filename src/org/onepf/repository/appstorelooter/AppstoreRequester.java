@@ -31,7 +31,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class AppstoreRequester {
 
-    private static int  POLLING_PERIOD = 30; // polling period in seconds
+    private static int  POLLING_PERIOD = 60; // polling period in seconds
     private static int CONNECTIONS_PER_STORE = 5;
 
     private HttpClient httpClient;
