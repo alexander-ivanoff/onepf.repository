@@ -4,7 +4,6 @@ import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.protocol.HttpContext;
 import org.onepf.repository.ApiMapping;
 import org.onepf.repository.api.responsewriter.entity.ApplicationEntity;
@@ -15,7 +14,6 @@ import org.onepf.repository.api.xmlapi.XmlResponseReaderWriter;
 import javax.xml.bind.annotation.adapters.HexBinaryAdapter;
 import java.io.IOException;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.security.DigestInputStream;
 import java.security.MessageDigest;
 import java.text.SimpleDateFormat;
@@ -96,7 +94,7 @@ public class ApplicationsToUpdateLoader {
      * @return response object with set of ApplicationDescriptor and object with information about this update
      * @throws IOException
      */
-    public Response getUpdates(final Request request) throws IOException {
+    public Response getUpdates(final Request request) throws Exception {
         Response response = new Response();
         final AppstoreEntity appstore = request.appstore;
         final LastUpdateEntity prevUpdate = request.prevUpdate;
@@ -109,16 +107,7 @@ public class ApplicationsToUpdateLoader {
         int iterations = 0;
         URI uri = null;
         do {
-
-            try {
-                URIBuilder builder = null;
-                builder = new URIBuilder(url);
-                builder.addParameter("authToken",appstore.getAppstoreAccessToken() );
-                uri = builder.build();
-            } catch (URISyntaxException e) {
-                throw new IOException(e);
-            }
-
+            uri = RequesterUtils.buildRequestUri(url, appstore.getAppstoreAccessToken(), null);
             HttpGet httpGet = new HttpGet(uri);
             httpGet.addHeader("authToken", appstore.getAppstoreAccessToken());
 
@@ -128,22 +117,18 @@ public class ApplicationsToUpdateLoader {
 
             if (result == HttpStatus.SC_OK) {
                 hash = null;
-                try {
-                    MessageDigest md = MessageDigest.getInstance("MD5");
-                    DigestInputStream dis = new DigestInputStream(httpResponse.getEntity().getContent(), md);
-                    ApplicationListEntity applicationListEntity = xmlResponseWriter.read(ApplicationListEntity.class, dis);
-                    hash = marshaler.marshal(dis.getMessageDigest().digest());
-                    url = applicationListEntity.getOffset();
-                    appsToUpdate.addAll(applicationListEntity.getApplication());
-                    if (lastUpdate == null) {
-                        lastUpdate = new LastUpdateEntity();
-                        lastUpdate.setAppstoreId(appstore.getAppstoreId());
-                        lastUpdate.setLastResponseDatetime(dateFormat.format(new Date(System.currentTimeMillis())));
-                        lastUpdate.setLastResponseHash(hash);
-                        lastUpdate.setPrevOffset(applicationListEntity.getOffset());
-                    }
-                } catch (Exception e) {
-                    throw new IOException(e);
+                MessageDigest md = MessageDigest.getInstance("MD5");
+                DigestInputStream dis = new DigestInputStream(httpResponse.getEntity().getContent(), md);
+                ApplicationListEntity applicationListEntity = xmlResponseWriter.read(ApplicationListEntity.class, dis);
+                hash = marshaler.marshal(dis.getMessageDigest().digest());
+                url = applicationListEntity.getOffset();
+                appsToUpdate.addAll(applicationListEntity.getApplication());
+                if (lastUpdate == null) {
+                    lastUpdate = new LastUpdateEntity();
+                    lastUpdate.setAppstoreId(appstore.getAppstoreId());
+                    lastUpdate.setLastResponseDatetime(dateFormat.format(new Date(System.currentTimeMillis())));
+                    lastUpdate.setLastResponseHash(hash);
+                    lastUpdate.setPrevOffset(applicationListEntity.getOffset());
                 }
             } else {
                 throw new IOException("Applist request failed with result: " + httpResponse.getStatusLine());

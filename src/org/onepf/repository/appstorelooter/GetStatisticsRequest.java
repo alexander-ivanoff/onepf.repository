@@ -15,6 +15,7 @@ import org.onepf.repository.model.RepositoryFactory;
 import org.onepf.repository.model.services.mysql.SqlDataService;
 
 import java.io.*;
+import java.net.URI;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
 import java.text.SimpleDateFormat;
@@ -68,9 +69,11 @@ public class GetStatisticsRequest implements Runnable {
             List<String> filesList = new ArrayList<String>();
             String requestUrl = feedType.getApiMapping().getMethodUrl(appstore.getOpenaepUrl());
             boolean wasError = false;
+            URI requestUri = null;
             while (true) {
                 // Perform GET request to API
-                HttpGet httpGet = new HttpGet(requestUrl);
+                requestUri = RequesterUtils.buildRequestUri(requestUrl, appstore.getAppstoreAccessToken(), null);
+                HttpGet httpGet = new HttpGet(requestUri);
                 httpGet.addHeader("authToken", appstore.getAppstoreAccessToken());
                 HttpResponse response = httpClient.execute(httpGet, httpContext);
 
@@ -112,9 +115,9 @@ public class GetStatisticsRequest implements Runnable {
                         );
                     }
                     int start = downloads.size() - lastStatisticsUpdate.getLastResponseCount() - 1;
+                    Session session = ((SqlDataService) repositoryFactory.getDataService()).getSession();
                     for (int i = start; i >= 0; --i) {
                         //TODO move all work with database to dataService
-                        Session session = ((SqlDataService) repositoryFactory.getDataService()).getSession();
                         try {
                             DownloadEntity downloadEntity = downloads.get(i);
                             ApplicationEntity app =
@@ -127,12 +130,12 @@ public class GetStatisticsRequest implements Runnable {
                             lastStatisticsUpdate.setLastResponseDatetime(DATE_FORMAT.format(new Date(System.currentTimeMillis())));
                             session.saveOrUpdate(lastStatisticsUpdate); //
                             session.getTransaction().commit();
-                            session.close();
                         } catch (RuntimeException e) {
                             session.getTransaction().rollback();
                             throw e;
                         }
                     }
+                    session.close();
                     lastStatisticsUpdate = null;
                 }
             }

@@ -4,7 +4,6 @@ import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.protocol.HttpContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -126,11 +125,8 @@ public class ApplicationsLoader {
                     }
                 }
                 if (needUpdate) {
-                    URIBuilder builder = null;
-                    builder = new URIBuilder(ApiMapping.GET_APPDF.getMethodUrl(appstore.getOpenaepUrl()));
-                    builder.addParameter("authToken",appstore.getAppstoreAccessToken());
-                    builder.addParameter("package",appToLoad.getPackageName());
-                    uri = builder.build();
+                    uri = RequesterUtils.buildRequestUri(ApiMapping.GET_APPDF.getMethodUrl(appstore.getOpenaepUrl()),
+                            appstore.getAppstoreAccessToken(), appToLoad.getPackageName());
                     HttpGet httpGet = new HttpGet(uri);
                     httpGet.addHeader("authToken", appstore.getAppstoreAccessToken());
                     HttpResponse response = httpClient.execute(httpGet, httpContext);
