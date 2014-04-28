@@ -10,7 +10,7 @@
         <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
         <property name="hibernate.connection.password">pKDAVYi9fIlxha0RVyBM</property>
         <property name="hibernate.connection.url">
-            jdbc:mysql://onepf-repository.cxn84uhli0ok.us-east-1.rds.amazonaws.com:3306/onepf_repository_1
+            jdbc:mysql://onepf-repository.cxn84uhli0ok.us-east-1.rds.amazonaws.com:3306/onepf_repository
         </property>
         <property name="hibernate.connection.username">application_user</property>
         <property name="hibernate.connection.pool_size">10</property>

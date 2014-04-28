@@ -1,9 +1,6 @@
 package org.onepf.repository.api.responsewriter.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
@@ -19,6 +16,7 @@ import javax.xml.bind.annotation.XmlType;
 @Table(name = "downloads")
 public class DownloadEntity extends BaseHashEntity{
     @Id
+    @GeneratedValue(strategy= GenerationType.AUTO)
     private int id;
 
     @XmlAttribute(name = "package", required = true)

@@ -48,7 +48,7 @@ public class UploadAppdfFileServlet extends BaseServlet {
             AppstoreEntity appstore = getAuthenticator().getAuthorizedAppstore(formFields);
             if (appstore != null) {
                 for (File file : appdfFileUploder.getUploadedFiles()) {
-                    appdfHandler.processFile(file, null, appstore);
+                    appdfHandler.processFile(file, null, null, appstore);
                 }
             } else {
                 response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
