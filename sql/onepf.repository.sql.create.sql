@@ -16,14 +16,6 @@ CREATE TABLE `onepf_repository`.`appstoreupdates` (
   `lastUpdateHash` varchar(32) NOT NULL,
   `lastUpdateDateTime` datetime NOT NULL,
   `lastUpdateOffset` varchar(255) DEFAULT NULL,
-  FOREIGN KEY (`appstoreId`) REFERENCES `onepf_repository`.`appstores` (`appstoreId`)
-);
-
-CREATE TABLE `onepf_repository`.`appstoreupdates` (
-  `appstoreId` varchar(255) NOT NULL,
-  `lastUpdateHash` varchar(32) NOT NULL,
-  `lastUpdateDateTime` datetime NOT NULL,
-  `lastUpdateOffset` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`appstoreId`),
   FOREIGN KEY (`appstoreId`) REFERENCES `onepf_repository`.`appstores` (`appstoreId`)
 );
@@ -34,17 +26,7 @@ CREATE TABLE `onepf_repository`.`statistics_updates` (
   `lastUpdateCount` int(11) NOT NULL,
   `lastUpdateDateTime` datetime NOT NULL,
   `lastUpdateOffset` varchar(255) DEFAULT NULL,
-  FOREIGN KEY (`appstoreId`) REFERENCES `onepf_repository`.`appstores` (`appstoreId`)
-);
-
-CREATE TABLE `onepf_repository`.`statistics_updates` (
-  `appstoreId` varchar(255) NOT NULL,
-  `feedType` varchar(255) NOT NULL,
-  `lastUpdateCount` int(11) NOT NULL,
-  `lastUpdateDateTime` datetime NOT NULL,
-  `lastUpdateOffset` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`appstoreId`,`feedType`),
-  KEY `appstoreId` (`appstoreId`),
   FOREIGN KEY (`appstoreId`) REFERENCES `onepf_repository`.`appstores` (`appstoreId`)
 );
 
