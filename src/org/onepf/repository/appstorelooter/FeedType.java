@@ -1,7 +1,9 @@
 package org.onepf.repository.appstorelooter;
 
 import org.onepf.repository.ApiMapping;
+import org.onepf.repository.api.responsewriter.WriteException;
 import org.onepf.repository.api.responsewriter.entity.*;
+import org.onepf.repository.api.xmlapi.XmlResponseReaderWriter;
 
 /**
  * Feed type enum.
@@ -44,4 +46,19 @@ public enum FeedType {
     public Class getListEntity() { return listEntity; }
 
     public Class getElementEntity() { return elementEntity; }
+
+    public XmlResponseReaderWriter getXmlReaderWriter() {
+        try {
+            if (type.equals(DOWNLOADS.toString())) {
+                return new XmlResponseReaderWriter<DownloadListEntity>(ObjectFactory._Downloads_QNAME, listEntity.getPackage().getName());
+            } else if (type.equals(PURCHASES.toString())) {
+                return new XmlResponseReaderWriter<PurchaseListEntity>(ObjectFactory._Purchases_QNAME, listEntity.getPackage().getName());
+            } else if (type.equals(REVIEWS.toString())) {
+                return new XmlResponseReaderWriter<ReviewsListEntity>(ObjectFactory._Reviews_QNAME, listEntity.getPackage().getName());
+            }
+        } catch (WriteException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }

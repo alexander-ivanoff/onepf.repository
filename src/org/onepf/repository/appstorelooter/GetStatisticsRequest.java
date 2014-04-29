@@ -37,20 +37,16 @@ public class GetStatisticsRequest implements Runnable {
     private final AppstoreEntity appstore;
     private final HttpClient httpClient;
     private final HttpContext httpContext;
-    private final XmlResponseReaderWriter xmlResponseReaderWriter;
-
     private final File tempDir;
 
     private final DataService dataService;
 
     private final Random random = new Random();
 
-    public GetStatisticsRequest(XmlResponseReaderWriter xmlResponseReaderWriter,
-                                RepositoryFactory repositoryFactory,
+    public GetStatisticsRequest(RepositoryFactory repositoryFactory,
                                 HttpClient httpClient,
                                 AppstoreEntity appstore,
                                 File tempDir) {
-        this.xmlResponseReaderWriter = xmlResponseReaderWriter;
         this.dataService= repositoryFactory.getDataService();
         this.httpClient = httpClient;
         this.httpContext = new BasicHttpContext();
@@ -61,9 +57,12 @@ public class GetStatisticsRequest implements Runnable {
     @Override
     public void run() {
         processFeed(FeedType.DOWNLOADS);
+        processFeed(FeedType.PURCHASES);
+        processFeed(FeedType.REVIEWS);
     }
 
     private void processFeed(FeedType feedType) {
+        XmlResponseReaderWriter xmlResponseReaderWriter = feedType.getXmlReaderWriter();
         try {
             LastStatisticsUpdateEntity lastStatisticsUpdate =
                     dataService.getLastStatisticsUpdate(appstore.getAppstoreId(), feedType);
@@ -142,7 +141,6 @@ public class GetStatisticsRequest implements Runnable {
         int start = downloads.size() - lastStatisticsUpdate.getLastResponseCount() - 1;
         for (int i = start; i >= 0; --i) {
             dataService.saveStatisticEntity(downloads.get(i), lastStatisticsUpdate);
-
         }
     }
 
