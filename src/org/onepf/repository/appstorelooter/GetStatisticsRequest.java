@@ -140,10 +140,8 @@ public class GetStatisticsRequest implements Runnable {
         DownloadListEntity downloadList = (DownloadListEntity)statisticsList;
         List<DownloadEntity> downloads = downloadList.getDownload();
         int start = downloads.size() - lastStatisticsUpdate.getLastResponseCount() - 1;
-        //TODO move all work with database to dataService
         for (int i = start; i >= 0; --i) {
-            DownloadEntity entity = downloads.get(i);
-            dataService.saveStatisticEntity(entity, lastStatisticsUpdate);
+            dataService.saveStatisticEntity(downloads.get(i), lastStatisticsUpdate);
 
         }
     }
@@ -153,8 +151,7 @@ public class GetStatisticsRequest implements Runnable {
         List<ReviewEntity> reviews = reviewList.getReview();
         int start = reviews.size() - lastStatisticsUpdate.getLastResponseCount() - 1;
         for (int i = start; i >= 0; --i) {
-            ReviewEntity entity = reviews.get(i);
-            dataService.saveStatisticEntity(entity, lastStatisticsUpdate);
+            dataService.saveStatisticEntity(reviews.get(i), lastStatisticsUpdate);
         }
     }
 
@@ -163,8 +160,7 @@ public class GetStatisticsRequest implements Runnable {
         List<PurchaseEntity> purchases = purchaseList.getPurchase();
         int start = purchases.size() - lastStatisticsUpdate.getLastResponseCount() - 1;
         for (int i = start; i >= 0; --i) {
-            PurchaseEntity entity = purchases.get(i);
-            dataService.saveStatisticEntity(entity, lastStatisticsUpdate);
+            dataService.saveStatisticEntity(purchases.get(i), lastStatisticsUpdate);
         }
     }
 
