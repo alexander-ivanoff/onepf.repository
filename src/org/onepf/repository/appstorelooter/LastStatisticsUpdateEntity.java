@@ -10,12 +10,15 @@ import javax.persistence.*;
  * @author Ruslan Sayfutdinov
  */
 @Entity
+@IdClass(LastStatisticsTwoKeyEntity.class)
 @Table(name = "statistics_updates")
 public class LastStatisticsUpdateEntity extends BaseEntity {
-    @Column(name = "appstoreId")
+
     @Id
+    @Column(name = "appstoreId")
     private String appstoreId;
 
+    @Id
     @Column(name = "feedType")
     @Enumerated(EnumType.STRING)
     private FeedType feedType;

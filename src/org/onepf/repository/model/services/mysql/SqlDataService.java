@@ -17,6 +17,7 @@ import org.onepf.repository.model.services.DataException;
 import org.onepf.repository.model.services.DataService;
 
 import javax.sql.DataSource;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -32,6 +33,8 @@ public class SqlDataService implements DataService {
     private static final int PAGE_LIMIT_OTHER = 50;
 
     private static final int DEFAULT_RESULT_LIMIT = 1000;
+
+    private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     private static final String AUTH_TOKEN = "authToken";
 
@@ -282,30 +285,30 @@ public class SqlDataService implements DataService {
 
 
     /**
-     * @param packageName is used in downloads, purchases, reviews
+     * @param homestoreId is used in downloads, purchases, reviews
      * @param limit       number of the records per one page
      * @return pair <currPageHash, prevPageHash>
      * @throws java.sql.SQLException
      */
-    private Pair<Integer, Integer> getPageHashes(BaseHashEntity entity, String packageName, int limit) {
+    private Pair<Integer, Integer> getPageHashes(BaseHashEntity entity, String homestoreId, int limit) {
         Session session = getSession();
         int chash = 0, phash = 0;
         StringBuilder subQueryBuilder = new StringBuilder(String.format("FROM %s", entity.getClass().getName()));
-        if (packageName != null) {
-            subQueryBuilder.append(" WHERE packageName = :packageNameParam");
+        if (homestoreId != null) {
+            subQueryBuilder.append(" WHERE homeStoreId = :homeStoreIdParam");
         }
         subQueryBuilder.append(" ORDER BY id DESC");
 
         Query query = session.createQuery(subQueryBuilder.toString());
-        if (packageName != null) {
-            query.setParameter("packageNameParam", packageName);
+        if (homestoreId != null) {
+            query.setParameter("homeStoreIdParam", homestoreId);
         }
         query.setMaxResults(1); //todo try uniqueObject()
         List list = query.list();
         if (list != null && !list.isEmpty()) {
-            ApplicationEntity applicationEntity = (ApplicationEntity) list.get(0);
-            chash = applicationEntity.getCurrPageHash();
-            phash = applicationEntity.getPrevPageHash();
+            BaseHashEntity baseEntity = (BaseHashEntity) list.get(0);
+            chash = baseEntity.getCurrPageHash();
+            phash = baseEntity.getPrevPageHash();
         }
         Query hashQuery = session.createQuery(String.format("FROM %s WHERE currPageHash = :currPageHashParam", entity.getClass().getName()));
         hashQuery.setParameter("currPageHashParam", chash);
@@ -323,6 +326,33 @@ public class SqlDataService implements DataService {
         return new Pair<Integer, Integer>(chash, phash);
     }
 
+    public void saveStatisticEntity(BaseStatisticEntity statisticEntity, LastStatisticsUpdateEntity lastUpdateEntity) throws DataException{
+        Session session = null;
+        try {
+            ApplicationEntity app = getApplicationsLog(statisticEntity.getPackageName(), -1).get(0);
+            // add homeStoreId to statistics
+            statisticEntity.setHomeStoreId(app.getAppstoreId());
+            // add page number to statistics
+            Pair<Integer, Integer> pageHashes = getPageHashes(statisticEntity, statisticEntity.getHomeStoreId(), PAGE_LIMIT_OTHER);
+            statisticEntity.setCurrPageHash(pageHashes.fst);
+            statisticEntity.setPrevPageHash(pageHashes.snd);
+            session = getSession();
+            session.beginTransaction();
+            session.save(statisticEntity);
+            lastUpdateEntity.setLastResponseCount(lastUpdateEntity.getLastResponseCount() + 1);
+            lastUpdateEntity.setLastResponseDatetime(DATE_FORMAT.format(new Date(System.currentTimeMillis())));
+            session.saveOrUpdate(lastUpdateEntity);
+            session.getTransaction().commit();
+        } catch (RuntimeException e) {
+            session.getTransaction().rollback();
+            throw new DataException(e);
+        } finally {
+            if (session != null) {
+                session.close();
+            }
+        }
+
+    }
 
     public void saveEntity(BaseEntity entity) {
         Session session = getSession();

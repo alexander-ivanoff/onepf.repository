@@ -8,19 +8,20 @@ import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.HttpContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.hibernate.Session;
 import org.onepf.repository.api.responsewriter.entity.*;
 import org.onepf.repository.api.xmlapi.XmlResponseReaderWriter;
 import org.onepf.repository.model.RepositoryFactory;
 import org.onepf.repository.model.services.DataException;
-import org.onepf.repository.model.services.mysql.SqlDataService;
+import org.onepf.repository.model.services.DataService;
 
 import java.io.*;
 import java.net.URI;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
-import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Random;
 
 /**
  * This class perform statistics (downloads, reviews and purchases) requests from appstores.
@@ -28,7 +29,7 @@ import java.util.*;
  * @author Ruslan Sayfutdinov
  */
 public class GetStatisticsRequest implements Runnable {
-    private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
 
     private final Logger alarmCauseLogger = LogManager.getLogger("AlarmCauseLogger");
     private final Logger logger = LogManager.getLogger(GetAppListRequest.class.getName());
@@ -36,8 +37,9 @@ public class GetStatisticsRequest implements Runnable {
     private final AppstoreEntity appstore;
     private final HttpClient httpClient;
     private final HttpContext httpContext;
-    private final RepositoryFactory repositoryFactory;
     private final File tempDir;
+
+    private final DataService dataService;
 
     private final Random random = new Random();
 
@@ -45,7 +47,7 @@ public class GetStatisticsRequest implements Runnable {
                                 HttpClient httpClient,
                                 AppstoreEntity appstore,
                                 File tempDir) {
-        this.repositoryFactory = repositoryFactory;
+        this.dataService= repositoryFactory.getDataService();
         this.httpClient = httpClient;
         this.httpContext = new BasicHttpContext();
         this.appstore = appstore;
@@ -63,7 +65,7 @@ public class GetStatisticsRequest implements Runnable {
         XmlResponseReaderWriter xmlResponseReaderWriter = feedType.getXmlReaderWriter();
         try {
             LastStatisticsUpdateEntity lastStatisticsUpdate =
-                    repositoryFactory.getDataService().getLastStatisticsUpdate(appstore.getAppstoreId(), feedType);
+                    dataService.getLastStatisticsUpdate(appstore.getAppstoreId(), feedType);
             if (!tempDir.exists()) {
                 tempDir.mkdirs();
             }
@@ -137,27 +139,9 @@ public class GetStatisticsRequest implements Runnable {
         DownloadListEntity downloadList = (DownloadListEntity)statisticsList;
         List<DownloadEntity> downloads = downloadList.getDownload();
         int start = downloads.size() - lastStatisticsUpdate.getLastResponseCount() - 1;
-        //TODO move all work with database to dataService
-        Session session = ((SqlDataService) repositoryFactory.getDataService()).getSession();
         for (int i = start; i >= 0; --i) {
-            try {
-                DownloadEntity downloadEntity = downloads.get(i);
-                ApplicationEntity app =
-                        repositoryFactory.getDataService().getApplicationsLog(downloadEntity.getPackageName(), -1).get(0);
-                // add homeStoreId to download
-                downloadEntity.setHomeStoreId(app.getAppstoreId());
-                session.beginTransaction();
-                session.save(downloadEntity);
-                lastStatisticsUpdate.setLastResponseCount(lastStatisticsUpdate.getLastResponseCount() + 1);
-                lastStatisticsUpdate.setLastResponseDatetime(DATE_FORMAT.format(new Date(System.currentTimeMillis())));
-                session.saveOrUpdate(lastStatisticsUpdate);
-                session.getTransaction().commit();
-            } catch (RuntimeException e) {
-                session.getTransaction().rollback();
-                throw e;
-            }
+            dataService.saveStatisticEntity(downloads.get(i), lastStatisticsUpdate);
         }
-        session.close();
     }
 
     private void processReviews(BaseListEntity statisticsList, LastStatisticsUpdateEntity lastStatisticsUpdate) throws DataException {
@@ -165,25 +149,7 @@ public class GetStatisticsRequest implements Runnable {
         List<ReviewEntity> reviews = reviewList.getReview();
         int start = reviews.size() - lastStatisticsUpdate.getLastResponseCount() - 1;
         for (int i = start; i >= 0; --i) {
-            //TODO move all work with database to dataService
-            Session session = ((SqlDataService) repositoryFactory.getDataService()).getSession();
-            try {
-                ReviewEntity reviewEntity = reviews.get(i);
-                ApplicationEntity app =
-                        repositoryFactory.getDataService().getApplicationsLog(reviewEntity.getPackageName(), -1).get(0);
-                // add homeStoreId to review
-                reviewEntity.setHomeStoreId(app.getAppstoreId());
-                session.beginTransaction();
-                session.save(reviewEntity);
-                lastStatisticsUpdate.setLastResponseCount(lastStatisticsUpdate.getLastResponseCount() + 1);
-                lastStatisticsUpdate.setLastResponseDatetime(DATE_FORMAT.format(new Date(System.currentTimeMillis())));
-                session.saveOrUpdate(lastStatisticsUpdate);
-                session.getTransaction().commit();
-                session.close();
-            } catch (RuntimeException e) {
-                session.getTransaction().rollback();
-                throw e;
-            }
+            dataService.saveStatisticEntity(reviews.get(i), lastStatisticsUpdate);
         }
     }
 
@@ -192,25 +158,7 @@ public class GetStatisticsRequest implements Runnable {
         List<PurchaseEntity> purchases = purchaseList.getPurchase();
         int start = purchases.size() - lastStatisticsUpdate.getLastResponseCount() - 1;
         for (int i = start; i >= 0; --i) {
-            //TODO move all work with database to dataService
-            Session session = ((SqlDataService) repositoryFactory.getDataService()).getSession();
-            try {
-                PurchaseEntity purchaseEntity = purchases.get(i);
-                ApplicationEntity app =
-                        repositoryFactory.getDataService().getApplicationsLog(purchaseEntity.getPackageName(), -1).get(0);
-                // add homeStoreId to purchase
-                purchaseEntity.setHomeStoreId(app.getAppstoreId());
-                session.beginTransaction();
-                session.save(purchaseEntity);
-                lastStatisticsUpdate.setLastResponseCount(lastStatisticsUpdate.getLastResponseCount() + 1);
-                lastStatisticsUpdate.setLastResponseDatetime(DATE_FORMAT.format(new Date(System.currentTimeMillis())));
-                session.saveOrUpdate(lastStatisticsUpdate);
-                session.getTransaction().commit();
-                session.close();
-            } catch (RuntimeException e) {
-                session.getTransaction().rollback();
-                throw e;
-            }
+            dataService.saveStatisticEntity(purchases.get(i), lastStatisticsUpdate);
         }
     }
 
