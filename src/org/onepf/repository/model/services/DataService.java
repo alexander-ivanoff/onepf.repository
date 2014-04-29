@@ -5,7 +5,6 @@ import org.onepf.repository.appstorelooter.FeedType;
 import org.onepf.repository.appstorelooter.LastStatisticsUpdateEntity;
 import org.onepf.repository.appstorelooter.LastUpdateEntity;
 
-import javax.xml.crypto.Data;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -28,7 +27,10 @@ public interface DataService {
 
     void saveLastStatisticsUpdate(LastStatisticsUpdateEntity lastStatisticsUpdate) throws DataException;
 
-    void addDownload(DownloadEntity download) throws DataException;
+    void saveStatisticEntity(BaseStatisticEntity statisticEntity, LastStatisticsUpdateEntity lastUpdateEntity) throws DataException;
+
+
+        void addDownload(DownloadEntity download) throws DataException;
 
     List<ApplicationEntity> getApplicationsLog() throws DataException;
 
