@@ -8,18 +8,20 @@ import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.HttpContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.hibernate.Session;
 import org.onepf.repository.api.responsewriter.entity.*;
 import org.onepf.repository.api.xmlapi.XmlResponseReaderWriter;
 import org.onepf.repository.model.RepositoryFactory;
-import org.onepf.repository.model.services.mysql.SqlDataService;
+import org.onepf.repository.model.services.DataException;
+import org.onepf.repository.model.services.DataService;
 
 import java.io.*;
 import java.net.URI;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
-import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Random;
 
 /**
  * This class perform statistics (downloads, reviews and purchases) requests from appstores.
@@ -27,7 +29,7 @@ import java.util.*;
  * @author Ruslan Sayfutdinov
  */
 public class GetStatisticsRequest implements Runnable {
-    private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
 
     private final Logger alarmCauseLogger = LogManager.getLogger("AlarmCauseLogger");
     private final Logger logger = LogManager.getLogger(GetAppListRequest.class.getName());
@@ -35,9 +37,11 @@ public class GetStatisticsRequest implements Runnable {
     private final AppstoreEntity appstore;
     private final HttpClient httpClient;
     private final HttpContext httpContext;
-    private final RepositoryFactory repositoryFactory;
     private final XmlResponseReaderWriter xmlResponseReaderWriter;
+
     private final File tempDir;
+
+    private final DataService dataService;
 
     private final Random random = new Random();
 
@@ -47,7 +51,7 @@ public class GetStatisticsRequest implements Runnable {
                                 AppstoreEntity appstore,
                                 File tempDir) {
         this.xmlResponseReaderWriter = xmlResponseReaderWriter;
-        this.repositoryFactory = repositoryFactory;
+        this.dataService= repositoryFactory.getDataService();
         this.httpClient = httpClient;
         this.httpContext = new BasicHttpContext();
         this.appstore = appstore;
@@ -62,7 +66,7 @@ public class GetStatisticsRequest implements Runnable {
     private void processFeed(FeedType feedType) {
         try {
             LastStatisticsUpdateEntity lastStatisticsUpdate =
-                    repositoryFactory.getDataService().getLastStatisticsUpdate(appstore.getAppstoreId(), feedType);
+                    dataService.getLastStatisticsUpdate(appstore.getAppstoreId(), feedType);
             if (!tempDir.exists()) {
                 tempDir.mkdirs();
             }
@@ -103,8 +107,7 @@ public class GetStatisticsRequest implements Runnable {
                 for (String filename : filesList) {
                     BaseListEntity statisticsList = (BaseListEntity)xmlResponseReaderWriter.read(feedType.getListEntity(),
                             new FileInputStream(new File(tempDir, filename)));
-                    // TODO: make for abstract entity
-                    List<DownloadEntity> downloads = ((DownloadListEntity)statisticsList).getDownload();
+
                     if (lastStatisticsUpdate == null) {
                         lastStatisticsUpdate = new LastStatisticsUpdateEntity(
                                 appstore.getAppstoreId(),
@@ -114,33 +117,54 @@ public class GetStatisticsRequest implements Runnable {
                                 statisticsList.getOffset()
                         );
                     }
-                    int start = downloads.size() - lastStatisticsUpdate.getLastResponseCount() - 1;
-                    Session session = ((SqlDataService) repositoryFactory.getDataService()).getSession();
-                    for (int i = start; i >= 0; --i) {
-                        //TODO move all work with database to dataService
-                        try {
-                            DownloadEntity downloadEntity = downloads.get(i);
-                            ApplicationEntity app =
-                                    repositoryFactory.getDataService().getApplicationsLog(downloadEntity.getPackageName(), -1).get(0);
-                            // add homeStoreId to download
-                            downloadEntity.setHomeStoreId(app.getAppstoreId());
-                            session.beginTransaction();
-                            session.save(downloadEntity);
-                            lastStatisticsUpdate.setLastResponseCount(lastStatisticsUpdate.getLastResponseCount() + 1);
-                            lastStatisticsUpdate.setLastResponseDatetime(DATE_FORMAT.format(new Date(System.currentTimeMillis())));
-                            session.saveOrUpdate(lastStatisticsUpdate); //
-                            session.getTransaction().commit();
-                        } catch (RuntimeException e) {
-                            session.getTransaction().rollback();
-                            throw e;
-                        }
+                    switch (feedType) {
+                        case DOWNLOADS:
+                            processDownloads(statisticsList, lastStatisticsUpdate);
+                            break;
+                        case REVIEWS:
+                            processReviews(statisticsList, lastStatisticsUpdate);
+                            break;
+                        case PURCHASES:
+                            processPurchases(statisticsList, lastStatisticsUpdate);
+                            break;
                     }
-                    session.close();
                     lastStatisticsUpdate = null;
                 }
             }
         } catch (Exception e) {
             alarmCauseLogger.error("Failed to get statistics from {}, reason {}", appstore.getAppstoreId(), e.getMessage());
+        }
+    }
+
+    private void processDownloads(BaseListEntity statisticsList, LastStatisticsUpdateEntity lastStatisticsUpdate) throws DataException {
+        DownloadListEntity downloadList = (DownloadListEntity)statisticsList;
+        List<DownloadEntity> downloads = downloadList.getDownload();
+        int start = downloads.size() - lastStatisticsUpdate.getLastResponseCount() - 1;
+        //TODO move all work with database to dataService
+        for (int i = start; i >= 0; --i) {
+            DownloadEntity entity = downloads.get(i);
+            dataService.saveStatisticEntity(entity, lastStatisticsUpdate);
+
+        }
+    }
+
+    private void processReviews(BaseListEntity statisticsList, LastStatisticsUpdateEntity lastStatisticsUpdate) throws DataException {
+        ReviewsListEntity reviewList = (ReviewsListEntity)statisticsList;
+        List<ReviewEntity> reviews = reviewList.getReview();
+        int start = reviews.size() - lastStatisticsUpdate.getLastResponseCount() - 1;
+        for (int i = start; i >= 0; --i) {
+            ReviewEntity entity = reviews.get(i);
+            dataService.saveStatisticEntity(entity, lastStatisticsUpdate);
+        }
+    }
+
+    private void processPurchases(BaseListEntity statisticsList, LastStatisticsUpdateEntity lastStatisticsUpdate) throws DataException {
+        PurchaseListEntity purchaseList = (PurchaseListEntity)statisticsList;
+        List<PurchaseEntity> purchases = purchaseList.getPurchase();
+        int start = purchases.size() - lastStatisticsUpdate.getLastResponseCount() - 1;
+        for (int i = start; i >= 0; --i) {
+            PurchaseEntity entity = purchases.get(i);
+            dataService.saveStatisticEntity(entity, lastStatisticsUpdate);
         }
     }
 
