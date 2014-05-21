@@ -8,11 +8,11 @@
     <session-factory>
         <property name="hibernate.bytecode.use_reflection_optimizer">false</property>
         <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
-        <property name="hibernate.connection.password">opf_pwd_appuser</property>
+        <property name="hibernate.connection.password"><!--Enter your user password here--></property>
         <property name="hibernate.connection.url">
-            jdbc:mysql://opf-repository.ckiztkolfu5g.us-east-1.rds.amazonaws.com:3306/onepf_repository
+            <!--Enter url to your database here -->
         </property>
-        <property name="hibernate.connection.username">opf_appuser</property>
+        <property name="hibernate.connection.username"><!--Enter your user name here--></property>
         <property name="hibernate.connection.pool_size">10</property>
         <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
         <property name="show_sql">true</property>

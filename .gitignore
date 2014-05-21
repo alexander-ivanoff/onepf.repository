@@ -1,5 +1,3 @@
-# ignoring all files in web/WEB-INF/setting/**
-web/WEB-INF/settings/**
 # ignoring all files in out directory
 out/**
 # ignoring idea project directory
