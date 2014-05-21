@@ -30,6 +30,8 @@ public class SqlDataService implements DataService {
 
     // TODO refactoring: move method in different requests (Maybe Entities), here should be only generic requests
 
+    private final Logger alarmCauseLogger = LogManager.getLogger("AlarmCauseLogger");
+
     private static final int PAGE_LIMIT_APPLICATIONS = 50;
     private static final int PAGE_LIMIT_OTHER = 50;
 
@@ -343,15 +345,20 @@ public class SqlDataService implements DataService {
         Session session = null;
         try {
             ApplicationEntity app = getApplicationsLog(statisticEntity.getPackageName(), -1).get(0);
-            // add homeStoreId to statistics
-            statisticEntity.setHomeStoreId(app.getAppstoreId());
-            // add page number to statistics
-            Pair<Integer, Integer> pageHashes = getPageHashes(statisticEntity, statisticEntity.getHomeStoreId(), PAGE_LIMIT_OTHER);
-            statisticEntity.setCurrPageHash(pageHashes.fst);
-            statisticEntity.setPrevPageHash(pageHashes.snd);
-            session = getSession();
-            session.beginTransaction();
-            session.save(statisticEntity);
+            // if application not found we
+            if (app != null) {
+                // add homeStoreId to statistics
+                statisticEntity.setHomeStoreId(app.getAppstoreId());
+                // add page number to statistics
+                Pair<Integer, Integer> pageHashes = getPageHashes(statisticEntity, statisticEntity.getHomeStoreId(), PAGE_LIMIT_OTHER);
+                statisticEntity.setCurrPageHash(pageHashes.fst);
+                statisticEntity.setPrevPageHash(pageHashes.snd);
+                session = getSession();
+                session.beginTransaction();
+                session.save(statisticEntity);
+            } else {
+                alarmCauseLogger.error("Failed to save statistics. Package {} not found!", statisticEntity.getPackageName());
+            }
             lastUpdateEntity.setLastResponseCount(lastUpdateEntity.getLastResponseCount() + 1);
             lastUpdateEntity.setLastResponseDatetime(Utils.sqlFormattedDate(new Date(System.currentTimeMillis())));
             session.saveOrUpdate(lastUpdateEntity);
