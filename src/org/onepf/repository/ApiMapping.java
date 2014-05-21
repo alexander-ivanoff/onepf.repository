@@ -14,7 +14,8 @@ public enum ApiMapping {
     LIST_REVIEWS("/openaep/reviews"),
     GET_DESCRIPTION("/openaep/appdescription"),
     GET_APPDF("/openaep/appdf"),
-    UPLOAD_APPDF("/openaep/upload");
+    UPLOAD_APPDF("/openaep/upload"),
+    SIGN_PURCHASE("/openaep/signPurchase");
 
 
     private final String methodPath;

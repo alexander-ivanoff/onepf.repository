@@ -49,6 +49,10 @@ public class RepositoryFactory {
         return new GetReviewsRequestHandler(dataService, storageService);
     }
 
+    public SignReceiptHandler createSignReceiptHandler() {
+        return new SignReceiptHandler(dataService, storageService);
+    }
+
     public DataService getDataService() {
         return dataService;
     }
@@ -60,4 +64,6 @@ public class RepositoryFactory {
     public void close() {
         dataService.close();
     }
+
+
 }

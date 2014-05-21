@@ -11,6 +11,7 @@ import org.onepf.repository.model.services.DataException;
 import org.onepf.repository.model.services.DataService;
 import org.onepf.repository.model.services.StorageException;
 import org.onepf.repository.model.services.StorageService;
+import org.onepf.repository.utils.Utils;
 
 import javax.xml.bind.annotation.adapters.HexBinaryAdapter;
 import java.io.File;
@@ -20,7 +21,6 @@ import java.io.InputStream;
 import java.security.DigestInputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.List;
@@ -36,8 +36,6 @@ import java.util.zip.ZipFile;
 public class UploadAppdfRequestHandler extends BaseRequestHandler {
 
     public static final String APPDF_DESCRIPTION_FILE_NAME = "description.xml"; // Move to RepositoryOptions
-
-    private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     private static HexBinaryAdapter marshaler = new HexBinaryAdapter();
 
@@ -97,7 +95,7 @@ public class UploadAppdfRequestHandler extends BaseRequestHandler {
             app.setPackageName(packageName);
             app.setAppdfHash(appdfHash);
         }
-        app.setDatetime(dateFormat.format(new Date(System.currentTimeMillis())));
+        app.setDatetime(Utils.sqlFormattedDate(new Date(System.currentTimeMillis())));
         app.setAppdfLink(appdfKey);
         app.setAppstoreId(appstoreDescriptor.getAppstoreId());
 

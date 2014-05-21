@@ -9,7 +9,7 @@ CREATE TABLE `onepf_repository`.`appstores` (
   `appstoreAccessToken` varchar(64) NOT NULL,
   `publicKey` text,
   PRIMARY KEY (`appstoreId`)
-);;
+);
 
 CREATE TABLE `onepf_repository`.`appstoreupdates` (
   `appstoreId` varchar(255) NOT NULL,
@@ -17,6 +17,7 @@ CREATE TABLE `onepf_repository`.`appstoreupdates` (
   `lastUpdateDateTime` datetime NOT NULL,
   `lastUpdateOffset` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`appstoreId`),
+  UNIQUE KEY `appstoreId_UNIQUE` (`appstoreId`),
   FOREIGN KEY (`appstoreId`) REFERENCES `onepf_repository`.`appstores` (`appstoreId`)
 );
 
@@ -27,6 +28,7 @@ CREATE TABLE `onepf_repository`.`statistics_updates` (
   `lastUpdateDateTime` datetime NOT NULL,
   `lastUpdateOffset` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`appstoreId`,`feedType`),
+  KEY `appstoreId` (`appstoreId`),
   FOREIGN KEY (`appstoreId`) REFERENCES `onepf_repository`.`appstores` (`appstoreId`)
 );
 
@@ -104,6 +106,18 @@ CREATE TABLE `onepf_repository`.`reviews` (
   `prevPageHash` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 );
+
+CREATE TABLE `onepf_repository`.`receipts` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `receiptData` text,
+  `distributorStoreId` varchar(45) DEFAULT NULL,
+  `distributorSignature` text,
+  `developerStoreId` varchar(45) DEFAULT NULL,
+  `developerSignature` text,
+  `datetime` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+);
+
 
 /* Create test appstore*/
 INSERT INTO `onepf_repository`.`appstores`

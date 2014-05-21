@@ -9,11 +9,28 @@ package org.onepf.repository.model.services;
  */
 public class DataException extends Exception {
 
+    private Error error;
+
     public DataException(Exception e) {
-        super(e);
+        this(Error.GENERIC, e);
     }
 
-    public DataException(String message) {
-        super(message);
+    public DataException(Error e) {
+        this(e, null);
+    }
+
+    public DataException(Error error, Exception e) {
+        super(e);
+        setError(error);
+    }
+
+
+
+    public Error getError() {
+        return error;
+    }
+
+    public void setError(Error error) {
+        this.error = error;
     }
 }
