@@ -13,7 +13,8 @@ import org.onepf.repository.api.responsewriter.entity.AppstoreEntity;
 import org.onepf.repository.model.FileType;
 import org.onepf.repository.model.RepositoryFactory;
 import org.onepf.repository.model.UploadAppdfRequestHandler;
-import org.onepf.repository.model.services.DataException;
+import org.onepf.repository.model.services.*;
+import org.onepf.repository.model.services.Error;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -113,8 +114,9 @@ public class ApplicationsLoader {
                 if (appLog.size() > 0) {
                     // check that uploading store is home store
                     if (!appLog.get(0).getAppstoreId().equals(appstore.getAppstoreId())) {
-                        throw new DataException(String.format("Store '%s' is not home store for package '%s'",
-                                appstore.getAppstoreId(), appToLoad.getPackageName()));
+                        throw new DataException(Error.INTERNAL_ERROR.withMessage(
+                                String.format("Store '%s' is not home store for package '%s'",
+                                        appstore.getAppstoreId(), appToLoad.getPackageName())));
                     }
                     for (ApplicationEntity app : appLog) {
                         // check if there is appdf file with the same hash, if it is here means appdf is up to date

@@ -67,6 +67,10 @@
         <servlet-name>ReviewListServlet</servlet-name>
         <servlet-class>org.onepf.repository.GetReviewListServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>SignReceiptServlet</servlet-name>
+        <servlet-class>org.onepf.repository.SignReceiptServlet</servlet-class>
+    </servlet>
 
     <!-- Mappings -->
 
@@ -102,6 +106,10 @@
     <servlet-mapping>
         <servlet-name>FileDownloadServlet</servlet-name>
         <url-pattern>/openaep/appdescription</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SignReceiptServlet</servlet-name>
+        <url-pattern>/openaep/signReceipt</url-pattern>
     </servlet-mapping>
 
     <!-- Web application parameters -->

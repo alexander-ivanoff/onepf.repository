@@ -36,6 +36,8 @@ public class ObjectFactory {
     public final static QName _Downloads_QNAME = new QName("", "downloads");
     public final static QName _Purchases_QNAME = new QName("", "purchases");
     public final static QName _Reviews_QNAME = new QName("", "reviews");
+    public final static QName _Receipt_QNAME = new QName("", "receipt");
+    public final static QName _Error_QNAME = new QName("", "error");
 
     /**
      * Create a new ObjectFactory that can be used to create new instances of schema derived classes for package: org.onepf.repository.api.xmlapi.applist
@@ -143,6 +145,20 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "", name = "reviews")
     public JAXBElement<ReviewsListEntity> createReviews(ReviewsListEntity value) {
         return new JAXBElement<ReviewsListEntity>(_Reviews_QNAME, ReviewsListEntity.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link org.onepf.repository.api.responsewriter.entity.ReceiptEntity }{@code >}}
+     *
+     */
+    @XmlElementDecl(namespace = "", name = "receipt")
+    public JAXBElement<ReceiptEntity> createReceipt(ReceiptEntity value) {
+        return value.getAsJaxbElement(_Receipt_QNAME);
+    }
+
+    @XmlElementDecl(namespace = "", name = "error")
+    public JAXBElement<ErrorEntity> createError(ErrorEntity value) {
+        return value.getAsJaxbElement(_Error_QNAME);
     }
 
 }

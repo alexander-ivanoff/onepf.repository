@@ -25,12 +25,9 @@ public interface DataService {
 
     void saveLastUpdate(LastUpdateEntity lastUpdate) throws DataException;
 
-    void saveLastStatisticsUpdate(LastStatisticsUpdateEntity lastStatisticsUpdate) throws DataException;
-
     void saveStatisticEntity(BaseStatisticEntity statisticEntity, LastStatisticsUpdateEntity lastUpdateEntity) throws DataException;
 
-
-        void addDownload(DownloadEntity download) throws DataException;
+    void saveEntity(BaseEntity entity) throws DataException;
 
     List<ApplicationEntity> getApplicationsLog() throws DataException;
 
@@ -72,6 +69,8 @@ public interface DataService {
     ArrayList<PurchaseEntity> getPurchases(String homeStoreId, long page) throws DataException;
 
     ArrayList<ReviewEntity> getReviews(String homeStoreId, long page) throws DataException;
+
+    AppstoreEntity getHomeStore(String packageName) throws DataException;
 
     void close();
 }

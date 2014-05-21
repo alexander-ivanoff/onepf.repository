@@ -10,13 +10,13 @@ import org.onepf.repository.api.responsewriter.entity.ApplicationEntity;
 import org.onepf.repository.api.responsewriter.entity.ApplicationListEntity;
 import org.onepf.repository.api.responsewriter.entity.AppstoreEntity;
 import org.onepf.repository.api.xmlapi.XmlResponseReaderWriter;
+import org.onepf.repository.utils.Utils;
 
 import javax.xml.bind.annotation.adapters.HexBinaryAdapter;
 import java.io.IOException;
 import java.net.URI;
 import java.security.DigestInputStream;
 import java.security.MessageDigest;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -28,7 +28,6 @@ import java.util.Set;
  */
 public class ApplicationsToUpdateLoader {
 
-    private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     private static HexBinaryAdapter marshaler = new HexBinaryAdapter();
 
     /**
@@ -126,7 +125,7 @@ public class ApplicationsToUpdateLoader {
                 if (lastUpdate == null) {
                     lastUpdate = new LastUpdateEntity();
                     lastUpdate.setAppstoreId(appstore.getAppstoreId());
-                    lastUpdate.setLastResponseDatetime(dateFormat.format(new Date(System.currentTimeMillis())));
+                    lastUpdate.setLastResponseDatetime(Utils.sqlFormattedDate(new Date(System.currentTimeMillis())));
                     lastUpdate.setLastResponseHash(hash);
                     lastUpdate.setPrevOffset(applicationListEntity.getOffset());
                 }

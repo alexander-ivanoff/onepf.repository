@@ -15,9 +15,10 @@ import org.onepf.repository.appstorelooter.LastStatisticsUpdateEntity;
 import org.onepf.repository.appstorelooter.LastUpdateEntity;
 import org.onepf.repository.model.services.DataException;
 import org.onepf.repository.model.services.DataService;
+import org.onepf.repository.model.services.Error;
+import org.onepf.repository.utils.Utils;
 
 import javax.sql.DataSource;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -33,8 +34,6 @@ public class SqlDataService implements DataService {
     private static final int PAGE_LIMIT_OTHER = 50;
 
     private static final int DEFAULT_RESULT_LIMIT = 1000;
-
-    private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     private static final String AUTH_TOKEN = "authToken";
 
@@ -68,16 +67,6 @@ public class SqlDataService implements DataService {
     @Override
     public void saveLastUpdate(LastUpdateEntity lastUpdate) throws DataException {
         saveOrUpdateEntity(lastUpdate);
-    }
-
-    @Override
-    public void saveLastStatisticsUpdate(LastStatisticsUpdateEntity lastStatisticsUpdate) throws DataException {
-        saveOrUpdateEntity(lastStatisticsUpdate);
-    }
-
-    @Override
-    public void addDownload(DownloadEntity download) throws DataException {
-        insertWithHashes(download.getPackageName(), download, PAGE_LIMIT_OTHER);
     }
 
     @Override
@@ -243,7 +232,8 @@ public class SqlDataService implements DataService {
     @Override
     public ArrayList<ReviewEntity> getReviews(String homeStoreId, long currPageHash) throws DataException {
         Session session = getSession();
-        Query query = session.createQuery("FROM ReviewEntity WHERE homeStoreId= :homeStoreIdParam AND currPageHash= :currPageHashParam ORDER BY id DESC");
+        Query query = session.createQuery("FROM AppstoreEntity as appstore " +
+                "INNER JOIN appstore.appstoreId  WHERE homeStoreId= :homeStoreIdParam AND currPageHash= :currPageHashParam ORDER BY id DESC");
         query.setParameter("homeStoreIdParam", homeStoreId);
         if (currPageHash >= 0) {
             query.setParameter("currPageHashParam", currPageHash);
@@ -263,6 +253,29 @@ public class SqlDataService implements DataService {
         List list = query.list();
         session.close();
         return new ArrayList<ReviewEntity>(list);
+    }
+
+    @Override
+    public AppstoreEntity getHomeStore(String packageName) throws DataException {
+        Session session = null;
+        AppstoreEntity appstore = null;
+        try {
+            session = getSession();
+            ApplicationEntity applicationEntity =  (ApplicationEntity) session.createQuery("FROM ApplicationEntity where packageName = :packageParam")
+                    .setParameter("packageParam", packageName).uniqueResult();
+            if (applicationEntity == null) {
+                throw new DataException(Error.BAD_REQUEST.withMessage("package not found"));
+            }
+            appstore =  (AppstoreEntity) session.createQuery("FROM AppstoreEntity where appstoreId = :appstoreIdParam")
+                    .setParameter("appstoreIdParam", applicationEntity.getAppstoreId()).uniqueResult();
+        } catch (RuntimeException e) {
+            throw new DataException(Error.INTERNAL_ERROR);
+        } finally {
+            if (session != null) {
+                session.close();
+            }
+        }
+        return appstore;
     }
 
     /**
@@ -340,7 +353,7 @@ public class SqlDataService implements DataService {
             session.beginTransaction();
             session.save(statisticEntity);
             lastUpdateEntity.setLastResponseCount(lastUpdateEntity.getLastResponseCount() + 1);
-            lastUpdateEntity.setLastResponseDatetime(DATE_FORMAT.format(new Date(System.currentTimeMillis())));
+            lastUpdateEntity.setLastResponseDatetime(Utils.sqlFormattedDate(new Date(System.currentTimeMillis())));
             session.saveOrUpdate(lastUpdateEntity);
             session.getTransaction().commit();
         } catch (RuntimeException e) {

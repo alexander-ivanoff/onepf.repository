@@ -132,7 +132,8 @@ public class GetStatisticsRequest implements Runnable {
                 }
             }
         } catch (Exception e) {
-            alarmCauseLogger.error("Failed to get statistics from {}, reason {}", appstore.getAppstoreId(), e.getMessage());
+            e.printStackTrace();
+            alarmCauseLogger.error("Failed to get statistics from {}, reason {}", appstore.getAppstoreId(), e);
         }
     }
 
