@@ -69,6 +69,7 @@ To store appdf files from other stores you have two options:
 
 - local file system (then all appdf files will be stored in folder in your Web Application directory)
 - Amazon S3 - then files will be stored in bucket on Amazon cloud.
+
 #### a) Setup Amazon S3
 - Go to Services -> S3
 - Press `Create Bucket`
@@ -83,6 +84,7 @@ To store appdf files from other stores you have two options:
 		- Grantee: `Authenticated Users`
 		- Select `List` and `Upload/Delete` checkboxes
 	- Press `Save`
+	
 #### b) Setup IAM user
 - Go to Services -> IAM -> Users
 - Press `Create New Users`
