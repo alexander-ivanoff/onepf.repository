@@ -88,16 +88,13 @@ public class AppstoreRequester {
                 if (!appstore.getAppstoreId().equals("com.appstore.test") ) { //TEST PURPOSES ONLY
                     cm.setDefaultMaxPerRoute(CONNECTIONS_PER_STORE);
                     // schedule GetAppListRequests
-
                     scheduler.scheduleAtFixedRate(
                             new GetAppListRequest(xmlResponseWriterV2, repositoryFactory, httpClient, appstore, uploadDir),
                             POLLING_PERIOD, POLLING_PERIOD, TimeUnit.SECONDS);
                     // schedule GetStatisticsRequests
-
                     scheduler.scheduleAtFixedRate(
-                            new GetStatisticsRequest(xmlResponseWriterV2, repositoryFactory, httpClient, appstore, tmpDir),
+                            new GetStatisticsRequest(repositoryFactory, httpClient, appstore, tmpDir),
                             POLLING_PERIOD, POLLING_PERIOD, TimeUnit.SECONDS);
-
                 }
             }
         }
