@@ -7,8 +7,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  */
 public class ReceiptData {
 
-    @JsonProperty("appstoreId")
-    public String appstoreId;
+    @JsonProperty("distributorStoreId")
+    public String distributorAppstoreId;
+
+    @JsonProperty("developerStoreId")
+    public String developerAppstoreId;
 
     @JsonProperty("orderId")
     public String orderId;
@@ -27,5 +30,8 @@ public class ReceiptData {
 
     @JsonProperty("developerPayload")
     public String developerPayload;
+
+    @JsonProperty("purchaseState")
+    public String purchaseState;
 
 }

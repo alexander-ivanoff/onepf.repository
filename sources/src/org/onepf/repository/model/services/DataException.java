@@ -33,4 +33,12 @@ public class DataException extends Exception {
     public void setError(Error error) {
         this.error = error;
     }
+
+    @Override
+    public String getMessage() {
+        if (error != null) {
+            return error.getMessage();
+        }
+        return super.getMessage();
+    }
 }
